@@ -1,16 +1,25 @@
 import { NextResponse } from 'next/server'
+import { testConnection } from '@/lib/db'
 
 // Health check endpoint
 export async function GET(request) {
   const { pathname } = new URL(request.url)
   
   if (pathname === '/api/health') {
+    const dbStatus = await testConnection()
+    
     return NextResponse.json({
       status: 'ok',
       environment: 'sandbox',
       project: 'FDC Tax – Luna Onboarding',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      database: dbStatus
     })
+  }
+  
+  if (pathname === '/api/db-test') {
+    const dbStatus = await testConnection()
+    return NextResponse.json(dbStatus)
   }
   
   return NextResponse.json({
