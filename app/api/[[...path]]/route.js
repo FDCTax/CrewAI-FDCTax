@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { testConnection, query } from '@/lib/db'
 import { createClient, getAllClients, getClientByUUID, deleteClient } from '@/lib/clientDb'
 import { encryptTFN, decryptTFN, maskTFN } from '@/lib/encryption'
-import { sendWelcomeEmail, sendAdminNotification } from '@/lib/emails'
+import { sendWelcomeEmail, sendAdminNotification, sendGSTFollowUpEmail } from '@/lib/emails'
 
 // Health check endpoint
 export async function GET(request) {
