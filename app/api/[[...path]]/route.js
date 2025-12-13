@@ -148,11 +148,26 @@ export async function POST(request) {
       // Add UUID to client data for emails
       const clientDataWithUUID = { ...clientData, uuid: result.uuid }
       
-      // Send emails asynchronously (don't block the response)
-      Promise.all([
+      // Prepare email promises
+      const emailPromises = [
         sendWelcomeEmail(clientDataWithUUID).catch(err => console.error('Welcome email failed:', err)),
         sendAdminNotification(clientDataWithUUID).catch(err => console.error('Admin notification failed:', err))
-      ]).then(() => {
+      ]
+      
+      // Send GST follow-up email if assistance requested
+      const needsGSTFollowUp = 
+        clientData.gst_assistance === 'yes_assist' || 
+        clientData.gst_assistance === 'discuss_further'
+      
+      if (needsGSTFollowUp) {
+        console.log('📧 GST assistance requested - sending follow-up email')
+        emailPromises.push(
+          sendGSTFollowUpEmail(clientDataWithUUID).catch(err => console.error('GST follow-up email failed:', err))
+        )
+      }
+      
+      // Send all emails asynchronously (don't block the response)
+      Promise.all(emailPromises).then(() => {
         console.log('✅ All emails sent successfully')
       })
       
