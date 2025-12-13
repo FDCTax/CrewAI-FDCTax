@@ -846,8 +846,18 @@ export default function LunaOnboarding() {
               {/* Entity Structure */}
               <div className="border-t border-gray-200 pt-6">
                 <label className="block text-sm font-medium mb-3">Do you operate through a trust, company, or partnership? *</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 flex-1">
+                <div className="flex flex-col gap-3">
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="has_entity"
+                      checked={formData.has_entity === 'no' || !formData.has_entity}
+                      onChange={() => updateField('has_entity', 'no')}
+                      className="mr-3"
+                    />
+                    <span className="font-medium">No (Sole Trader)</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                     <input
                       type="radio"
                       name="has_entity"
@@ -855,20 +865,24 @@ export default function LunaOnboarding() {
                       onChange={() => updateField('has_entity', 'yes')}
                       className="mr-3"
                     />
-                    <span className="font-medium">Yes</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 flex-1">
-                    <input
-                      type="radio"
-                      name="has_entity"
-                      checked={formData.has_entity === 'no'}
-                      onChange={() => updateField('has_entity', 'no')}
-                      className="mr-3"
-                    />
-                    <span className="font-medium">No (sole trader)</span>
+                    <span className="font-medium">Yes (trust, company, or partnership)</span>
                   </label>
                 </div>
               </div>
+
+              {/* Trading Name - moved here after entity question */}
+              {formData.has_abn === 'yes' && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">Trading Name / Business Name</label>
+                  <input
+                    value={formData.trading_name || ''}
+                    onChange={(e) => updateField('trading_name', e.target.value)}
+                    placeholder="e.g., Happy Kids Family Day Care"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Your registered business name (optional)</p>
+                </div>
+              )}
 
               {formData.has_entity === 'yes' && (
                 <>
