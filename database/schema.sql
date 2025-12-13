@@ -94,6 +94,9 @@ CREATE TABLE IF NOT EXISTS clients (
     engagement_letter_signed TEXT DEFAULT 'N',  -- Y/N
     engagement_letter_signed_date TIMESTAMP,
     
+    -- GST Assistance
+    gst_assistance_requested TEXT DEFAULT 'N',  -- Y/N
+    
     -- Admin Fields
     client_owner TEXT DEFAULT 'Luna',  -- Assigned staff member
     groups TEXT,  -- Client groups/tags
