@@ -345,61 +345,12 @@ export default function LunaOnboarding() {
 
               <h3 className="text-lg font-semibold text-gray-900 pt-4">Residential Address</h3>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Street Address *</label>
-                <input
-                  value={formData.residential_address_line_1 || ''}
-                  onChange={(e) => updateField('residential_address_line_1', e.target.value)}
-                  placeholder="123 Main Street"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">Address Line 2 <span className="text-gray-400">(optional)</span></label>
-                <input
-                  value={formData.residential_address_line_2 || ''}
-                  onChange={(e) => updateField('residential_address_line_2', e.target.value)}
-                  placeholder="Unit 5"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Suburb/City *</label>
-                  <input
-                    value={formData.residential_address_location || ''}
-                    onChange={(e) => updateField('residential_address_location', e.target.value)}
-                    placeholder="Sydney"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">State *</label>
-                  <select
-                    value={formData.residential_address_state || ''}
-                    onChange={(e) => updateField('residential_address_state', e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  >
-                    <option value="">Select</option>
-                    {AUSTRALIAN_STATES.map(state => (
-                      <option key={state} value={state}>{state}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="w-1/2">
-                <label className="block text-sm font-medium mb-2">Postcode *</label>
-                <input
-                  value={formData.residential_address_postcode || ''}
-                  onChange={(e) => updateField('residential_address_postcode', e.target.value)}
-                  placeholder="2000"
-                  maxLength={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
+              <AddressAutocomplete
+                prefix="residential"
+                formData={formData}
+                updateField={updateField}
+                label="Your Home Address"
+              />
 
               <label className="flex items-center cursor-pointer">
                 <input
