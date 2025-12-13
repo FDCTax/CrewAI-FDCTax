@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS clients (
     eft_account_name TEXT,
     eft_account_number TEXT,
     eft_bsb_number TEXT,  -- Format: 000-000
+    bank_details_later TEXT DEFAULT 'N',  -- Y/N - if client chose to provide later
     
     -- Service Flags
     fee_from_refund TEXT DEFAULT 'N',  -- Y/N
