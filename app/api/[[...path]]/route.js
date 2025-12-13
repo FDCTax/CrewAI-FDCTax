@@ -105,9 +105,10 @@ export async function POST(request) {
     try {
       const { abn } = await request.json()
       
-      // Basic ABN validation (11 digits)
-      const cleanABN = abn.replace(/\\s/g, '')
+      // Clean: remove ALL non-digits (spaces, dashes, etc.)
+      const cleanABN = abn.replace(/\D/g, '')
       
+      // Check length only
       if (cleanABN.length !== 11) {
         return NextResponse.json({
           valid: false,
@@ -115,14 +116,7 @@ export async function POST(request) {
         })
       }
       
-      if (!/^\\d{11}$/.test(cleanABN)) {
-        return NextResponse.json({
-          valid: false,
-          message: 'ABN must contain only numbers'
-        })
-      }
-      
-      // ABN algorithm validation
+      // ABN algorithm validation (ABR checksum)
       const weights = [10, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
       let sum = 0
       
@@ -137,7 +131,7 @@ export async function POST(request) {
       
       return NextResponse.json({
         valid: isValid,
-        message: isValid ? 'Valid ABN' : 'Invalid ABN - please check the number'
+        message: isValid ? 'Valid ABN ✓' : 'Invalid ABN - please check the number'
       })
     } catch (error) {
       return NextResponse.json({ valid: false, message: 'Validation error' }, { status: 500 })
