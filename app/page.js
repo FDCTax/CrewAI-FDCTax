@@ -30,11 +30,14 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-6 mt-12">
               <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border border-primary/20">
                 <div className="flex items-center mb-3">
-                  <div className="w-2 h-2 bg-primary rounded-full mr-2"></div>
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                   <h3 className="text-lg font-semibold text-gray-900">Database</h3>
                 </div>
-                <p className="text-sm text-gray-600">
-                  PostgreSQL connection ready. Awaiting connection string configuration.
+                <p className="text-sm text-gray-600 mb-2">
+                  ✅ PostgreSQL connection configured
+                </p>
+                <p className="text-xs text-gray-500">
+                  DigitalOcean Database • Port 25060 • SSL Enabled
                 </p>
               </div>
 
