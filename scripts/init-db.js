@@ -5,9 +5,14 @@ require('dotenv').config()
 
 console.log('Database URL:', process.env.DATABASE_URL ? 'Found' : 'NOT FOUND')
 
+const connectionString = process.env.DATABASE_URL.replace('?sslmode=require', '')
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL + '&sslmode=no-verify',
-  ssl: false
+  connectionString,
+  ssl: {
+    rejectUnauthorized: false,
+    ca: undefined
+  }
 })
 
 async function initDatabase() {
