@@ -279,7 +279,11 @@ export default function LunaOnboarding() {
                 <label className="block text-sm font-medium mb-2">Preferred Name *</label>
                 <input
                   value={formData.casual_name || ''}
-                  onChange={(e) => updateField('casual_name', e.target.value)}
+                  onChange={(e) => {
+                    updateField('casual_name', e.target.value)
+                    // Mark as manually edited so auto-fill won't override
+                    updateField('casual_name_edited', true)
+                  }}
                   placeholder="What should we call you?"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
