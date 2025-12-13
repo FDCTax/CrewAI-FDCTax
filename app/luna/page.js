@@ -985,56 +985,106 @@ export default function LunaOnboarding() {
         {stage === 5 && (
           <div className="bg-white rounded-xl shadow-xl p-6 md:p-8">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Bank account for refunds</h2>
-              <p className="text-gray-600">Where should we send your tax refund?</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Bank account details</h2>
+              <p className="text-gray-600">For refunds and payments</p>
             </div>
 
             <div className="space-y-6">
+              {/* Provide Now or Later */}
               <div>
-                <label className="block text-sm font-medium mb-2">Account Name *</label>
-                <input
-                  value={formData.eft_account_name || ''}
-                  onChange={(e) => updateField('eft_account_name', e.target.value)}
-                  placeholder="John Smith"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-                <p className="text-xs text-gray-500 mt-1">Name on the bank account</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">BSB *</label>
-                  <input
-                    value={formData.eft_bsb_number || ''}
-                    onChange={(e) => {
-                      let val = e.target.value.replace(/[^0-9]/g, '')
-                      if (val.length > 3) {
-                        val = val.slice(0, 3) + '-' + val.slice(3, 6)
-                      }
-                      updateField('eft_bsb_number', val)
-                    }}
-                    placeholder="000-000"
-                    maxLength={7}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Account Number *</label>
-                  <input
-                    value={formData.eft_account_number || ''}
-                    onChange={(e) => updateField('eft_account_number', e.target.value.replace(/[^0-9]/g, ''))}
-                    placeholder="12345678"
-                    maxLength={9}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
+                <label className="block text-sm font-medium mb-3">When would you like to provide your bank details? *</label>
+                <div className="flex flex-col gap-3">
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="bank_details_timing"
+                      checked={formData.bank_details_later !== true}
+                      onChange={() => updateField('bank_details_later', false)}
+                      className="mr-3"
+                    />
+                    <span className="font-medium">Provide now</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="bank_details_timing"
+                      checked={formData.bank_details_later === true}
+                      onChange={() => updateField('bank_details_later', true)}
+                      className="mr-3"
+                    />
+                    <span className="font-medium">Provide later (I'll contact you when needed)</span>
+                  </label>
                 </div>
               </div>
 
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                <p className="text-sm text-blue-900">
-                  <strong>💡 Tip:</strong> This account will be used for tax refunds and any credits. You can update it later if needed.
-                </p>
-              </div>
+              {/* Bank Fields (only if Provide Now) */}
+              {formData.bank_details_later !== true && (
+                <>
+                  <div className="border-t border-gray-200 pt-6">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Account Name *</label>
+                      <input
+                        value={formData.eft_account_name || ''}
+                        onChange={(e) => updateField('eft_account_name', e.target.value)}
+                        placeholder="John Smith"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Name on the bank account</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">BSB *</label>
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        value={formData.eft_bsb_number || ''}
+                        onChange={(e) => {
+                          let val = e.target.value.replace(/[^0-9]/g, '')
+                          if (val.length > 3) {
+                            val = val.slice(0, 3) + '-' + val.slice(3, 6)
+                          }
+                          updateField('eft_bsb_number', val)
+                        }}
+                        placeholder="000-000"
+                        maxLength={7}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Account Number *</label>
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        value={formData.eft_account_number || ''}
+                        onChange={(e) => updateField('eft_account_number', e.target.value.replace(/[^0-9]/g, ''))}
+                        placeholder="12345678"
+                        maxLength={9}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                    <p className="text-sm text-blue-900">
+                      <strong>💡 Tip:</strong> This account will be used for tax refunds and any credits. You can update it later if needed.
+                    </p>
+                  </div>
+                </>
+              )}
+
+              {/* Provide Later Message */}
+              {formData.bank_details_later === true && (
+                <div className="bg-green-50 rounded-lg p-5 border border-green-200">
+                  <p className="text-sm text-green-900">
+                    <strong>✓ No problem!</strong> We'll contact you when we need your bank details for your refund or payment.
+                  </p>
+                  <p className="text-sm text-green-800 mt-2">
+                    You can provide them later via email or through our secure client portal.
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="flex gap-4 mt-8">
@@ -1043,7 +1093,10 @@ export default function LunaOnboarding() {
               </button>
               <button 
                 onClick={nextStage}
-                disabled={!formData.eft_account_name || !formData.eft_bsb_number || !formData.eft_account_number}
+                disabled={
+                  formData.bank_details_later !== true && 
+                  (!formData.eft_account_name || !formData.eft_bsb_number || !formData.eft_account_number)
+                }
                 className="flex-1 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center"
               >
                 Continue <ChevronRight className="ml-2 w-4 h-4" />
