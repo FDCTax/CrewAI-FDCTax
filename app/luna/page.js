@@ -544,41 +544,56 @@ export default function LunaOnboarding() {
         {stage === 4 && (
           <div className="bg-white rounded-xl shadow-xl p-6 md:p-8">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Tell me about your business</h2>
-              <p className="text-gray-600">Family Day Care details</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Let's talk about your business</h2>
+              <p className="text-gray-600">Your Family Day Care setup</p>
             </div>
 
             <div className="space-y-6">
+              {/* ABN Question */}
               <div>
-                <label className="block text-sm font-medium mb-2">Do you have an ABN? *</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
+                <label className="block text-sm font-medium mb-3">Do you have an ABN (Australian Business Number)? *</label>
+                <div className="flex flex-col gap-3">
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                     <input
                       type="radio"
                       name="has_abn"
                       checked={formData.has_abn === 'yes'}
-                      onChange={() => updateField('has_abn', 'yes')}
-                      className="mr-2"
+                      onChange={() => {
+                        updateField('has_abn', 'yes')
+                        updateField('abn_assistance', '')
+                      }}
+                      className="mr-3"
                     />
-                    Yes
+                    <span className="font-medium">Yes, I have an ABN</span>
                   </label>
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
                     <input
                       type="radio"
                       name="has_abn"
                       checked={formData.has_abn === 'no'}
                       onChange={() => updateField('has_abn', 'no')}
-                      className="mr-2"
+                      className="mr-3"
                     />
-                    No
+                    <span className="font-medium">No, I don't have an ABN</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="has_abn"
+                      checked={formData.has_abn === 'unsure'}
+                      onChange={() => updateField('has_abn', 'unsure')}
+                      className="mr-3"
+                    />
+                    <span className="font-medium">I'm not sure</span>
                   </label>
                 </div>
               </div>
 
+              {/* ABN Entry (if Yes) */}
               {formData.has_abn === 'yes' && (
                 <>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Australian Business Number (ABN) *</label>
+                    <label className="block text-sm font-medium mb-2">Please enter your ABN *</label>
                     <div className="relative">
                       <input
                         type="tel"
@@ -620,88 +635,332 @@ export default function LunaOnboarding() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">Trading Name / Business Name *</label>
+                    <label className="block text-sm font-medium mb-2">Trading Name / Business Name</label>
                     <input
                       value={formData.trading_name || ''}
                       onChange={(e) => updateField('trading_name', e.target.value)}
-                      placeholder="Your FDC business name"
+                      placeholder="e.g., Happy Kids Family Day Care"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
+                    <p className="text-xs text-gray-500 mt-1">Your registered business name (optional)</p>
                   </div>
                 </>
               )}
 
-              <div>
-                <label className="block text-sm font-medium mb-2">When did you start Family Day Care? *</label>
-                <input
-                  type="date"
-                  value={formData.fdc_start_date || ''}
-                  onChange={(e) => updateField('fdc_start_date', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-              </div>
+              {/* ABN Assistance (if No or Unsure) */}
+              {(formData.has_abn === 'no' || formData.has_abn === 'unsure') && (
+                <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
+                  <p className="text-sm text-blue-900 leading-relaxed mb-4">
+                    Your ABN is your Australian Business Number. If you have not yet set up an ABN, you can do so for free at{' '}
+                    <a href="https://www.abr.gov.au" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">
+                      www.abr.gov.au
+                    </a>, or for a fee of <strong>$99.00</strong> we can obtain an ABN on your behalf.
+                  </p>
+                  <p className="text-sm font-medium text-blue-900 mb-3">Please indicate your preference:</p>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center cursor-pointer p-3 bg-white border border-blue-200 rounded-lg hover:bg-blue-50">
+                      <input
+                        type="radio"
+                        name="abn_assistance"
+                        checked={formData.abn_assistance === 'assist_me'}
+                        onChange={() => updateField('abn_assistance', 'assist_me')}
+                        className="mr-3"
+                      />
+                      <span className="text-sm">Yes - Please assist me ($99)</span>
+                    </label>
+                    <label className="flex items-center cursor-pointer p-3 bg-white border border-blue-200 rounded-lg hover:bg-blue-50">
+                      <input
+                        type="radio"
+                        name="abn_assistance"
+                        checked={formData.abn_assistance === 'apply_myself'}
+                        onChange={() => updateField('abn_assistance', 'apply_myself')}
+                        className="mr-3"
+                      />
+                      <span className="text-sm">No thanks - I will apply myself</span>
+                    </label>
+                    <label className="flex items-center cursor-pointer p-3 bg-white border border-blue-200 rounded-lg hover:bg-blue-50">
+                      <input
+                        type="radio"
+                        name="abn_assistance"
+                        checked={formData.abn_assistance === 'have_question'}
+                        onChange={() => updateField('abn_assistance', 'have_question')}
+                        className="mr-3"
+                      />
+                      <span className="text-sm">Not yet - I have a question</span>
+                    </label>
+                  </div>
+                  {formData.abn_assistance === 'assist_me' && (
+                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-sm text-green-900">
+                        ✓ Perfect! We'll contact you within 1-2 business days to assist with your ABN application.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Are you a sole trader? *</label>
+              {/* GST Registration (only if ABN is Yes and valid) */}
+              {formData.has_abn === 'yes' && validations.abn?.valid === true && (
+                <>
+                  <div className="border-t border-gray-200 pt-6">
+                    <label className="block text-sm font-medium mb-3">Are you registered for GST? *</label>
+                    <div className="flex flex-col gap-3">
+                      <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input
+                          type="radio"
+                          name="gst_registered"
+                          checked={formData.gst_registered === 'yes'}
+                          onChange={() => updateField('gst_registered', 'yes')}
+                          className="mr-3"
+                        />
+                        <span className="font-medium">Yes, I'm registered for GST</span>
+                      </label>
+                      <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input
+                          type="radio"
+                          name="gst_registered"
+                          checked={formData.gst_registered === 'no'}
+                          onChange={() => updateField('gst_registered', 'no')}
+                          className="mr-3"
+                        />
+                        <span className="font-medium">No, I'm not registered</span>
+                      </label>
+                      <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                        <input
+                          type="radio"
+                          name="gst_registered"
+                          checked={formData.gst_registered === 'unsure'}
+                          onChange={() => updateField('gst_registered', 'unsure')}
+                          className="mr-3"
+                        />
+                        <span className="font-medium">I'm not sure</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* GST Basis (if registered) */}
+                  {formData.gst_registered === 'yes' && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">On what basis? *</label>
+                      <select
+                        value={formData.gst_basis || ''}
+                        onChange={(e) => updateField('gst_basis', e.target.value)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      >
+                        <option value="">Select...</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="annual">Annual</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {/* GST Information (if not registered) */}
+                  {(formData.gst_registered === 'no' || formData.gst_registered === 'unsure') && (
+                    <div className="bg-yellow-50 rounded-lg p-5 border border-yellow-200">
+                      <p className="text-sm text-yellow-900 mb-4">
+                        If you do not wish to register for GST, press Next to continue. Otherwise, please indicate if you wish to read further information.
+                      </p>
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-yellow-900 mb-2">Would you like to find out more about GST?</label>
+                        <div className="flex gap-4">
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              type="radio"
+                              name="gst_learn_more"
+                              checked={formData.gst_learn_more === 'yes'}
+                              onChange={() => updateField('gst_learn_more', 'yes')}
+                              className="mr-2"
+                            />
+                            <span className="text-sm">Yes</span>
+                          </label>
+                          <label className="flex items-center cursor-pointer">
+                            <input
+                              type="radio"
+                              name="gst_learn_more"
+                              checked={formData.gst_learn_more === 'no'}
+                              onChange={() => updateField('gst_learn_more', 'no')}
+                              className="mr-2"
+                            />
+                            <span className="text-sm">No</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {formData.gst_learn_more === 'yes' && (
+                        <>
+                          <div className="mb-4 p-4 bg-white rounded-lg border border-yellow-300">
+                            <p className="text-sm text-gray-900 mb-2">
+                              📄 <strong>Download our GST fact sheet:</strong>
+                            </p>
+                            <a 
+                              href="https://fdctax.sharepoint.com/:b:/s/FDCTaxTeam/EeS8vK9uN9pGvq8jKQx_n8IBpYqx-1qQMJxXO_4vZqOKBw?e=1HU0qn" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline text-sm font-medium"
+                            >
+                              Should I Register for GST? →
+                            </a>
+                            <p className="text-xs text-gray-600 mt-2">
+                              Or feel free to call us on <strong>1300 000 000</strong> to discuss your situation.
+                            </p>
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-medium text-yellow-900 mb-2">Would you like assistance registering for GST?</label>
+                            <div className="flex flex-col gap-2">
+                              <label className="flex items-center cursor-pointer p-3 bg-white border border-yellow-300 rounded-lg hover:bg-yellow-50">
+                                <input
+                                  type="radio"
+                                  name="gst_assistance"
+                                  checked={formData.gst_assistance === 'yes_assist'}
+                                  onChange={() => updateField('gst_assistance', 'yes_assist')}
+                                  className="mr-3"
+                                />
+                                <span className="text-sm">Yes - Please assist me</span>
+                              </label>
+                              <label className="flex items-center cursor-pointer p-3 bg-white border border-yellow-300 rounded-lg hover:bg-yellow-50">
+                                <input
+                                  type="radio"
+                                  name="gst_assistance"
+                                  checked={formData.gst_assistance === 'no_thanks'}
+                                  onChange={() => updateField('gst_assistance', 'no_thanks')}
+                                  className="mr-3"
+                                />
+                                <span className="text-sm">No thanks</span>
+                              </label>
+                              <label className="flex items-center cursor-pointer p-3 bg-white border border-yellow-300 rounded-lg hover:bg-yellow-50">
+                                <input
+                                  type="radio"
+                                  name="gst_assistance"
+                                  checked={formData.gst_assistance === 'discuss_further'}
+                                  onChange={() => updateField('gst_assistance', 'discuss_further')}
+                                  className="mr-3"
+                                />
+                                <span className="text-sm">Not now - I'd like to discuss further</span>
+                              </label>
+                            </div>
+                          </div>
+
+                          {formData.gst_assistance === 'yes_assist' && (
+                            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                              <p className="text-sm text-green-900">
+                                ✓ Great! We will contact you within 1-2 business days to assist with your GST registration.
+                              </p>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Entity Structure */}
+              <div className="border-t border-gray-200 pt-6">
+                <label className="block text-sm font-medium mb-3">Do you operate through a trust, company, or partnership? *</label>
                 <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 flex-1">
                     <input
                       type="radio"
-                      name="is_sole_trader"
-                      checked={formData.is_sole_trader === 'Y'}
-                      onChange={() => updateField('is_sole_trader', 'Y')}
-                      className="mr-2"
+                      name="has_entity"
+                      checked={formData.has_entity === 'yes'}
+                      onChange={() => updateField('has_entity', 'yes')}
+                      className="mr-3"
                     />
-                    Yes
+                    <span className="font-medium">Yes</span>
                   </label>
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex items-center cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 flex-1">
                     <input
                       type="radio"
-                      name="is_sole_trader"
-                      checked={formData.is_sole_trader === 'N'}
-                      onChange={() => updateField('is_sole_trader', 'N')}
-                      className="mr-2"
+                      name="has_entity"
+                      checked={formData.has_entity === 'no'}
+                      onChange={() => updateField('has_entity', 'no')}
+                      className="mr-3"
                     />
-                    No
+                    <span className="font-medium">No (sole trader)</span>
                   </label>
                 </div>
               </div>
 
-              {formData.is_sole_trader === 'N' && (
+              {formData.has_entity === 'yes' && (
                 <>
                   <div>
                     <label className="block text-sm font-medium mb-2">Entity Name *</label>
                     <input
                       value={formData.entity_name || ''}
                       onChange={(e) => updateField('entity_name', e.target.value)}
-                      placeholder="Company or Trust name"
+                      placeholder="e.g., Smith Family Trust"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2">ACN (if applicable)</label>
+                    <label className="block text-sm font-medium mb-2">ACN (if company)</label>
                     <input
+                      type="tel"
+                      inputMode="numeric"
                       value={formData.acn || ''}
-                      onChange={(e) => updateField('acn', e.target.value)}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/[^0-9]/g, '').slice(0, 9)
+                        // Auto-format: 000 000 000
+                        if (value.length > 6) {
+                          value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6)
+                        } else if (value.length > 3) {
+                          value = value.slice(0, 3) + ' ' + value.slice(3)
+                        }
+                        updateField('acn', value)
+                      }}
                       placeholder="000 000 000"
+                      maxLength={11}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
                 </>
               )}
 
+              {/* Business Address */}
               {formData.has_abn === 'yes' && (
                 <>
-                  <h3 className="text-lg font-semibold text-gray-900 pt-4">Business Address</h3>
-                  <p className="text-sm text-gray-600 mb-4">Where do you operate your FDC?</p>
+                  <div className="border-t border-gray-200 pt-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">Business Address</h3>
+                    <p className="text-sm text-gray-600 mb-4">Where do you operate your Family Day Care?</p>
 
-                  <AddressAutocomplete
-                    prefix="business"
-                    formData={formData}
-                    updateField={updateField}
-                    label="Business Location"
-                  />
+                    <label className="flex items-center cursor-pointer mb-4">
+                      <input
+                        type="checkbox"
+                        checked={formData.business_same_as_residential !== false}
+                        onChange={(e) => {
+                          updateField('business_same_as_residential', e.target.checked)
+                          if (e.target.checked) {
+                            // Copy residential to business
+                            updateField('business_address_line_1', formData.residential_address_line_1)
+                            updateField('business_address_line_2', formData.residential_address_line_2)
+                            updateField('business_address_location', formData.residential_address_location)
+                            updateField('business_address_state', formData.residential_address_state)
+                            updateField('business_address_postcode', formData.residential_address_postcode)
+                          }
+                        }}
+                        className="mr-2"
+                      />
+                      <span className="text-sm font-medium">Same as residential address</span>
+                    </label>
+
+                    {formData.business_same_as_residential === false && (
+                      <AddressAutocomplete
+                        prefix="business"
+                        formData={formData}
+                        updateField={updateField}
+                        label="Business Location"
+                      />
+                    )}
+
+                    {formData.business_same_as_residential !== false && (
+                      <p className="text-sm text-gray-600 italic">
+                        ✓ Business address will be the same as your residential address
+                      </p>
+                    )}
+                  </div>
                 </>
               )}
             </div>
@@ -712,7 +971,7 @@ export default function LunaOnboarding() {
               </button>
               <button 
                 onClick={nextStage}
-                disabled={!formData.fdc_start_date || !formData.is_sole_trader || !formData.has_abn}
+                disabled={!formData.has_abn || !formData.has_entity}
                 className="flex-1 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center"
               >
                 Continue <ChevronRight className="ml-2 w-4 h-4" />
