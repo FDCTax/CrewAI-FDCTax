@@ -156,11 +156,16 @@ export async function POST(request) {
       
       const result = await createClient(clientData)
       
-      // Send welcome email (placeholder)
-      console.log('TODO: Send welcome email to', clientData.email)
+      // Add UUID to client data for emails
+      const clientDataWithUUID = { ...clientData, uuid: result.uuid }
       
-      // Send admin notification (placeholder)
-      console.log('TODO: Send admin notification to', process.env.ADMIN_EMAIL)
+      // Send emails asynchronously (don't block the response)
+      Promise.all([
+        sendWelcomeEmail(clientDataWithUUID).catch(err => console.error('Welcome email failed:', err)),
+        sendAdminNotification(clientDataWithUUID).catch(err => console.error('Admin notification failed:', err))
+      ]).then(() => {
+        console.log('✅ All emails sent successfully')
+      })
       
       return NextResponse.json({
         success: true,
