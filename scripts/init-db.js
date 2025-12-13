@@ -6,10 +6,8 @@ require('dotenv').config()
 console.log('Database URL:', process.env.DATABASE_URL ? 'Found' : 'NOT FOUND')
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL + '&sslmode=no-verify',
+  ssl: false
 })
 
 async function initDatabase() {
