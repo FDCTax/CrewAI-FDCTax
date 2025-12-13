@@ -372,15 +372,38 @@ export default function LunaOnboarding() {
                 label="Your Home Address"
               />
 
-              <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={postalSameAsResidential}
-                  onChange={(e) => setPostalSameAsResidential(e.target.checked)}
-                  className="mr-2"
-                />
-                <span className="text-sm">Postal address is the same as residential</span>
-              </label>
+              <div className="mt-6 border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Postal Address</h3>
+                
+                <label className="flex items-center cursor-pointer mb-4">
+                  <input
+                    type="checkbox"
+                    checked={postalSameAsResidential}
+                    onChange={(e) => setPostalSameAsResidential(e.target.checked)}
+                    className="mr-2"
+                  />
+                  <span className="text-sm font-medium">Same as residential address</span>
+                </label>
+
+                {!postalSameAsResidential && (
+                  <div className="space-y-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <p className="text-sm text-blue-900 mb-3">Enter your postal/mailing address:</p>
+                    
+                    <AddressAutocomplete
+                      prefix="postal"
+                      formData={formData}
+                      updateField={updateField}
+                      label="Postal Address"
+                    />
+                  </div>
+                )}
+
+                {postalSameAsResidential && (
+                  <p className="text-sm text-gray-600 italic">
+                    ✓ Postal address will be the same as your residential address
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="flex gap-4 mt-8">
