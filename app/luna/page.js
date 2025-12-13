@@ -527,8 +527,24 @@ export default function LunaOnboarding() {
                     <label className="block text-sm font-medium mb-2">Australian Business Number (ABN) *</label>
                     <div className="relative">
                       <input
+                        type="tel"
+                        inputMode="numeric"
                         value={formData.abn || ''}
-                        onChange={(e) => updateField('abn', e.target.value)}
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/[^0-9]/g, '')
+                          if (value.length > 11) value = value.slice(0, 11)
+                          
+                          // Auto-format: 00 000 000 000
+                          if (value.length > 8) {
+                            value = value.slice(0, 2) + ' ' + value.slice(2, 5) + ' ' + value.slice(5, 8) + ' ' + value.slice(8)
+                          } else if (value.length > 5) {
+                            value = value.slice(0, 2) + ' ' + value.slice(2, 5) + ' ' + value.slice(5)
+                          } else if (value.length > 2) {
+                            value = value.slice(0, 2) + ' ' + value.slice(2)
+                          }
+                          
+                          updateField('abn', value)
+                        }}
                         placeholder="00 000 000 000"
                         maxLength={14}
                         className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
