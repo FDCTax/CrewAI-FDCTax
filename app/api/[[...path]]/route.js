@@ -70,9 +70,10 @@ export async function POST(request) {
     try {
       const { tfn } = await request.json()
       
-      // Basic TFN validation (9 digits)
-      const cleanTFN = tfn.replace(/\\s/g, '')
+      // Clean: remove ALL non-digits (spaces, dashes, etc.)
+      const cleanTFN = tfn.replace(/\D/g, '')
       
+      // Check length only
       if (cleanTFN.length !== 9) {
         return NextResponse.json({
           valid: false,
@@ -80,14 +81,7 @@ export async function POST(request) {
         })
       }
       
-      if (!/^\\d{9}$/.test(cleanTFN)) {
-        return NextResponse.json({
-          valid: false,
-          message: 'TFN must contain only numbers'
-        })
-      }
-      
-      // TFN algorithm validation
+      // TFN algorithm validation (ATO checksum)
       const weights = [1, 4, 3, 7, 5, 8, 6, 9, 10]
       let sum = 0
       
@@ -99,7 +93,7 @@ export async function POST(request) {
       
       return NextResponse.json({
         valid: isValid,
-        message: isValid ? 'Valid TFN' : 'Invalid TFN - please check the number'
+        message: isValid ? 'Valid TFN ✓' : 'Invalid TFN - please check the number'
       })
     } catch (error) {
       return NextResponse.json({ valid: false, message: 'Validation error' }, { status: 500 })
