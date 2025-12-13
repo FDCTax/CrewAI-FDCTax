@@ -592,51 +592,14 @@ export default function LunaOnboarding() {
               {formData.has_abn === 'yes' && (
                 <>
                   <h3 className="text-lg font-semibold text-gray-900 pt-4">Business Address</h3>
-                  <p className="text-sm text-gray-600 -mt-4">Where do you operate your FDC?</p>
+                  <p className="text-sm text-gray-600 mb-4">Where do you operate your FDC?</p>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Street Address *</label>
-                    <input
-                      value={formData.business_address_line_1 || ''}
-                      onChange={(e) => updateField('business_address_line_1', e.target.value)}
-                      placeholder="123 Main Street"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Suburb/City *</label>
-                      <input
-                        value={formData.business_address_location || ''}
-                        onChange={(e) => updateField('business_address_location', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">State *</label>
-                      <select
-                        value={formData.business_address_state || ''}
-                        onChange={(e) => updateField('business_address_state', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option value="">Select</option>
-                        {AUSTRALIAN_STATES.map(state => (
-                          <option key={state} value={state}>{state}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="w-1/2">
-                    <label className="block text-sm font-medium mb-2">Postcode *</label>
-                    <input
-                      value={formData.business_address_postcode || ''}
-                      onChange={(e) => updateField('business_address_postcode', e.target.value)}
-                      maxLength={4}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
+                  <AddressAutocomplete
+                    prefix="business"
+                    formData={formData}
+                    updateField={updateField}
+                    label="Business Location"
+                  />
                 </>
               )}
             </div>
