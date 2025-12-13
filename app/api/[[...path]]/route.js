@@ -306,6 +306,31 @@ export async function POST(request) {
     }
   }
 
+  // Address search (placeholder for Addressr)
+  if (pathname === '/api/address-search') {
+    try {
+      const url = new URL(request.url)
+      const searchQuery = url.searchParams.get('q') || ''
+      
+      // TODO: Replace with real Addressr API call when deployed
+      // For now, return mock suggestions based on common Australian addresses
+      
+      const mockSuggestions = [
+        { street: `${searchQuery}`, suburb: 'Sydney', state: 'NSW', postcode: '2000', line2: '' },
+        { street: `${searchQuery}`, suburb: 'Melbourne', state: 'VIC', postcode: '3000', line2: '' },
+        { street: `${searchQuery}`, suburb: 'Brisbane', state: 'QLD', postcode: '4000', line2: '' },
+      ].filter(addr => 
+        addr.street.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      
+      return NextResponse.json({
+        suggestions: mockSuggestions.slice(0, 5)
+      })
+    } catch (error) {
+      return NextResponse.json({ suggestions: [] }, { status: 200 })
+    }
+  }
+
   return NextResponse.json({
     message: 'API endpoint not implemented',
     path: pathname
