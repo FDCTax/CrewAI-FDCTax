@@ -101,6 +101,13 @@ export default function LunaOnboarding() {
     }
   }
 
+  // Auto-prefill preferred name from first name
+  useEffect(() => {
+    if (formData.first_name && !formData.casual_name) {
+      updateField('casual_name', formData.first_name)
+    }
+  }, [formData.first_name])
+
   useEffect(() => {
     if (formData.tfn) {
       const timeoutId = setTimeout(() => validateTFN(formData.tfn), 500)
