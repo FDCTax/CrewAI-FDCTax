@@ -101,9 +101,10 @@ export default function LunaOnboarding() {
     }
   }
 
-  // Auto-prefill preferred name from first name
+  // Auto-prefill preferred name from first name (full name, not just first letter)
   useEffect(() => {
-    if (formData.first_name && !formData.casual_name) {
+    // Only auto-fill if casual_name is empty or hasn't been manually edited
+    if (formData.first_name && !formData.casual_name_edited) {
       updateField('casual_name', formData.first_name)
     }
   }, [formData.first_name])
