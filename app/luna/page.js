@@ -296,8 +296,22 @@ export default function LunaOnboarding() {
                 <label className="block text-sm font-medium mb-2">Tax File Number (TFN) *</label>
                 <div className="relative">
                   <input
+                    type="tel"
+                    inputMode="numeric"
                     value={formData.tfn || ''}
-                    onChange={(e) => updateField('tfn', e.target.value)}
+                    onChange={(e) => {
+                      let value = e.target.value.replace(/[^0-9]/g, '')
+                      if (value.length > 9) value = value.slice(0, 9)
+                      
+                      // Auto-format: add spaces after 3rd and 6th digit
+                      if (value.length > 6) {
+                        value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6)
+                      } else if (value.length > 3) {
+                        value = value.slice(0, 3) + ' ' + value.slice(3)
+                      }
+                      
+                      updateField('tfn', value)
+                    }}
                     placeholder="000 000 000"
                     maxLength={11}
                     className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
@@ -319,7 +333,7 @@ export default function LunaOnboarding() {
                     {validations.tfn.message}
                   </p>
                 )}
-                <p className="text-xs text-gray-500 mt-1">9 digits • We validate this with the ATO</p>
+                <p className="text-xs text-gray-500 mt-1">9 digits • Auto-formats as you type • We validate with the ATO</p>
               </div>
 
               <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
