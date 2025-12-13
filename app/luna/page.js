@@ -491,12 +491,37 @@ export default function LunaOnboarding() {
                 <label className="block text-sm font-medium mb-2">Alternate Phone <span className="text-gray-400">(optional)</span></label>
                 <input
                   type="tel"
+                  inputMode="numeric"
                   value={formData.phone || ''}
-                  onChange={(e) => updateField('phone', e.target.value)}
-                  placeholder="(02) 0000 0000"
+                  onChange={(e) => {
+                    // Remove all non-digits
+                    let value = e.target.value.replace(/\D/g, '')
+                    if (value.length > 10) value = value.slice(0, 10)
+                    
+                    // Smart format: detects mobile (04xx) vs landline (02/03/07/08)
+                    if (value.startsWith('04') && value.length > 4) {
+                      // Mobile format: 0400 000 000
+                      if (value.length > 7) {
+                        value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7)
+                      } else {
+                        value = value.slice(0, 4) + ' ' + value.slice(4)
+                      }
+                    } else if (value.length > 2) {
+                      // Landline format: 02 1234 5678
+                      if (value.length > 6) {
+                        value = value.slice(0, 2) + ' ' + value.slice(2, 6) + ' ' + value.slice(6)
+                      } else {
+                        value = value.slice(0, 2) + ' ' + value.slice(2)
+                      }
+                    }
+                    
+                    updateField('phone', value)
+                  }}
+                  placeholder="02 1234 5678"
+                  maxLength={12}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
-                <p className="text-xs text-gray-500 mt-1">Home or work number</p>
+                <p className="text-xs text-gray-500 mt-1">Home or work number (mobile or landline)</p>
               </div>
             </div>
 
