@@ -591,60 +591,47 @@ export default function LunaOnboarding() {
 
               {/* ABN Entry (if Yes) */}
               {formData.has_abn === 'yes' && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Please enter your ABN *</label>
-                    <div className="relative">
-                      <input
-                        type="tel"
-                        inputMode="numeric"
-                        value={formData.abn || ''}
-                        onChange={(e) => {
-                          let value = e.target.value.replace(/[^0-9]/g, '')
-                          if (value.length > 11) value = value.slice(0, 11)
-                          
-                          // Auto-format: 00 000 000 000
-                          if (value.length > 8) {
-                            value = value.slice(0, 2) + ' ' + value.slice(2, 5) + ' ' + value.slice(5, 8) + ' ' + value.slice(8)
-                          } else if (value.length > 5) {
-                            value = value.slice(0, 2) + ' ' + value.slice(2, 5) + ' ' + value.slice(5)
-                          } else if (value.length > 2) {
-                            value = value.slice(0, 2) + ' ' + value.slice(2)
-                          }
-                          
-                          updateField('abn', value)
-                        }}
-                        placeholder="00 000 000 000"
-                        maxLength={14}
-                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
-                          validations.abn?.valid === true ? 'border-green-500' : ''
-                        } ${validations.abn?.valid === false ? 'border-red-500' : ''}`}
-                      />
-                      {validations.abn?.loading && (
-                        <Loader2 className="absolute right-3 top-3 w-4 h-4 animate-spin text-gray-400" />
-                      )}
-                      {validations.abn?.valid === true && (
-                        <Check className="absolute right-3 top-3 w-4 h-4 text-green-500" />
-                      )}
-                    </div>
-                    {validations.abn?.message && (
-                      <p className={`text-xs mt-1 ${validations.abn.valid ? 'text-green-600' : 'text-red-600'}`}>
-                        {validations.abn.message}
-                      </p>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Please enter your ABN *</label>
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      value={formData.abn || ''}
+                      onChange={(e) => {
+                        let value = e.target.value.replace(/[^0-9]/g, '')
+                        if (value.length > 11) value = value.slice(0, 11)
+                        
+                        // Auto-format: 00 000 000 000
+                        if (value.length > 8) {
+                          value = value.slice(0, 2) + ' ' + value.slice(2, 5) + ' ' + value.slice(5, 8) + ' ' + value.slice(8)
+                        } else if (value.length > 5) {
+                          value = value.slice(0, 2) + ' ' + value.slice(2, 5) + ' ' + value.slice(5)
+                        } else if (value.length > 2) {
+                          value = value.slice(0, 2) + ' ' + value.slice(2)
+                        }
+                        
+                        updateField('abn', value)
+                      }}
+                      placeholder="00 000 000 000"
+                      maxLength={14}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
+                        validations.abn?.valid === true ? 'border-green-500' : ''
+                      } ${validations.abn?.valid === false ? 'border-red-500' : ''}`}
+                    />
+                    {validations.abn?.loading && (
+                      <Loader2 className="absolute right-3 top-3 w-4 h-4 animate-spin text-gray-400" />
+                    )}
+                    {validations.abn?.valid === true && (
+                      <Check className="absolute right-3 top-3 w-4 h-4 text-green-500" />
                     )}
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Trading Name / Business Name</label>
-                    <input
-                      value={formData.trading_name || ''}
-                      onChange={(e) => updateField('trading_name', e.target.value)}
-                      placeholder="e.g., Happy Kids Family Day Care"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Your registered business name (optional)</p>
-                  </div>
-                </>
+                  {validations.abn?.message && (
+                    <p className={`text-xs mt-1 ${validations.abn.valid ? 'text-green-600' : 'text-red-600'}`}>
+                      {validations.abn.message}
+                    </p>
+                  )}
+                </div>
               )}
 
               {/* ABN Assistance (if No or Unsure) */}
