@@ -78,13 +78,8 @@ CREATE TABLE IF NOT EXISTS clients (
     entity_name TEXT,  -- If not sole trader
     is_sole_trader TEXT DEFAULT 'Y',  -- Y/N
     
-    -- Deductions Profile
-    uses_car TEXT,  -- Y/N
-    car_method TEXT,  -- logbook/cents_per_km
-    uses_home_office TEXT,  -- Y/N
-    uses_mobile TEXT,  -- Y/N
-    mobile_business_percent TEXT,  -- percentage
-    uses_internet TEXT,  -- Y/N
+    -- Deductions Profile (stored as JSONB)
+    deduction_profile JSONB,  -- {"car_use": true, "car_method": "logbook", "home_office": true, etc.}
     
     -- Previous Accountant
     used_accountant_previously TEXT,  -- Y/N
