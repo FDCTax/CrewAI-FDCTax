@@ -412,7 +412,20 @@ export default function LunaOnboarding() {
               </button>
               <button 
                 onClick={nextStage} 
-                disabled={!formData.first_name || !formData.last_name || !formData.casual_name || !formData.birth_date || !formData.gender || !formData.tfn || validations.tfn?.valid !== true}
+                disabled={
+                  !formData.first_name || 
+                  !formData.last_name || 
+                  !formData.casual_name || 
+                  !formData.birth_date || 
+                  !formData.gender || 
+                  !formData.tfn || 
+                  validations.tfn?.valid !== true ||
+                  !formData.residential_address_line_1 ||
+                  !formData.residential_address_location ||
+                  !formData.residential_address_state ||
+                  !formData.residential_address_postcode ||
+                  (!postalSameAsResidential && (!formData.postal_address_line_1 || !formData.postal_address_location || !formData.postal_address_state || !formData.postal_address_postcode))
+                }
                 className="flex-1 px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 Continue <ChevronRight className="ml-2 w-4 h-4" />
