@@ -37,7 +37,20 @@ export default function LunaOnboarding() {
   }
 
   const validateTFN = async (tfn) => {
-    if (!tfn || tfn.replace(/\s/g, '').length !== 9) return
+    if (!tfn) return
+    
+    // Clean: remove all non-digits
+    const cleanTFN = tfn.replace(/\D/g, '')
+    
+    // Check length first
+    if (cleanTFN.length === 0) return
+    if (cleanTFN.length !== 9) {
+      setValidations(prev => ({
+        ...prev,
+        tfn: { valid: false, message: 'TFN must be 9 digits', loading: false }
+      }))
+      return
+    }
     
     setValidations(prev => ({ ...prev, tfn: { loading: true } }))
     
@@ -45,7 +58,7 @@ export default function LunaOnboarding() {
       const response = await fetch('/api/validate-tfn', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tfn: tfn.replace(/\s/g, '') })
+        body: JSON.stringify({ tfn: cleanTFN })
       })
       
       const data = await response.json()
