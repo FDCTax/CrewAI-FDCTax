@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Sparkles, ChevronRight, ChevronLeft, Check, AlertCircle, Loader2, Building2, CreditCard, Car, Home, Smartphone, Wifi, FileCheck, Shield, UserCheck } from 'lucide-react'
 import AddressAutocomplete from '@/components/AddressAutocomplete'
+import LunaChatWidget from '@/components/LunaChatWidget'
 
 const AUSTRALIAN_STATES = ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'NT', 'ACT']
 const TITLES = ['Mr', 'Mrs', 'Miss', 'Ms', 'Dr', 'Prof']
