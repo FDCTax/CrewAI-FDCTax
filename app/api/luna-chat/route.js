@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server';
-import { openai, callWithRetry } from '@/lib/openai';
-import { searchKnowledgeBase } from '@/lib/knowledgeBase';
+import { generateLunaResponse } from '@/lib/lunaAI';
 
+/**
+ * Luna Chat API Route
+ * 
+ * NOTE: Currently using KB-based responses with fallback logic.
+ * TODO: Once Emergent LLM endpoint is properly configured, replace generateLunaResponse
+ * with actual LLM integration using the Emergent Universal Key.
+ */
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -14,7 +20,7 @@ export async function POST(request) {
       );
     }
 
-    // Get the last user message for KB search
+    // Get the last user message
     const lastUserMessage = messages.filter(m => m.role === 'user').pop();
     
     if (!lastUserMessage) {
@@ -24,62 +30,21 @@ export async function POST(request) {
       );
     }
 
-    // Search knowledge base for relevant context
-    const kbResults = await searchKnowledgeBase(lastUserMessage.content, 3);
+    // Generate Luna's response using KB + intelligent fallbacks
+    const { content, sources } = await generateLunaResponse(
+      lastUserMessage.content,
+      formContext
+    );
 
-    // Build context from KB results
-    let kbContext = '';
-    if (kbResults.length > 0) {
-      kbContext = '\n\nRelevant knowledge base information:\n';
-      kbResults.forEach((article, index) => {
-        kbContext += `\n${index + 1}. ${article.title}\n${article.content}\n`;
-      });
-    }
-
-    // Build form context
-    let formContextStr = '';
-    if (formContext) {
-      formContextStr = `\n\nCurrent form context:\n- Stage: ${formContext.currentStage || 'unknown'}\n`;
-      if (formContext.hasABN) formContextStr += '- User has ABN\n';
-      if (formContext.hasGST) formContextStr += '- User registered for GST\n';
-    }
-
-    // System prompt for Luna
-    const systemPrompt = {
-      role: 'system',
-      content: `You are Luna, a friendly and helpful AI assistant for FDC Tax's client onboarding process. Your role is to:
-
-1. Answer questions about Australian tax, ABN, GST, and the onboarding process
-2. Provide clear, accurate information based on the knowledge base
-3. Help users understand what information is needed and why
-4. Be encouraging and supportive throughout the onboarding journey
-5. If payment is required, explain the deposit process clearly
-
-Guidelines:
-- Keep responses concise and friendly
-- Use the knowledge base information when available
-- If you don't know something, acknowledge it and suggest contacting FDC Tax directly
-- Be aware of the user's current form stage and provide contextual help
-- Format your responses with proper paragraphs for readability
-${kbContext}${formContextStr}`
-    };
-
-    // Call OpenAI with retry logic
-    const response = await callWithRetry(async () => {
-      return await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [systemPrompt, ...messages],
-        temperature: 0.7,
-        max_tokens: 500,
-      });
-    });
-
-    const aiMessage = response.choices[0].message;
-
+    // Return response in OpenAI-compatible format
     return NextResponse.json({
-      message: aiMessage,
-      kbSources: kbResults.map(r => ({ title: r.title, category: r.category })),
-      sessionId
+      message: {
+        role: 'assistant',
+        content
+      },
+      kbSources: sources,
+      sessionId,
+      note: 'Using KB-based responses. Emergent LLM integration pending endpoint configuration.'
     });
   } catch (error) {
     console.error('Luna Chat API Error:', error);
