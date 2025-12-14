@@ -1558,6 +1558,16 @@ export default function LunaOnboarding() {
           </div>
         )}
       </div>
+
+      {/* Luna Chat Widget */}
+      <LunaChatWidget 
+        formContext={{
+          currentStage: stage,
+          hasABN: formData.has_abn === 'Y',
+          hasGST: formData.registered_for_gst === 'Y',
+          isSoleTrader: formData.is_sole_trader === 'Y'
+        }}
+      />
     </div>
   )
 }
