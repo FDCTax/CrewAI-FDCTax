@@ -298,6 +298,121 @@ export default function LunaDashboard() {
     }
   };
 
+  const openEditModal = async (doc) => {
+    setEditingDoc(doc);
+    setEditLoading(true);
+    setShowEditModal(true);
+    
+    try {
+      // Fetch full document content
+      const res = await fetch(`/api/luna-rag/kb/documents/${doc.doc_id}`);
+      const data = await res.json();
+      
+      // Combine all chunks to get full content
+      const fullContent = data.chunks?.map(c => c.content).join('\n\n') || '';
+      setEditContent(fullContent);
+    } catch (error) {
+      alert(`Error loading document: ${error.message}`);
+      setShowEditModal(false);
+    } finally {
+      setEditLoading(false);
+    }
+  };
+  
+  const saveDocumentEdit = async () => {
+    if (!editingDoc || !editContent.trim()) return;
+    
+    setEditLoading(true);
+    try {
+      // Delete the old document
+      await fetch(`/api/luna-rag/kb/documents/${editingDoc.doc_id}`, {
+        method: 'DELETE'
+      });
+      
+      // Re-ingest with new content
+      const formData = new FormData();
+      const blob = new Blob([editContent], { type: 'text/plain' });
+      const file = new File([blob], editingDoc.filename, { type: 'text/plain' });
+      formData.append('file', file);
+      formData.append('category', editingDoc.category);
+      formData.append('title', editingDoc.title);
+      
+      const res = await fetch('/api/luna-rag/ingest/file', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await res.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      alert(`✅ Document updated successfully!\n\n${data.chunks_created} chunks created.`);
+      setShowEditModal(false);
+      setEditingDoc(null);
+      setEditContent('');
+      
+      // Refresh
+      await loadDocuments();
+      checkHealth();
+    } catch (error) {
+      alert(`❌ Error saving document: ${error.message}`);
+    } finally {
+      setEditLoading(false);
+    }
+  };
+  
+  const loadEmailTemplates = async () => {
+    setTemplateLoading(true);
+    try {
+      const res = await fetch('/api/email-templates');
+      const data = await res.json();
+      setEmailTemplates(data.templates || []);
+    } catch (error) {
+      console.error('Error loading templates:', error);
+    } finally {
+      setTemplateLoading(false);
+    }
+  };
+  
+  const openTemplateEditor = (template) => {
+    setSelectedTemplate(template);
+    setTemplateSubject(template.subject);
+    setTemplateBody(template.html_body);
+    setShowTemplateModal(true);
+  };
+  
+  const saveEmailTemplate = async () => {
+    if (!selectedTemplate) return;
+    
+    setTemplateLoading(true);
+    try {
+      const res = await fetch(`/api/email-templates/${selectedTemplate.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: templateSubject,
+          html_body: templateBody
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      alert('✅ Email template saved successfully!');
+      setShowTemplateModal(false);
+      await loadEmailTemplates();
+    } catch (error) {
+      alert(`❌ Error saving template: ${error.message}`);
+    } finally {
+      setTemplateLoading(false);
+    }
+  };
+
   const exportKB = async () => {
     setLoading(true);
     try {
