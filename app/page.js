@@ -833,50 +833,73 @@ export default function LunaDashboard() {
                 <div className="space-y-3">
                   <p className="text-sm text-gray-600">{documents.length} document(s) loaded</p>
                   
-                  {documents.map((doc) => (
-                    <div
-                      key={doc.doc_id}
-                      className="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <FileText className="w-5 h-5 text-[#15ADC2]" />
-                            <h3 className="font-semibold text-gray-900">{doc.title}</h3>
-                            <span className="text-xs bg-[#15ADC2]/10 text-[#15ADC2] px-2 py-1 rounded">
-                              {doc.category}
-                            </span>
+                  {documents.map((doc) => {
+                    const isCore = doc.category === 'Core';
+                    
+                    return (
+                      <div
+                        key={doc.doc_id}
+                        className="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              {isCore ? (
+                                <Lock className="w-5 h-5 text-amber-500" />
+                              ) : (
+                                <FileText className="w-5 h-5 text-[#15ADC2]" />
+                              )}
+                              <h3 className="font-semibold text-gray-900">{doc.title}</h3>
+                              <span className={`text-xs px-2 py-1 rounded ${
+                                isCore 
+                                  ? 'bg-amber-50 text-amber-700 font-medium'
+                                  : 'bg-[#15ADC2]/10 text-[#15ADC2]'
+                              }`}>
+                                {doc.category}
+                              </span>
+                            </div>
+                            <div className="text-sm text-gray-600 space-y-1">
+                              <p>📄 File: {doc.filename}</p>
+                              <p>🧩 Chunks: {doc.chunk_count}</p>
+                              <p className="text-xs text-gray-500">ID: {doc.doc_id}</p>
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-600 space-y-1">
-                            <p>📄 File: {doc.filename}</p>
-                            <p>🧩 Chunks: {doc.chunk_count}</p>
-                            <p className="text-xs text-gray-500">ID: {doc.doc_id}</p>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                viewDocument(doc.doc_id);
+                              }}
+                              className="px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-sm"
+                            >
+                              View
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEditModal(doc);
+                              }}
+                              className="px-3 py-1 bg-green-50 text-green-600 rounded hover:bg-green-100 transition-colors text-sm flex items-center gap-1"
+                            >
+                              <Edit className="w-3 h-3" />
+                              Edit
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteDocument(doc.doc_id);
+                              }}
+                              disabled={loading || isCore}
+                              className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                              title={isCore ? 'Core documents are protected' : 'Delete document'}
+                            >
+                              Delete
+                            </button>
                           </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              viewDocument(doc.doc_id);
-                            }}
-                            className="px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-sm"
-                          >
-                            View
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              deleteDocument(doc.doc_id);
-                            }}
-                            disabled={loading}
-                            className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            Delete
-                          </button>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
