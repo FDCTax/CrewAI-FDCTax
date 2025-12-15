@@ -45,7 +45,7 @@ export default function LunaDashboard() {
 
   const checkHealth = async () => {
     try {
-      const res = await fetch('http://localhost:8002/health');
+      const res = await fetch('/api/luna-rag/health');
       const data = await res.json();
       setHealth(data);
     } catch (error) {
@@ -63,7 +63,7 @@ export default function LunaDashboard() {
     setChatLoading(true);
 
     try {
-      const res = await fetch('http://localhost:8002/chat', {
+      const res = await fetch('/api/luna-rag/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,7 +98,7 @@ export default function LunaDashboard() {
       formData.append('category', uploadCategory);
       if (uploadTitle) formData.append('title', uploadTitle);
 
-      const res = await fetch('http://localhost:8002/ingest/file', {
+      const res = await fetch('/api/luna-rag/ingest/file', {
         method: 'POST',
         body: formData
       });
@@ -128,7 +128,7 @@ export default function LunaDashboard() {
 
     setSearchLoading(true);
     try {
-      const res = await fetch('http://localhost:8002/kb/search', {
+      const res = await fetch('/api/luna-rag/kb/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: searchQuery, limit: 5 })
@@ -149,7 +149,7 @@ export default function LunaDashboard() {
 
     try {
       const payload = JSON.parse(apiPayload);
-      const res = await fetch(`http://localhost:8002${apiEndpoint}`, {
+      const res = await fetch(`/api/luna-rag${apiEndpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
