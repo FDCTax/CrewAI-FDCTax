@@ -379,8 +379,16 @@ export default function LunaDashboard() {
                 
                 {chatLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-white rounded-2xl px-4 py-3 border border-gray-200">
-                      <Loader2 className="w-4 h-4 animate-spin text-[#15ADC2]" />
+                    <div className="bg-gradient-to-r from-[#15ADC2]/10 to-[#6366F1]/10 rounded-2xl px-4 py-3 border border-[#15ADC2]/30">
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin text-[#15ADC2]" />
+                        <span className="text-sm text-gray-700 animate-pulse">
+                          Luna is thinking...
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        First query may take 2-3 minutes (warming up)
+                      </p>
                     </div>
                   </div>
                 )}
