@@ -373,7 +373,46 @@ export default function LunaDashboard() {
           {/* Chat Tab */}
           {activeTab === 'chat' && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Chat with Luna</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-gray-900">Chat with Luna</h2>
+                
+                {/* Mode Toggle */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setChatMode('educator')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                      chatMode === 'educator'
+                        ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    👨‍🏫 Educator Mode
+                  </button>
+                  <button
+                    onClick={() => setChatMode('internal')}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                      chatMode === 'internal'
+                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    🔧 Internal Mode
+                  </button>
+                </div>
+              </div>
+              
+              {/* Mode Description */}
+              <div className={`p-3 rounded-lg border-l-4 ${
+                chatMode === 'educator'
+                  ? 'bg-green-50 border-green-500 text-green-800'
+                  : 'bg-orange-50 border-orange-500 text-orange-800'
+              }`}>
+                <p className="text-sm font-medium">
+                  {chatMode === 'educator' 
+                    ? '👨‍🏫 Educator Mode: Brief responses, bullet points, plain language for clients'
+                    : '🔧 Internal Mode: Full detail, conversational, tax agent shorthand'}
+                </p>
+              </div>
               
               <div className="border border-gray-200 rounded-xl p-4 h-96 overflow-y-auto bg-gray-50">
                 {chatMessages.map((msg, idx) => (
