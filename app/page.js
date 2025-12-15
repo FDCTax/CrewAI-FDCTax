@@ -76,7 +76,8 @@ export default function LunaDashboard() {
         body: JSON.stringify({
           messages: [...chatMessages, userMessage],
           session_id: 'dashboard-session',
-          form_context: {}
+          form_context: {},
+          use_fallback: useLocalModel  // true = Ollama, false = OpenAI (default)
         })
       });
 
