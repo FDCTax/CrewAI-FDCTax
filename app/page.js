@@ -438,6 +438,8 @@ export default function LunaDashboard() {
   useEffect(() => {
     if (activeTab === 'library') {
       loadDocuments();
+    } else if (activeTab === 'email-templates') {
+      loadEmailTemplates();
     }
   }, [activeTab]);
 
