@@ -662,6 +662,70 @@ export default function LunaDashboard() {
           )}
         </div>
       </div>
+
+      {/* Document Detail Modal */}
+      {showDocModal && selectedDoc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold mb-1">{selectedDoc.title}</h2>
+                  <p className="text-white/90 text-sm">
+                    {selectedDoc.category} • {selectedDoc.chunk_count} chunks • {selectedDoc.filename}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowDocModal(false)}
+                  className="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
+                >
+                  <XCircle className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>Document ID:</strong> {selectedDoc.doc_id}
+                </p>
+              </div>
+
+              {selectedDoc.chunks.map((chunk, idx) => (
+                <div key={chunk.chunk_id} className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-700">
+                      Chunk {chunk.chunk_index + 1} of {selectedDoc.chunk_count}
+                    </span>
+                    <span className="text-xs text-gray-500">{chunk.chunk_id}</span>
+                  </div>
+                  <p className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                    {chunk.content}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-gray-200 p-4 flex justify-between">
+              <button
+                onClick={() => deleteDocument(selectedDoc.doc_id)}
+                className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+              >
+                Delete Document
+              </button>
+              <button
+                onClick={() => setShowDocModal(false)}
+                className="px-6 py-2 bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white rounded-lg hover:shadow-lg transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
