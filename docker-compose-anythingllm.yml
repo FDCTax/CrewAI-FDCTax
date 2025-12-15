@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Ollama - Local LLM inference
+  ollama:
+    image: ollama/ollama:latest
+    container_name: fdc-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - luna-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # AnythingLLM - Knowledge Base & Agent System
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: fdc-anythingllm
+    ports:
+      - "3001:3001"
+    volumes:
+      - anythingllm_data:/app/server/storage
+      - anythingllm_documents:/app/server/storage/documents
+      - anythingllm_vector_cache:/app/server/storage/vector-cache
+    environment:
+      # LLM Configuration
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_PATH=http://ollama:11434
+      - OLLAMA_MODEL_PREF=llama3:8b
+      
+      # OpenAI Fallback
+      - OPEN_AI_KEY=${OPENAI_API_KEY}
+      
+      # Agent & Memory Features
+      - AGENT_MEMORY_ENABLED=true
+      - ENABLE_AGENTS=true
+      
+      # Embedding Configuration
+      - EMBEDDING_ENGINE=ollama
+      - EMBEDDING_MODEL_PREF=nomic-embed-text
+      
+      # Storage & Security
+      - STORAGE_DIR=/app/server/storage
+      - JWT_SECRET=${ANYTHINGLLM_JWT_SECRET:-fdc-luna-secret-key-change-in-production}
+      - AUTH_TOKEN=${ANYTHINGLLM_AUTH_TOKEN:-fdc-auth-token-12345}
+      
+      # Server Configuration
+      - SERVER_PORT=3001
+      - DISABLE_TELEMETRY=true
+      
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - luna-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  luna-network:
+    driver: bridge
+
+volumes:
+  ollama_data:
+    driver: local
+  anythingllm_data:
+    driver: local
+  anythingllm_documents:
+    driver: local
+  anythingllm_vector_cache:
+    driver: local
