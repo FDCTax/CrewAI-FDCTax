@@ -14,6 +14,7 @@ export default function LunaDashboard() {
   ]);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
+  const [useLocalModel, setUseLocalModel] = useState(false); // false = OpenAI (default), true = Ollama
   const chatEndRef = useRef(null);
 
   // Upload state
