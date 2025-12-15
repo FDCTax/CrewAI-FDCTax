@@ -388,14 +388,26 @@ export default function LunaDashboard() {
                 <div ref={chatEndRef} />
               </div>
 
-              <form onSubmit={handleChat} className="flex gap-2">
-                <input
-                  type="text"
+              <form onSubmit={handleChat} className="flex gap-2 items-end">
+                <textarea
                   value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  placeholder="Ask Luna about tax, ABN, GST, deductions..."
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2] focus:border-transparent"
+                  onChange={(e) => {
+                    setChatInput(e.target.value);
+                    // Auto-resize textarea
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                  }}
+                  onKeyDown={(e) => {
+                    // Submit on Enter (without Shift)
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleChat(e);
+                    }
+                  }}
+                  placeholder="Ask Luna about tax, ABN, GST, deductions... (Shift+Enter for new line)"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2] focus:border-transparent resize-none overflow-hidden min-h-[48px] max-h-[200px]"
                   disabled={chatLoading}
+                  rows={1}
                 />
                 <button
                   type="submit"
