@@ -1,0 +1,373 @@
+#!/usr/bin/env python3
+"""
+FDC Tax Luna RAG System
+Lightweight RAG using Ollama + ChromaDB
+"""
+
+import os
+import uuid
+from typing import List, Dict, Any, Optional
+from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import chromadb
+from chromadb.config import Settings
+from sentence_transformers import SentenceTransformer
+import requests
+from pypdf import PdfReader
+from docx import Document
+import json
+
+# Initialize FastAPI
+app = FastAPI(title="FDC Luna RAG API")
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize ChromaDB
+chroma_client = chromadb.Client(Settings(
+    persist_directory="/app/python_rag/chroma_db",
+    anonymized_telemetry=False
+))
+
+# Create or get collection
+try:
+    kb_collection = chroma_client.create_collection(
+        name="fdc_knowledge_base",
+        metadata={"hnsw:space": "cosine"}
+    )
+except:
+    kb_collection = chroma_client.get_collection("fdc_knowledge_base")
+
+# Initialize embedding model
+embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Ollama configuration
+OLLAMA_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Pydantic models
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: List[ChatMessage]
+    session_id: str
+    form_context: Optional[Dict[str, Any]] = None
+    use_fallback: bool = False
+
+class DocumentIngest(BaseModel):
+    title: str
+    content: str
+    category: str
+    metadata: Optional[Dict[str, Any]] = None
+
+class KBSearchRequest(BaseModel):
+    query: str
+    limit: int = 5
+
+# Helper functions
+def extract_text_from_pdf(file_bytes: bytes) -> str:
+    """Extract text from PDF file"""
+    try:
+        pdf = PdfReader(file_bytes)
+        text = ""
+        for page in pdf.pages:
+            text += page.extract_text() + "\n\n"
+        return text.strip()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error reading PDF: {str(e)}")
+
+def extract_text_from_docx(file_bytes: bytes) -> str:
+    """Extract text from DOCX file"""
+    try:
+        doc = Document(file_bytes)
+        text = "\n\n".join([para.text for para in doc.paragraphs if para.text.strip()])
+        return text.strip()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error reading DOCX: {str(e)}")
+
+def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]:
+    """Split text into overlapping chunks"""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunk = text[start:end]
+        if chunk.strip():
+            chunks.append(chunk)
+        start = end - overlap
+    return chunks
+
+def search_knowledge_base(query: str, limit: int = 5) -> List[Dict[str, Any]]:
+    """Search ChromaDB for relevant documents"""
+    try:
+        query_embedding = embedding_model.encode([query])[0].tolist()
+        results = kb_collection.query(
+            query_embeddings=[query_embedding],
+            n_results=limit
+        )
+        
+        documents = []
+        if results['documents']:
+            for i, doc in enumerate(results['documents'][0]):
+                documents.append({
+                    "content": doc,
+                    "metadata": results['metadatas'][0][i] if results['metadatas'] else {},
+                    "distance": results['distances'][0][i] if results['distances'] else 0
+                })
+        return documents
+    except Exception as e:
+        print(f"Error searching KB: {e}")
+        return []
+
+def call_ollama(messages: List[Dict[str, str]], system_prompt: str) -> str:
+    """Call Ollama llama3:8b for chat completion"""
+    try:
+        # Format messages for Ollama
+        formatted_messages = [{"role": "system", "content": system_prompt}]
+        formatted_messages.extend(messages)
+        
+        response = requests.post(
+            f"{OLLAMA_URL}/api/chat",
+            json={
+                "model": "llama3:8b",
+                "messages": formatted_messages,
+                "stream": False
+            },
+            timeout=60
+        )
+        
+        if response.status_code == 200:
+            return response.json()["message"]["content"]
+        else:
+            raise Exception(f"Ollama error: {response.text}")
+    except Exception as e:
+        print(f"Ollama error: {e}")
+        raise
+
+def call_openai_fallback(messages: List[Dict[str, str]], system_prompt: str) -> str:
+    """Fallback to OpenAI GPT-4 if Ollama fails"""
+    if not OPENAI_API_KEY:
+        raise Exception("OpenAI API key not configured")
+    
+    try:
+        formatted_messages = [{"role": "system", "content": system_prompt}]
+        formatted_messages.extend(messages)
+        
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {OPENAI_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "gpt-4-turbo-preview",
+                "messages": formatted_messages,
+                "temperature": 0.7,
+                "max_tokens": 500
+            },
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            return response.json()["choices"][0]["message"]["content"]
+        else:
+            raise Exception(f"OpenAI error: {response.text}")
+    except Exception as e:
+        print(f"OpenAI error: {e}")
+        raise
+
+# API Endpoints
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {
+        "status": "healthy",
+        "ollama_url": OLLAMA_URL,
+        "kb_documents": kb_collection.count()
+    }
+
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    """Main chat endpoint with RAG"""
+    try:
+        # Get last user message for KB search
+        last_user_msg = next((m for m in reversed(request.messages) if m.role == "user"), None)
+        if not last_user_msg:
+            raise HTTPException(status_code=400, detail="No user message found")
+        
+        # Search knowledge base
+        kb_results = search_knowledge_base(last_user_msg.content, limit=3)
+        
+        # Build context
+        kb_context = ""
+        if kb_results:
+            kb_context = "\n\nRelevant knowledge base information:\n"
+            for i, doc in enumerate(kb_results):
+                kb_context += f"\n{i+1}. {doc['metadata'].get('title', 'Untitled')}\n{doc['content']}\n"
+        
+        # Build form context
+        form_context_str = ""
+        if request.form_context:
+            form_context_str = f"\n\nCurrent form context:\n- Stage: {request.form_context.get('currentStage', 'unknown')}\n"
+            if request.form_context.get('hasABN'):
+                form_context_str += "- User has ABN\n"
+            if request.form_context.get('hasGST'):
+                form_context_str += "- User registered for GST\n"
+        
+        # System prompt
+        system_prompt = f"""You are Luna, a friendly and professional AI assistant for FDC Tax's client onboarding process.
+
+Your role:
+1. Answer questions about Australian tax, ABN, GST, and the onboarding process
+2. Provide clear, accurate information based on the knowledge base
+3. Help users understand what information is needed and why
+4. Be encouraging and supportive throughout the onboarding journey
+5. Use a warm, conversational tone
+
+Guidelines:
+- Keep responses concise (2-4 sentences typically)
+- Use the knowledge base information when available
+- If you don't know something, acknowledge it and suggest contacting FDC Tax
+- Be aware of the user's current form stage and provide contextual help
+{kb_context}{form_context_str}"""
+        
+        # Format messages for LLM
+        formatted_messages = [{"role": m.role, "content": m.content} for m in request.messages]
+        
+        # Try Ollama first, fallback to OpenAI if needed
+        try:
+            if request.use_fallback:
+                raise Exception("Fallback requested")
+            response_content = call_ollama(formatted_messages, system_prompt)
+            provider = "ollama"
+        except Exception as e:
+            print(f"Ollama failed, using OpenAI fallback: {e}")
+            response_content = call_openai_fallback(formatted_messages, system_prompt)
+            provider = "openai"
+        
+        return {
+            "message": {
+                "role": "assistant",
+                "content": response_content
+            },
+            "kb_sources": [{
+                "title": doc['metadata'].get('title', 'Untitled'),
+                "category": doc['metadata'].get('category', 'Unknown')
+            } for doc in kb_results],
+            "session_id": request.session_id,
+            "provider": provider
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/ingest/document")
+async def ingest_document(doc: DocumentIngest):
+    """Ingest a text document into the knowledge base"""
+    try:
+        # Chunk the content
+        chunks = chunk_text(doc.content)
+        
+        # Generate embeddings and store
+        doc_id = str(uuid.uuid4())
+        for i, chunk in enumerate(chunks):
+            chunk_id = f"{doc_id}_chunk_{i}"
+            embedding = embedding_model.encode([chunk])[0].tolist()
+            
+            kb_collection.add(
+                ids=[chunk_id],
+                embeddings=[embedding],
+                documents=[chunk],
+                metadatas=[{
+                    "title": doc.title,
+                    "category": doc.category,
+                    "chunk_index": i,
+                    "doc_id": doc_id,
+                    **(doc.metadata or {})
+                }]
+            )
+        
+        return {
+            "status": "success",
+            "doc_id": doc_id,
+            "chunks_created": len(chunks)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/ingest/file")
+async def ingest_file(file: UploadFile = File(...), category: str = "General", title: Optional[str] = None):
+    """Ingest a PDF or DOCX file"""
+    try:
+        file_bytes = await file.read()
+        
+        # Extract text based on file type
+        if file.filename.endswith('.pdf'):
+            content = extract_text_from_pdf(file_bytes)
+        elif file.filename.endswith('.docx'):
+            content = extract_text_from_docx(file_bytes)
+        else:
+            raise HTTPException(status_code=400, detail="Unsupported file type. Use PDF or DOCX.")
+        
+        # Use filename as title if not provided
+        doc_title = title or file.filename
+        
+        # Ingest the document
+        doc = DocumentIngest(
+            title=doc_title,
+            content=content,
+            category=category,
+            metadata={"filename": file.filename}
+        )
+        
+        return await ingest_document(doc)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/kb/search")
+async def search_kb(request: KBSearchRequest):
+    """Search knowledge base"""
+    results = search_knowledge_base(request.query, request.limit)
+    return {
+        "query": request.query,
+        "results": results,
+        "count": len(results)
+    }
+
+@app.get("/kb/stats")
+async def kb_stats():
+    """Get knowledge base statistics"""
+    try:
+        count = kb_collection.count()
+        return {
+            "total_documents": count,
+            "collection_name": "fdc_knowledge_base"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/kb/clear")
+async def clear_kb():
+    """Clear all documents from knowledge base (admin only)"""
+    try:
+        global kb_collection
+        chroma_client.delete_collection("fdc_knowledge_base")
+        kb_collection = chroma_client.create_collection(
+            name="fdc_knowledge_base",
+            metadata={"hnsw:space": "cosine"}
+        )
+        return {"status": "success", "message": "Knowledge base cleared"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8001)
