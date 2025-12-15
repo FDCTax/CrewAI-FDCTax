@@ -216,11 +216,24 @@ export default function LunaDashboard() {
       const res = await fetch(`/api/luna-rag/kb/documents/${docId}`, {
         method: 'DELETE'
       });
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
+      
       const data = await res.json();
-      alert(data.message);
-      loadDocuments();
+      
+      // Close modal if it's open
+      setShowDocModal(false);
+      
+      // Show success message
+      alert(data.message || 'Document deleted successfully!');
+      
+      // Refresh library and health
+      await loadDocuments();
       checkHealth();
     } catch (error) {
+      console.error('Delete error:', error);
       alert(`Error deleting document: ${error.message}`);
     } finally {
       setLoading(false);
