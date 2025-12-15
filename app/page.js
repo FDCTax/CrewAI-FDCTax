@@ -371,6 +371,62 @@ export default function LunaDashboard() {
     }
   };
   
+  const openAddArticleModal = () => {
+    setNewArticleTitle('');
+    setNewArticleCategory('General');
+    setNewArticleDescription('');
+    setNewArticleContent('');
+    setShowAddModal(true);
+  };
+  
+  const saveNewArticle = async () => {
+    if (!newArticleTitle.trim() || !newArticleContent.trim()) {
+      alert('Please provide both a title and content for the article.');
+      return;
+    }
+    
+    setAddLoading(true);
+    try {
+      // Create article content with optional description
+      let fullContent = newArticleContent;
+      if (newArticleDescription.trim()) {
+        fullContent = `${newArticleDescription}\n\n${newArticleContent}`;
+      }
+      
+      // Create a text file from the content
+      const formData = new FormData();
+      const blob = new Blob([fullContent], { type: 'text/plain' });
+      const filename = `${newArticleTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+      const file = new File([blob], filename, { type: 'text/plain' });
+      
+      formData.append('file', file);
+      formData.append('category', newArticleCategory);
+      formData.append('title', newArticleTitle);
+      
+      const res = await fetch('/api/luna-rag/ingest/file', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await res.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
+      alert(`✅ Article created successfully!\n\n${data.chunks_created} chunks created.`);
+      setShowAddModal(false);
+      
+      // Refresh
+      await loadDocuments();
+      checkHealth();
+    } catch (error) {
+      alert(`❌ Error creating article: ${error.message}`);
+    } finally {
+      setAddLoading(false);
+    }
+  };
+  
   const loadEmailTemplates = async () => {
     setTemplateLoading(true);
     try {
