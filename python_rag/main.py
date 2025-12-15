@@ -351,7 +351,7 @@ async def ingest_document(doc: DocumentIngest):
 
 @app.post("/ingest/file")
 async def ingest_file(file: UploadFile = File(...), category: str = "General", title: Optional[str] = None):
-    """Ingest a PDF or DOCX file"""
+    """Ingest a PDF, DOCX, RTF, or TXT file"""
     try:
         file_bytes = await file.read()
         
@@ -360,8 +360,12 @@ async def ingest_file(file: UploadFile = File(...), category: str = "General", t
             content = extract_text_from_pdf(file_bytes)
         elif file.filename.endswith('.docx'):
             content = extract_text_from_docx(file_bytes)
+        elif file.filename.endswith('.rtf'):
+            content = extract_text_from_rtf(file_bytes)
+        elif file.filename.endswith('.txt'):
+            content = extract_text_from_txt(file_bytes)
         else:
-            raise HTTPException(status_code=400, detail="Unsupported file type. Use PDF or DOCX.")
+            raise HTTPException(status_code=400, detail="Unsupported file type. Use PDF, DOCX, RTF, or TXT.")
         
         # Use filename as title if not provided
         doc_title = title or file.filename
