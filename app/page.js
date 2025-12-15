@@ -905,6 +905,69 @@ export default function LunaDashboard() {
             </div>
           )}
 
+          {/* Email Templates Tab */}
+          {activeTab === 'email-templates' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-gray-900">Email Templates</h2>
+                <button
+                  onClick={loadEmailTemplates}
+                  disabled={templateLoading}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {templateLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Activity className="w-4 h-4" />}
+                  Refresh
+                </button>
+              </div>
+
+              {templateLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 animate-spin text-[#15ADC2]" />
+                </div>
+              ) : emailTemplates.length === 0 ? (
+                <div className="p-8 bg-gray-50 border border-gray-200 rounded-lg text-center">
+                  <Mail className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Templates Yet</h3>
+                  <p className="text-gray-600">Email templates will appear here.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-sm text-gray-600">{emailTemplates.length} template(s)</p>
+                  
+                  {emailTemplates.map((template) => (
+                    <div
+                      key={template.id}
+                      className="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Mail className="w-5 h-5 text-[#6366F1]" />
+                            <h3 className="font-semibold text-gray-900">{template.name}</h3>
+                            <span className="text-xs bg-purple-50 text-purple-600 px-2 py-1 rounded font-mono">
+                              {template.slug}
+                            </span>
+                          </div>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <p className="font-medium">{template.subject}</p>
+                            <p className="text-xs text-gray-500">Last updated: {new Date(template.updated_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => openTemplateEditor(template)}
+                          className="px-4 py-2 bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+                        >
+                          <Edit className="w-4 h-4" />
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* API Tester Tab */}
           {activeTab === 'api' && (
             <div className="space-y-4">
