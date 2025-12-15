@@ -354,6 +354,122 @@ async def kb_stats():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/kb/documents")
+async def list_documents():
+    """List all ingested documents with metadata"""
+    try:
+        # Get all documents from collection
+        results = kb_collection.get()
+        
+        # Group chunks by doc_id
+        documents = {}
+        if results['ids']:
+            for i, chunk_id in enumerate(results['ids']):
+                metadata = results['metadatas'][i] if results['metadatas'] else {}
+                doc_id = metadata.get('doc_id', 'unknown')
+                
+                if doc_id not in documents:
+                    documents[doc_id] = {
+                        'doc_id': doc_id,
+                        'title': metadata.get('title', 'Untitled'),
+                        'category': metadata.get('category', 'Unknown'),
+                        'filename': metadata.get('filename', 'N/A'),
+                        'chunk_count': 0,
+                        'created_at': metadata.get('created_at', 'Unknown'),
+                        'first_chunk_id': chunk_id
+                    }
+                documents[doc_id]['chunk_count'] += 1
+        
+        return {
+            "documents": list(documents.values()),
+            "total": len(documents)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/kb/documents/{doc_id}")
+async def get_document_details(doc_id: str):
+    """Get detailed information about a specific document including all chunks"""
+    try:
+        results = kb_collection.get(
+            where={"doc_id": doc_id}
+        )
+        
+        chunks = []
+        if results['ids']:
+            for i, chunk_id in enumerate(results['ids']):
+                chunks.append({
+                    'chunk_id': chunk_id,
+                    'content': results['documents'][i],
+                    'metadata': results['metadatas'][i] if results['metadatas'] else {},
+                    'chunk_index': results['metadatas'][i].get('chunk_index', i) if results['metadatas'] else i
+                })
+        
+        # Sort by chunk index
+        chunks.sort(key=lambda x: x['chunk_index'])
+        
+        if not chunks:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        return {
+            "doc_id": doc_id,
+            "title": chunks[0]['metadata'].get('title', 'Untitled'),
+            "category": chunks[0]['metadata'].get('category', 'Unknown'),
+            "filename": chunks[0]['metadata'].get('filename', 'N/A'),
+            "chunk_count": len(chunks),
+            "chunks": chunks
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/kb/documents/{doc_id}")
+async def delete_document(doc_id: str):
+    """Delete a document and all its chunks from the knowledge base"""
+    try:
+        # Get all chunk IDs for this document
+        results = kb_collection.get(
+            where={"doc_id": doc_id}
+        )
+        
+        if not results['ids']:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        # Delete all chunks
+        kb_collection.delete(ids=results['ids'])
+        
+        return {
+            "status": "success",
+            "message": f"Deleted document {doc_id}",
+            "chunks_deleted": len(results['ids'])
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/kb/export")
+async def export_kb():
+    """Export entire knowledge base as JSON"""
+    try:
+        results = kb_collection.get()
+        
+        documents = []
+        if results['ids']:
+            for i, chunk_id in enumerate(results['ids']):
+                documents.append({
+                    'chunk_id': chunk_id,
+                    'content': results['documents'][i],
+                    'metadata': results['metadatas'][i] if results['metadatas'] else {},
+                    'embedding': results['embeddings'][i] if results['embeddings'] else None
+                })
+        
+        return {
+            "export_date": json.dumps({"timestamp": "2025-12-15"}),
+            "collection_name": "fdc_knowledge_base",
+            "total_chunks": len(documents),
+            "documents": documents
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.delete("/kb/clear")
 async def clear_kb():
     """Clear all documents from knowledge base (admin only)"""
