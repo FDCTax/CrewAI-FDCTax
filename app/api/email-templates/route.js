@@ -1,13 +1,9 @@
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false }
-});
+import { getPool } from '@/lib/db';
 
 export async function GET() {
   try {
+    const pool = getPool();
     const result = await pool.query(
       'SELECT * FROM email_templates ORDER BY name ASC'
     );
