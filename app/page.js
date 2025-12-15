@@ -859,6 +859,13 @@ export default function LunaDashboard() {
                 <h2 className="text-2xl font-bold text-gray-900">Knowledge Base Library</h2>
                 <div className="flex gap-2">
                   <button
+                    onClick={openAddArticleModal}
+                    className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add New Article
+                  </button>
+                  <button
                     onClick={loadDocuments}
                     disabled={libraryLoading}
                     className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center gap-2"
