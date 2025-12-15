@@ -94,8 +94,9 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
 
 def extract_text_from_docx(file_bytes: bytes) -> str:
     """Extract text from DOCX file"""
+    import io
     try:
-        doc = Document(file_bytes)
+        doc = Document(io.BytesIO(file_bytes))
         text = "\n\n".join([para.text for para in doc.paragraphs if para.text.strip()])
         return text.strip()
     except Exception as e:
