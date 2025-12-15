@@ -95,6 +95,23 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error reading DOCX: {str(e)}")
 
+def extract_text_from_rtf(file_bytes: bytes) -> str:
+    """Extract text from RTF file"""
+    try:
+        rtf_content = file_bytes.decode('utf-8', errors='ignore')
+        text = rtf_to_text(rtf_content)
+        return text.strip()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error reading RTF: {str(e)}")
+
+def extract_text_from_txt(file_bytes: bytes) -> str:
+    """Extract text from TXT file"""
+    try:
+        text = file_bytes.decode('utf-8', errors='ignore')
+        return text.strip()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Error reading TXT: {str(e)}")
+
 def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]:
     """Split text into overlapping chunks"""
     chunks = []
