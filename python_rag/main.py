@@ -278,8 +278,42 @@ async def chat(request: ChatRequest):
         if not last_user_msg:
             raise HTTPException(status_code=400, detail="No user message found")
         
-        # Search knowledge base
-        kb_results = search_knowledge_base(last_user_msg.content, limit=3)
+        # STEP 1: Get Core docs first (Style Guide & Management Duties)
+        core_results = kb_collection.get(
+            where={"category": "Core"},
+            limit=10
+        )
+        
+        core_rulebook = ""
+        if core_results and core_results['documents']:
+            # Combine all Core doc chunks into rulebook
+            core_content = []
+            seen_titles = set()
+            for i, metadata in enumerate(core_results['metadatas']):
+                title = metadata.get('title', 'Core Document')
+                if title not in seen_titles:
+                    seen_titles.add(title)
+                    core_content.append(f"=== {title} ===")
+                core_content.append(core_results['documents'][i])
+            
+            core_rulebook = "\n".join(core_content)
+        
+        # STEP 2: Search knowledge base with boosted Core docs
+        kb_results = search_knowledge_base(last_user_msg.content, limit=5)
+        
+        # STEP 3: Apply 3x boost to Core category docs in results
+        boosted_results = []
+        for result in kb_results:
+            if result['metadata'].get('category') == 'Core':
+                # Create boosted copies (effectively tripling weight)
+                boosted_results.append(result)
+                boosted_results.append(result)
+                boosted_results.append(result)
+            else:
+                boosted_results.append(result)
+        
+        # Take top results after boosting
+        kb_results = boosted_results[:5]
         
         # Build context
         kb_context = ""
