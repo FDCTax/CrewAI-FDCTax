@@ -884,17 +884,18 @@ export default function LunaDashboard() {
                               <Edit className="w-3 h-3" />
                               Edit
                             </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteDocument(doc.doc_id);
-                              }}
-                              disabled={loading || isCore}
-                              className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                              title={isCore ? 'Core documents are protected' : 'Delete document'}
-                            >
-                              Delete
-                            </button>
+                            {!isCore && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  deleteDocument(doc.doc_id);
+                                }}
+                                disabled={loading}
+                                className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                Delete
+                              </button>
+                            )}
                           </div>
                         </div>
                       </div>
