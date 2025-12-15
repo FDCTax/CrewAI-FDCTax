@@ -3,4 +3,4 @@ set -a
 source /app/.env
 set +a
 cd /app/python_rag
-exec python3 main.py
+exec /root/.venv/bin/python3 main.py
