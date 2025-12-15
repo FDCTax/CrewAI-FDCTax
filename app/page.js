@@ -80,7 +80,14 @@ export default function LunaDashboard() {
       });
 
       const data = await res.json();
-      setChatMessages(prev => [...prev, data.message]);
+      
+      // Ensure message has proper structure
+      const assistantMessage = {
+        role: data.message?.role || 'assistant',
+        content: data.message?.content || data.message || 'No response received'
+      };
+      
+      setChatMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       setChatMessages(prev => [...prev, {
         role: 'assistant',
