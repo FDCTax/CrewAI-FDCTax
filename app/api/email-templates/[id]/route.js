@@ -1,16 +1,12 @@
 import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('localhost') ? false : { rejectUnauthorized: false }
-});
+import { getPool } from '@/lib/db';
 
 export async function PUT(request, { params }) {
   try {
     const { id } = params;
     const { subject, html_body } = await request.json();
     
+    const pool = getPool();
     const result = await pool.query(
       'UPDATE email_templates SET subject = $1, html_body = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
       [subject, html_body, id]
