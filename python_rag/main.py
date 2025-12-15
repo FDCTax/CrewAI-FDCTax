@@ -236,11 +236,28 @@ def call_openai_fallback(messages: List[Dict[str, str]], system_prompt: str) -> 
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "ollama_url": OLLAMA_URL,
-        "kb_documents": kb_collection.count()
-    }
+    try:
+        # Count unique documents, not chunks
+        results = kb_collection.get()
+        unique_docs = set()
+        if results['metadatas']:
+            for metadata in results['metadatas']:
+                doc_id = metadata.get('doc_id')
+                if doc_id:
+                    unique_docs.add(doc_id)
+        
+        return {
+            "status": "healthy",
+            "ollama_url": OLLAMA_URL,
+            "kb_documents": len(unique_docs)
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "ollama_url": OLLAMA_URL,
+            "kb_documents": 0,
+            "error": str(e)
+        }
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
