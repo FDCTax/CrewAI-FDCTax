@@ -16,6 +16,7 @@ from sentence_transformers import SentenceTransformer
 import requests
 from pypdf import PdfReader
 from docx import Document
+from striprtf.striprtf import rtf_to_text
 import json
 
 # Initialize FastAPI
