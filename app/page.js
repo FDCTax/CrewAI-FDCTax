@@ -488,6 +488,7 @@ export default function LunaDashboard() {
             { id: 'upload', label: 'Upload Documents', icon: Upload },
             { id: 'search', label: 'Search KB', icon: Search },
             { id: 'library', label: 'KB Library', icon: FileText },
+            { id: 'email-templates', label: 'Email Templates', icon: Mail },
             { id: 'api', label: 'API Tester', icon: Code },
           ].map(tab => (
             <button
