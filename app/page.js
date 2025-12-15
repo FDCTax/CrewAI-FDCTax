@@ -1169,6 +1169,130 @@ export default function LunaDashboard() {
         </div>
       )}
 
+      {/* Add New Article Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                  <Plus className="w-6 h-6 text-green-600" />
+                  Add New Article
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">Create a new knowledge base article</p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowAddModal(false);
+                  setNewArticleTitle('');
+                  setNewArticleCategory('General');
+                  setNewArticleDescription('');
+                  setNewArticleContent('');
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <XCircle className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {/* Title Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newArticleTitle}
+                  onChange={(e) => setNewArticleTitle(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2]"
+                  placeholder="e.g., GST Registration Guide for FDC Educators"
+                />
+              </div>
+
+              {/* Category Dropdown */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={newArticleCategory}
+                  onChange={(e) => setNewArticleCategory(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2]"
+                >
+                  <option value="General">General</option>
+                  <option value="Tax">Tax</option>
+                  <option value="Deductions">Deductions</option>
+                  <option value="GST">GST</option>
+                  <option value="ABN">ABN</option>
+                  <option value="BAS">BAS</option>
+                  <option value="Core">Core (Protected)</option>
+                </select>
+              </div>
+
+              {/* Description Field (Optional) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description <span className="text-gray-400">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={newArticleDescription}
+                  onChange={(e) => setNewArticleDescription(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2]"
+                  placeholder="Brief summary (will be added at the start)"
+                />
+              </div>
+
+              {/* Content WYSIWYG */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Content <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  value={newArticleContent}
+                  onChange={(e) => setNewArticleContent(e.target.value)}
+                  className="w-full h-[300px] px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2] font-mono text-sm"
+                  placeholder="Write your article content here... This will be chunked and embedded into Luna's knowledge base."
+                />
+              </div>
+
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>💡 Tip:</strong> Articles are automatically chunked and embedded. Write clear, structured content for best results.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t border-gray-200 p-4 flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowAddModal(false);
+                  setNewArticleTitle('');
+                  setNewArticleCategory('General');
+                  setNewArticleDescription('');
+                  setNewArticleContent('');
+                }}
+                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveNewArticle}
+                disabled={addLoading || !newArticleTitle.trim() || !newArticleContent.trim()}
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
+              >
+                {addLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                Create Article
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Edit Document Modal */}
       {showEditModal && editingDoc && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
