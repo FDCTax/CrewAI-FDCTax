@@ -67,6 +67,7 @@ class ChatRequest(BaseModel):
     session_id: str
     form_context: Optional[Dict[str, Any]] = None
     use_fallback: bool = False
+    mode: str = "educator"  # 'educator' or 'internal'
 
 class DocumentIngest(BaseModel):
     title: str
