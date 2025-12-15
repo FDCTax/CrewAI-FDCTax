@@ -600,15 +600,21 @@ export default function LunaDashboard() {
                         </div>
                         <div className="flex gap-2">
                           <button
-                            onClick={() => viewDocument(doc.doc_id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              viewDocument(doc.doc_id);
+                            }}
                             className="px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-sm"
                           >
                             View
                           </button>
                           <button
-                            onClick={() => deleteDocument(doc.doc_id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteDocument(doc.doc_id);
+                            }}
                             disabled={loading}
-                            className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50"
+                            className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Delete
                           </button>
