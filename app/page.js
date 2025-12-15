@@ -91,7 +91,8 @@ export default function LunaDashboard() {
           messages: [...chatMessages, userMessage],
           session_id: 'dashboard-session',
           form_context: {},
-          use_fallback: useLocalModel  // true = Ollama, false = OpenAI (default)
+          use_fallback: useLocalModel,  // true = Ollama, false = OpenAI (default)
+          mode: chatMode  // 'educator' or 'internal'
         })
       });
 
