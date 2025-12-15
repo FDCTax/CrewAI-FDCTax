@@ -15,7 +15,21 @@ export default function LunaDashboard() {
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [useLocalModel, setUseLocalModel] = useState(false); // false = OpenAI (default), true = Ollama
+  const [chatMode, setChatMode] = useState(() => {
+    // Load from sessionStorage or default to 'educator'
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('lunaMode') || 'educator';
+    }
+    return 'educator';
+  }); // 'educator' or 'internal'
   const chatEndRef = useRef(null);
+
+  // Persist mode to sessionStorage when it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('lunaMode', chatMode);
+    }
+  }, [chatMode]);
 
   // Upload state
   const [uploadFile, setUploadFile] = useState(null);
