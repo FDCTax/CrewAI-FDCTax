@@ -102,7 +102,7 @@ export default function LunaDashboard() {
       const formData = new FormData();
       formData.append('file', uploadFile);
       formData.append('category', uploadCategory);
-      if (uploadTitle) formData.append('title', uploadTitle);
+      formData.append('title', uploadTitle || uploadFile.name);
 
       const res = await fetch('/api/luna-rag/ingest/file', {
         method: 'POST',
@@ -110,6 +110,11 @@ export default function LunaDashboard() {
       });
 
       const data = await res.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      
       setUploadStatus({
         success: true,
         message: `Successfully ingested ${uploadFile.name}! Created ${data.chunks_created} chunks.`,
@@ -118,6 +123,11 @@ export default function LunaDashboard() {
       setUploadFile(null);
       setUploadTitle('');
       checkHealth(); // Refresh document count
+      
+      // Auto-refresh KB Library if we're on that tab
+      if (activeTab === 'library') {
+        loadDocuments();
+      }
     } catch (error) {
       setUploadStatus({
         success: false,
