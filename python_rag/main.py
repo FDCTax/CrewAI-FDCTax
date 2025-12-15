@@ -421,7 +421,11 @@ async def ingest_document(doc: DocumentIngest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/ingest/file")
-async def ingest_file(file: UploadFile = File(...), category: str = "General", title: Optional[str] = None):
+async def ingest_file(
+    file: UploadFile = File(...), 
+    category: str = Form("General"), 
+    title: Optional[str] = Form(None)
+):
     """Ingest a PDF, DOCX, RTF, or TXT file"""
     try:
         file_bytes = await file.read()
