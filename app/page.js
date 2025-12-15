@@ -1,7 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, Upload, Search, Activity, Code, Sparkles, FileText, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { MessageCircle, Upload, Search, Activity, Code, Sparkles, FileText, CheckCircle, XCircle, Loader2, Lock, Edit, Mail } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import CKEditor to avoid SSR issues
+const CKEditor = dynamic(() => import('@ckeditor/ckeditor5-react').then(mod => mod.CKEditor), { ssr: false });
+const ClassicEditor = dynamic(() => import('@ckeditor/ckeditor5-build-classic'), { ssr: false });
 
 export default function LunaDashboard() {
   const [activeTab, setActiveTab] = useState('chat');
