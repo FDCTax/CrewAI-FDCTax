@@ -107,23 +107,48 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]
     return chunks
 
 def search_knowledge_base(query: str, limit: int = 5) -> List[Dict[str, Any]]:
-    """Search ChromaDB for relevant documents"""
+    """Search ChromaDB for relevant documents with style guide prioritization"""
     try:
         query_embedding = embedding_model.encode([query])[0].tolist()
+        
+        # Get more results initially (we'll prioritize and limit after)
         results = kb_collection.query(
             query_embeddings=[query_embedding],
-            n_results=limit
+            n_results=limit * 2  # Get extra results to prioritize from
         )
         
         documents = []
+        style_guide_docs = []
+        
         if results['documents']:
             for i, doc in enumerate(results['documents'][0]):
-                documents.append({
+                metadata = results['metadatas'][0][i] if results['metadatas'] else {}
+                distance = results['distances'][0][i] if results['distances'] else 0
+                
+                doc_entry = {
                     "content": doc,
-                    "metadata": results['metadatas'][0][i] if results['metadatas'] else {},
-                    "distance": results['distances'][0][i] if results['distances'] else 0
-                })
-        return documents
+                    "metadata": metadata,
+                    "distance": distance
+                }
+                
+                # Check if this is from Luna Style Guide
+                title = metadata.get('title', '').lower()
+                filename = metadata.get('filename', '').lower()
+                
+                if 'luna style guide' in title or 'luna style guide' in filename:
+                    # Boost style guide by reducing distance (making it more relevant)
+                    doc_entry['distance'] = distance * 0.5  # 50% boost
+                    style_guide_docs.append(doc_entry)
+                else:
+                    documents.append(doc_entry)
+        
+        # Prioritize: Style guide docs first, then others
+        prioritized_docs = style_guide_docs + documents
+        
+        # Sort by distance (lower is more relevant) and limit
+        prioritized_docs.sort(key=lambda x: x['distance'])
+        return prioritized_docs[:limit]
+        
     except Exception as e:
         print(f"Error searching KB: {e}")
         return []
