@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageCircle, Upload, Search, Activity, Code, Sparkles, FileText, CheckCircle, XCircle, Loader2, Lock, Edit, Mail } from 'lucide-react';
+import { MessageCircle, Upload, Search, Activity, Code, Sparkles, FileText, CheckCircle, XCircle, Loader2, Lock, Edit, Mail, Plus } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import CKEditor to avoid SSR issues
