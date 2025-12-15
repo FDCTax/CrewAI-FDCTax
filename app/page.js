@@ -170,6 +170,81 @@ export default function LunaDashboard() {
     }
   };
 
+  const loadDocuments = async () => {
+    setLibraryLoading(true);
+    try {
+      const res = await fetch('/api/luna-rag/kb/documents');
+      const data = await res.json();
+      setDocuments(data.documents || []);
+    } catch (error) {
+      console.error('Error loading documents:', error);
+      setDocuments([]);
+    } finally {
+      setLibraryLoading(false);
+    }
+  };
+
+  const viewDocument = async (docId) => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/luna-rag/kb/documents/${docId}`);
+      const data = await res.json();
+      setSelectedDoc(data);
+      setShowDocModal(true);
+    } catch (error) {
+      alert(`Error loading document: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteDocument = async (docId) => {
+    if (!confirm('Are you sure you want to delete this document? This cannot be undone.')) return;
+
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/luna-rag/kb/documents/${docId}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      alert(data.message);
+      loadDocuments();
+      checkHealth();
+    } catch (error) {
+      alert(`Error deleting document: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const exportKB = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/luna-rag/kb/export');
+      const data = await res.json();
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fdc-kb-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert(`Error exporting KB: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'library') {
+      loadDocuments();
+    }
+  }, [activeTab]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#15ADC2]/10 via-white to-[#6366F1]/10">
       {/* Header */}
