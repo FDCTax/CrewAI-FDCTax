@@ -67,6 +67,14 @@ export default function LunaDashboard() {
   const [editContent, setEditContent] = useState('');
   const [editLoading, setEditLoading] = useState(false);
   
+  // Add New Article state
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newArticleTitle, setNewArticleTitle] = useState('');
+  const [newArticleCategory, setNewArticleCategory] = useState('General');
+  const [newArticleDescription, setNewArticleDescription] = useState('');
+  const [newArticleContent, setNewArticleContent] = useState('');
+  const [addLoading, setAddLoading] = useState(false);
+  
   // Email Templates state
   const [emailTemplates, setEmailTemplates] = useState([]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
