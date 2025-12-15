@@ -175,12 +175,14 @@ def search_knowledge_base(query: str, limit: int = 5) -> List[Dict[str, Any]]:
         print(f"Error searching KB: {e}")
         return []
 
-def call_ollama(messages: List[Dict[str, str]], system_prompt: str) -> str:
-    """Call Ollama llama3:8b for chat completion"""
+def call_ollama(messages: List[Dict[str, str]], system_prompt: str, timeout: int = 180) -> str:
+    """Call Ollama llama3:8b for chat completion with extended timeout for cold starts"""
     try:
         # Format messages for Ollama
         formatted_messages = [{"role": "system", "content": system_prompt}]
         formatted_messages.extend(messages)
+        
+        print(f"Calling Ollama with timeout={timeout}s...")
         
         response = requests.post(
             f"{OLLAMA_URL}/api/chat",
@@ -189,13 +191,18 @@ def call_ollama(messages: List[Dict[str, str]], system_prompt: str) -> str:
                 "messages": formatted_messages,
                 "stream": False
             },
-            timeout=60
+            timeout=timeout  # Extended timeout for first query cold-start
         )
         
         if response.status_code == 200:
-            return response.json()["message"]["content"]
+            content = response.json()["message"]["content"]
+            print(f"Ollama response received: {len(content)} characters")
+            return content
         else:
             raise Exception(f"Ollama error: {response.text}")
+    except requests.exceptions.Timeout:
+        print(f"Ollama timeout after {timeout}s - cold start issue")
+        raise Exception(f"Luna is warming up (first query can take 2-3 minutes). Please try again!")
     except Exception as e:
         print(f"Ollama error: {e}")
         raise
