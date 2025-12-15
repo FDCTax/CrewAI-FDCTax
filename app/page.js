@@ -377,11 +377,11 @@ export default function LunaDashboard() {
               <form onSubmit={handleUpload} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Select File (PDF or DOCX)
+                    Select File (PDF, DOCX, RTF, or TXT)
                   </label>
                   <input
                     type="file"
-                    accept=".pdf,.docx"
+                    accept=".pdf,.docx,.rtf,.txt"
                     onChange={(e) => setUploadFile(e.target.files[0])}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#15ADC2]"
                   />
