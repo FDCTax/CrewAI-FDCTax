@@ -60,6 +60,20 @@ export default function LunaDashboard() {
   const [selectedDoc, setSelectedDoc] = useState(null);
   const [showDocModal, setShowDocModal] = useState(false);
   const [libraryLoading, setLibraryLoading] = useState(false);
+  
+  // Edit Document state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingDoc, setEditingDoc] = useState(null);
+  const [editContent, setEditContent] = useState('');
+  const [editLoading, setEditLoading] = useState(false);
+  
+  // Email Templates state
+  const [emailTemplates, setEmailTemplates] = useState([]);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [templateSubject, setTemplateSubject] = useState('');
+  const [templateBody, setTemplateBody] = useState('');
+  const [templateLoading, setTemplateLoading] = useState(false);
 
   useEffect(() => {
     checkHealth();
