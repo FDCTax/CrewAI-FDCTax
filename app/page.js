@@ -209,9 +209,23 @@ export default function LunaDashboard() {
   };
 
   const deleteDocument = async (docId) => {
-    if (!confirm('Are you sure you want to delete this document? This cannot be undone.')) return;
+    // Find the document to get its title
+    const doc = documents.find(d => d.doc_id === docId);
+    const docTitle = doc?.title || selectedDoc?.title || 'this document';
+    
+    // Show confirmation with document title
+    const confirmed = window.confirm(
+      `⚠️ DELETE CONFIRMATION\n\nAre you sure you want to delete "${docTitle}"?\n\nThis will permanently remove:\n• The document\n• All ${doc?.chunk_count || selectedDoc?.chunk_count || ''} chunks\n• This cannot be undone!\n\nClick OK to delete, Cancel to keep.`
+    );
+    
+    if (!confirmed) {
+      console.log('Delete cancelled by user');
+      return;
+    }
 
     setLoading(true);
+    console.log(`Deleting document: ${docTitle} (ID: ${docId})`);
+    
     try {
       const res = await fetch(`/api/luna-rag/kb/documents/${docId}`, {
         method: 'DELETE'
@@ -222,19 +236,20 @@ export default function LunaDashboard() {
       }
       
       const data = await res.json();
+      console.log('Delete response:', data);
       
       // Close modal if it's open
       setShowDocModal(false);
       
       // Show success message
-      alert(data.message || 'Document deleted successfully!');
+      alert(`✅ Successfully deleted "${docTitle}"!\n\n${data.chunks_deleted || 0} chunks removed.`);
       
       // Refresh library and health
       await loadDocuments();
       checkHealth();
     } catch (error) {
       console.error('Delete error:', error);
-      alert(`Error deleting document: ${error.message}`);
+      alert(`❌ Error deleting document: ${error.message}`);
     } finally {
       setLoading(false);
     }
