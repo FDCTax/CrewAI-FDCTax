@@ -31,20 +31,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize ChromaDB
-chroma_client = chromadb.Client(Settings(
-    persist_directory="/app/python_rag/chroma_db",
-    anonymized_telemetry=False
-))
+# Initialize ChromaDB with persistent client
+chroma_client = chromadb.PersistentClient(
+    path="/app/python_rag/chroma_db"
+)
 
 # Create or get collection
 try:
+    kb_collection = chroma_client.get_or_create_collection(
+        name="fdc_knowledge_base",
+        metadata={"hnsw:space": "cosine"}
+    )
+    print(f"ChromaDB collection initialized. Current document count: {kb_collection.count()}")
+except Exception as e:
+    print(f"Error initializing ChromaDB: {e}")
     kb_collection = chroma_client.create_collection(
         name="fdc_knowledge_base",
         metadata={"hnsw:space": "cosine"}
     )
-except:
-    kb_collection = chroma_client.get_collection("fdc_knowledge_base")
 
 # Initialize embedding model
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
