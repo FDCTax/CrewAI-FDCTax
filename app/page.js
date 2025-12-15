@@ -35,6 +35,12 @@ export default function LunaDashboard() {
   }, null, 2));
   const [apiResponse, setApiResponse] = useState('');
 
+  // KB Library state
+  const [documents, setDocuments] = useState([]);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [showDocModal, setShowDocModal] = useState(false);
+  const [libraryLoading, setLibraryLoading] = useState(false);
+
   useEffect(() => {
     checkHealth();
   }, []);
