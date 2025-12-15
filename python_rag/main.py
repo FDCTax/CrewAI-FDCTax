@@ -317,16 +317,32 @@ IMPORTANT: Use the knowledge base information below - it contains official FDC g
         # Format messages for LLM
         formatted_messages = [{"role": m.role, "content": m.content} for m in request.messages]
         
-        # Try Ollama first, fallback to OpenAI if needed
+        # Use OpenAI as primary (faster, more reliable), Ollama as optional
         try:
             if request.use_fallback:
-                raise Exception("Fallback requested")
-            response_content = call_ollama(formatted_messages, system_prompt)
-            provider = "ollama"
+                # Use Ollama if explicitly requested
+                print("Using Ollama (user preference)...")
+                response_content = call_ollama(formatted_messages, system_prompt)
+                provider = "ollama"
+            else:
+                # Default to OpenAI (primary)
+                print("Using OpenAI GPT-4 (primary)...")
+                response_content = call_openai_fallback(formatted_messages, system_prompt)
+                provider = "openai"
         except Exception as e:
-            print(f"Ollama failed, using OpenAI fallback: {e}")
-            response_content = call_openai_fallback(formatted_messages, system_prompt)
-            provider = "openai"
+            # If primary fails, try the other option
+            print(f"Primary LLM failed ({e}), trying alternate...")
+            try:
+                if request.use_fallback:
+                    # Ollama failed, try OpenAI
+                    response_content = call_openai_fallback(formatted_messages, system_prompt)
+                    provider = "openai"
+                else:
+                    # OpenAI failed, try Ollama
+                    response_content = call_ollama(formatted_messages, system_prompt)
+                    provider = "ollama"
+            except Exception as e2:
+                raise HTTPException(status_code=500, detail=f"Both LLMs failed. OpenAI: {e}, Ollama: {e2}")
         
         return {
             "message": {
