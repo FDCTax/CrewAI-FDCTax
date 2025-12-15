@@ -398,6 +398,26 @@ export default function LunaDashboard() {
                 <div ref={chatEndRef} />
               </div>
 
+              {/* Model Selection Toggle */}
+              <div className="mb-3 p-3 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-700">AI Model:</span>
+                  <span className={`text-sm font-semibold ${useLocalModel ? 'text-gray-500' : 'text-[#15ADC2]'}`}>
+                    {useLocalModel ? 'Ollama (llama3:8b - slower)' : 'OpenAI (GPT-4o - faster) ⚡'}
+                  </span>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useLocalModel}
+                    onChange={(e) => setUseLocalModel(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gradient-to-r from-[#15ADC2] to-[#6366F1] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#15ADC2] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-400"></div>
+                  <span className="ml-3 text-xs text-gray-600">Use local model</span>
+                </label>
+              </div>
+
               <form onSubmit={handleChat} className="flex gap-2 items-end">
                 <textarea
                   value={chatInput}
