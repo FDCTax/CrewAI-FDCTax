@@ -1,0 +1,206 @@
+<analysis>
+
+**original_problem_statement:**
+The initial request was to build a sandbox project for FDC Tax – Luna Onboarding with a 9-stage conversational form to collect client data and store it in a PostgreSQL database. This included requirements for specific styling, a permanent SANDBOX banner, and integrations for TFN/ABN validation, Annature, and Resend.
+
+The project scope expanded significantly with a request to replace the static form with an AI-powered system. The new requirements include:
+- A full AI-powered knowledge base (KB) and email templating system.
+- The use of a local LLM (Ollama with ) for privacy and cost-savings, with OpenAI as a fallback.
+- Ingestion of FDC tax documents (PDF, DOCX, RTF, TXT) into the KB.
+- A central Luna AI that can spawn personalized mini-Lunas for each client, with memory and the ability to pull client-specific data (e.g., BAS frequency) from the main CRM database.
+- A web-based management UI to view/edit the KB, email templates, and monitor the AI agents.
+- The project is to be developed in phases, starting with the KB and RAG system.
+
+**User's preferred language**: English
+
+**what currently exists?**
+The application is a Next.js project with a PostgreSQL database. The original multi-stage  onboarding form exists but is now secondary. The main landing page () has been transformed into a comprehensive **Luna Dashboard**.
+
+This dashboard provides a unified interface for:
+- **Chatting with Luna**: An AI chat interface with enhancements like multi-line input, loading indicators, and suggestion prompts.
+- **Document Ingestion**: A form to upload documents (PDF, DOCX, RTF, TXT) into the Knowledge Base.
+- **KB Library**: A view to list, inspect, search, and delete all ingested documents.
+
+The backend has been extended with a custom **Python-based RAG (Retrieval-Augmented Generation) service** running on FastAPI and managed by Supervisor. This service uses ChromaDB for persistent vector storage and LangChain for orchestration.
+
+Key features implemented:
+- **Dual AI Model Support**: The chat can use either **OpenAI (GPT-4o)** as the primary, reliable model or a local **Ollama ()** model as a fallback. A toggle is available in the UI to switch between them.
+- **Dual Chat Modes**: A UI toggle allows switching between Educator Mode (brief, client-friendly responses) and Internal Mode (detailed, tax-agent-focused responses), which dynamically changes the system prompt sent to the LLM.
+- **Style Guide Integration**: The RAG system is configured to prioritize a Luna Style Guide document to ensure a consistent brand tone.
+
+**Last working item**:
+- Last item agent was working: The agent was addressing two critical issues reported by the user:
+    1. A file upload failure where documents appeared to upload successfully but were not added to the KB.
+    2. A  () that appeared on the dashboard, likely after the failed upload.
+- Status: **IN PROGRESS**
+- Agent Testing Done: N
+- Which testing method agent to use? The agent should first attempt to fix the code, then use the **screenshot tool** to manually test the file upload and verify the hydration error is gone. If issues persist, the **troubleshoot_agent** should be called.
+- User Testing Done: N (User reported the bug and is waiting for a fix).
+
+**All Pending/In progress Issue list**:
+- **Issue 1: React Hydration Error and File Upload Failure (P0)**
+  - Description: When the user uploads documents, they get a success confirmation, but the documents do not appear in the KB Library. Subsequently, a React hydration error appears, breaking the UI.
+  - Attempted fixes: The agent has identified that the hydration error is likely caused by using  in a  initial value, causing a server/client mismatch. The investigation into the file upload failure is just beginning.
+  - Next debug checklist:
+    1.  **Fix Hydration Error**: In , modify the  calls that use . Move the  logic inside a  hook to ensure it only runs on the client side.
+    2.  **Debug File Upload**:
+        - Examine the Next.js proxy at  to ensure it correctly forwards  to the Python backend, as it was previously fixed for JSON and might be failing for multipart/form-data.
+        - Check the RAG service logs () for errors during file ingestion.
+        - Use the browser developer tools (via screenshot tool with console logs) to inspect the network request for the upload and see the exact error response from the server.
+  - Why fix this issue and what will be achieved with the fix? The core functionality of the new system—ingesting documents into the KB—is broken. Fixing this is critical to unblock the user and allow them to proceed with testing and training Luna.
+  - Status: **IN PROGRESS**
+  - Is recurring issue? Y (File ingestion has had multiple issues related to persistence and proxying).
+  - Should Test frontend/backend/both after fix? Both.
+
+- **Issue 2: Ollama Service Instability (P2)**
+  - Description: The locally run Ollama service is unstable. It often fails to start, times out on the first query (cold start problem), or stops running unexpectedly.
+  - Attempted fixes: The agent tried increasing timeouts, adding a pre-warming script, and ensuring environment variables were set. As a final workaround, the primary LLM was switched to OpenAI GPT-4o, making Ollama an optional, unstable fallback.
+  - Next debug checklist: This is low priority as the OpenAI fallback provides a stable experience. If pursued, the agent should investigate resource constraints (RAM/CPU) in the environment and check for more robust supervisor configurations for long-running services.
+  - Why fix this issue and what will be achieved with the fix? It would fulfill the user's original goal of having a private, cost-effective local LLM option.
+  - Status: **NOT STARTED**
+  - Is recurring issue? Y
+  - Should Test frontend/backend/both after fix? Backend.
+  - Blocked on other issue: None.
+
+**In progress Task List**:
+- **Task 1: AI-Powered KB & Email System - Phase 1 (P0)**
+  - Description: Implement the foundational RAG system with a management dashboard.
+  - Where to resume: This phase is nearly complete but is blocked by the React Hydration Error and File Upload Failure issue. Once that bug is resolved, this phase can be considered ready for user validation.
+  - What will be achieved with this? A stable, working RAG system where the user can upload documents, manage the KB, and interact with the AI chat via the dashboard.
+  - Status: **BLOCKED**
+  - Should Test frontend/backend/both after fix? Both.
+  - Blocked on something: Issue 1: React Hydration Error and File Upload Failure.
+
+**Upcoming and Future Tasks**
+- **Upcoming Tasks (MyFDC Project):**
+    - **P0: Phase 2: Email Templating System**: Create a new  table in PostgreSQL. Build a UI with CKEditor 5 for creating and managing HTML email templates. Migrate the existing Resend logic to pull templates from the database by a .
+    - **P1: Phase 3: Mini-Luna Personalization**: Implement a secure API layer to fetch client-specific data (e.g., ) from the main CRM tables. Integrate chat memory so that mini-Lunas can recall past conversation context for each client.
+    - **P2: Phase 4: Management UI**: Expand the dashboard with UIs to configure mini-Lunas and manage email templates.
+
+- **Future Tasks (Original Luna Onboarding Project):**
+    - P1: Implement full Annature integration for ID verification and e-signatures.
+    - P1: Deploy and integrate a self-hosted Addressr instance to replace the mock address API.
+    - P2: Implement Dropbox folder creation for new clients on submission.
+    - P2: Add a CSV export feature to the  console.
+    - P2: Refactor the monolithic  into smaller components.
+
+**Completed work in this session**
+- **Architecture Pivot**: Successfully pivoted from a non-functional Docker/AnythingLLM plan to a custom **Python/FastAPI RAG system** with ChromaDB for storage, bypassing environment limitations.
+- **Luna Dashboard**: Created a new, feature-rich home page () that serves as a central hub for interacting with the entire Luna AI system.
+- **RAG System & KB Management**:
+    - Built the backend service () to handle document ingestion, KB search, and RAG-powered chat.
+    - Implemented a KB Library in the dashboard to list, view, and delete ingested documents.
+    - Added support for  and  files in addition to  and .
+    - Fixed a critical bug with ChromaDB persistence, ensuring the KB data is not lost on restart.
+- **Advanced Chat Features**:
+    - **AI Model Toggle**: Implemented a UI switch to select between OpenAI (default) and a local Ollama model.
+    - **Chat Mode Toggle**: Created a UI switch for Educator Mode vs. Internal Mode, which dynamically alters the LLM's system prompt and personality.
+    - **UI/UX Fixes**: Resolved a , converted the chat input to a resizable multi-line textarea, and added a Luna is thinking... loading state.
+- **Security**: Audited and replaced an old OpenAI API key with new keys provided by the user, ensuring the old key was purged from the codebase.
+- **Bug Fixes**: Corrected the KB counter to show document count instead of chunk count and fixed a critical flaw in the delete functionality that was removing all documents instead of the selected one.
+
+**Earlier issues found/mentioned but not fixed**
+- **Issue 1: Self-hosted Address Autocomplete**
+   - Debug checklist: The user requested a self-hosted  server. The previous agent deemed this out of scope and implemented a mock API instead, providing an integration guide. The actual implementation is still pending.
+   - Why to solve this issue and what will be achieved with this? To fulfill a core user requirement for a free, private address lookup service for the original onboarding form.
+   - Should Test frontend/backend/both after fix: Both.
+   - Is recurring issue? N
+
+**Known issue recurrence from previous fork**
+- N/A
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+- **Frontend**: Next.js 14, React, Tailwind CSS, shadcn/ui.
+- **Backend (JS)**: Next.js API Routes.
+- **Backend (Python)**: **FastAPI**, running as a separate service managed by Supervisor.
+- **Database**: PostgreSQL.
+- **AI/RAG**: **LangChain**, **ChromaDB** (vector store), **Ollama** (local LLM, ), **OpenAI** (primary LLM, ).
+- **RAG (Retrieval-Augmented Generation)** is the core AI pattern.
+
+**key DB schema**
+- : {, ,  (encrypted), ...}
+- : {uid=0(root) gid=0(root) groups=0(root), , , , , , } (Created)
+- : {uid=0(root) gid=0(root) groups=0(root), , , } (Planned for Phase 2)
+
+**changes in tech stack**
+- **Addition of a Python Backend**: A FastAPI service () was introduced to handle all RAG and AI logic, creating a dual-backend architecture.
+- **Pivot from Docker/AnythingLLM**: The initial plan to use a Docker-based solution was abandoned due to environment constraints in favor of a custom, directly installed stack.
+
+**All files of reference**
+- : **The Luna Dashboard**. A new, large monolithic component containing the UI for all new features (Chat, Upload, KB Library).
+- : **The RAG Service**. The heart of the new AI system, containing all logic for ingestion, search, and chat.
+- : The Next.js proxy that bridges the frontend to the Python backend service.
+- : The supervisor configuration that keeps the Python RAG service running.
+- : Heavily updated with keys for OpenAI (KB and OCR), and configuration for the RAG service.
+
+**Areas that need refactoring**:
+- : This new Luna Dashboard is already a large, multi-functional component. It should be broken down into smaller, self-contained components for each tab (e.g., , , ).
+- : The original onboarding form remains a 2000+ line monolith and needs to be broken down into stage-specific components.
+
+**key api endpoints**
+- **RAG Service (proxied via )**:
+    - : Generates an AI response for a given prompt and history.
+    - : Uploads and processes a document into the KB.
+    - : Lists all documents in the KB.
+    - : Deletes a specific document from the KB.
+    - : Checks the status of the RAG service.
+- **Original API**:
+    - : Creates a new client from the onboarding form.
+    -  / : Validation endpoints.
+
+**Critical Info for New Agent**
+- **Current Blocker**: You must first fix the **React Hydration Error and File Upload Failure**. The user cannot proceed until they can reliably ingest documents. Start by investigating  for the hydration error (look for  in ) and then debug the file upload proxy.
+- **Dual Backend Architecture**: Remember the app has two backends: the standard Next.js API routes and a separate Python FastAPI service for AI/RAG running on port 8002. The frontend communicates with the Python service via a Next.js proxy at .
+- **AI Model Default**: **OpenAI GPT-4o is the default and primary LLM**. Ollama is configured as a fallback but is very unstable in this environment. Do not spend time trying to fix Ollama unless the user explicitly requests it again.
+- **ChromaDB Persistence**: The vector store is configured to persist data in . Any changes to the RAG service should not affect this data.
+
+**documents created in this job**
+- 
+- 
+- 
+- 
+
+**Last 10 User Messages and any pending user messages**
+1.  **User (Msg 350):** Reported two bugs: the KB health bar shows chunk count instead of document count, and the delete button deletes all documents without confirmation. (COMPLETED)
+2.  **Agent (Msg 351-368):** Successfully fixed both the counter and the delete functionality. (COMPLETED)
+3.  **User (Msg 369):** Reported two new chat UI bugs: a  on the first message and a single-line chat input field. (COMPLETED)
+4.  **Agent (Msg 370-391):** Successfully fixed the  and implemented a multi-line, auto-growing textarea for chat input. (COMPLETED)
+5.  **User (Msg 392):** Reported No response received on the first query, suspecting an Ollama cold-start issue. Requested a fix. (COMPLETED)
+6.  **Agent (Msg 393-430):** Attempted to fix Ollama cold-start, but pivoted to a more robust solution. (COMPLETED)
+7.  **User (Msg 431):** Suggested making OpenAI the primary model and adding a UI toggle to switch between OpenAI and Ollama. (COMPLETED)
+8.  **Agent (Msg 432-457):** Implemented the OpenAI-primary logic and the UI toggle. Confirmed chat is now working reliably with GPT-4o. (COMPLETED)
+9.  **User (Msg 458):** Requested a mode toggle (Educator vs. Internal) to switch the AI's personality via system prompts. (COMPLETED)
+10. **User (Msg 475):** **(PENDING)** Reported that file uploads are failing and a React Hydration Error is now appearing on the dashboard. This is the current active issue.
+
+**Project Health Check:**
+- **Broken**:
+    - **File Ingestion**: The core function of uploading documents to the KB is not working.
+    - **Dashboard UI**: The home page suffers from a React Hydration Error, which can cause unpredictable UI behavior.
+- **Mocked**:
+    - **Address Autocomplete**: The address lookup feature in the original  form still uses mock data.
+    - **Ollama Integration**: The local LLM is so unstable that the system is fully reliant on the OpenAI fallback, making the local model feature effectively non-functional.
+
+**3rd Party Integrations**
+- **OpenAI GPT-4o** — uses User API Key (Primary LLM for chat).
+- **PostgreSQL (DigitalOcean)** — requires User API Key.
+- **Resend (Emails)** — requires User API Key.
+- **Ollama (Local LLM)** — Self-hosted, but unstable.
+- **Annature (eSignatures)** — requires User API Key (integration planned, not built).
+- **Stripe (Payments)** — requires User API Key (test keys in place, not yet integrated).
+
+**Testing status**
+- Testing agent used after significant changes: NO
+- Troubleshoot agent used after agent stuck in loop: NO
+- Test files created: []
+- Known regressions: File upload functionality, which was previously working, is now broken.
+
+**Credentials to test flow:**
+- All necessary credentials (PostgreSQL, Resend, OpenAI) are located in the  file.
+
+**What agent forgot to execute**
+- The original long-term tasks from the Luna onboarding flow (full Annature integration, self-hosted Addressr, Dropbox folder creation) remain unaddressed as the focus has shifted entirely to the new AI/RAG system.
+
+</analysis>
