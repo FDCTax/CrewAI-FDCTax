@@ -371,8 +371,8 @@ async def ingest_file(file: UploadFile = File(...), category: str = "General", t
         else:
             raise HTTPException(status_code=400, detail="Unsupported file type. Use PDF, DOCX, RTF, or TXT.")
         
-        # Use filename as title if not provided
-        doc_title = title or file.filename
+        # Use provided title, fallback to filename
+        doc_title = title if title else file.filename
         
         # Ingest the document
         doc = DocumentIngest(
