@@ -208,6 +208,7 @@ export default function LunaDashboard() {
             { id: 'chat', label: 'Chat with Luna', icon: MessageCircle },
             { id: 'upload', label: 'Upload Documents', icon: Upload },
             { id: 'search', label: 'Search KB', icon: Search },
+            { id: 'library', label: 'KB Library', icon: FileText },
             { id: 'api', label: 'API Tester', icon: Code },
           ].map(tab => (
             <button
