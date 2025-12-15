@@ -223,7 +223,7 @@ def call_openai_fallback(messages: List[Dict[str, str]], system_prompt: str) -> 
                 "Content-Type": "application/json"
             },
             json={
-                "model": "gpt-4-turbo-preview",
+                "model": "gpt-4o",  # Latest GPT-4o (faster, better, cheaper)
                 "messages": formatted_messages,
                 "temperature": 0.7,
                 "max_tokens": 500
