@@ -562,6 +562,34 @@ async def clear_kb():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+def prewarm_ollama():
+    """Pre-warm Ollama on startup to avoid cold-start delays"""
+    print("🔥 Pre-warming Ollama (llama3:8b)...")
+    try:
+        response = requests.post(
+            f"{OLLAMA_URL}/api/chat",
+            json={
+                "model": "llama3:8b",
+                "messages": [
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": "Say 'ready'"}
+                ],
+                "stream": False
+            },
+            timeout=180
+        )
+        if response.status_code == 200:
+            print("✅ Ollama pre-warmed and ready!")
+        else:
+            print(f"⚠️ Ollama pre-warm failed: {response.status_code}")
+    except Exception as e:
+        print(f"⚠️ Ollama pre-warm error (will use OpenAI fallback): {e}")
+
 if __name__ == "__main__":
     import uvicorn
+    import threading
+    
+    # Pre-warm Ollama in background thread
+    threading.Thread(target=prewarm_ollama, daemon=True).start()
+    
     uvicorn.run(app, host="0.0.0.0", port=8002)
