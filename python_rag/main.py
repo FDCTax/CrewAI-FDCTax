@@ -82,8 +82,9 @@ class KBSearchRequest(BaseModel):
 # Helper functions
 def extract_text_from_pdf(file_bytes: bytes) -> str:
     """Extract text from PDF file"""
+    import io
     try:
-        pdf = PdfReader(file_bytes)
+        pdf = PdfReader(io.BytesIO(file_bytes))
         text = ""
         for page in pdf.pages:
             text += page.extract_text() + "\n\n"
