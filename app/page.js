@@ -510,6 +510,94 @@ export default function LunaDashboard() {
             </div>
           )}
 
+          {/* KB Library Tab */}
+          {activeTab === 'library' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-gray-900">Knowledge Base Library</h2>
+                <div className="flex gap-2">
+                  <button
+                    onClick={loadDocuments}
+                    disabled={libraryLoading}
+                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {libraryLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Activity className="w-4 h-4" />}
+                    Refresh
+                  </button>
+                  <button
+                    onClick={exportKB}
+                    disabled={loading || documents.length === 0}
+                    className="px-4 py-2 bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center gap-2"
+                  >
+                    <Upload className="w-4 h-4" />
+                    Export JSON
+                  </button>
+                </div>
+              </div>
+
+              {libraryLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 animate-spin text-[#15ADC2]" />
+                </div>
+              ) : documents.length === 0 ? (
+                <div className="p-8 bg-gray-50 border border-gray-200 rounded-lg text-center">
+                  <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Documents Yet</h3>
+                  <p className="text-gray-600 mb-4">Upload your first FDC tax document to get started!</p>
+                  <button
+                    onClick={() => setActiveTab('upload')}
+                    className="px-6 py-2 bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white rounded-lg hover:shadow-lg transition-all"
+                  >
+                    Go to Upload
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-sm text-gray-600">{documents.length} document(s) loaded</p>
+                  
+                  {documents.map((doc) => (
+                    <div
+                      key={doc.doc_id}
+                      className="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <FileText className="w-5 h-5 text-[#15ADC2]" />
+                            <h3 className="font-semibold text-gray-900">{doc.title}</h3>
+                            <span className="text-xs bg-[#15ADC2]/10 text-[#15ADC2] px-2 py-1 rounded">
+                              {doc.category}
+                            </span>
+                          </div>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <p>📄 File: {doc.filename}</p>
+                            <p>🧩 Chunks: {doc.chunk_count}</p>
+                            <p className="text-xs text-gray-500">ID: {doc.doc_id}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => viewDocument(doc.doc_id)}
+                            className="px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-sm"
+                          >
+                            View
+                          </button>
+                          <button
+                            onClick={() => deleteDocument(doc.doc_id)}
+                            disabled={loading}
+                            className="px-3 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors text-sm disabled:opacity-50"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* API Tester Tab */}
           {activeTab === 'api' && (
             <div className="space-y-4">
