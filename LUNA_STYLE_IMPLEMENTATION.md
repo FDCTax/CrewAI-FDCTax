@@ -52,7 +52,7 @@ if 'luna style guide' in title or 'luna style guide' in filename:
 ## Testing the Style
 
 ### Upload Style Guide
-1. Go to: https://fdctax-sandbox.preview.emergentagent.com
+1. Go to: https://tax-knowledge-hub-2.preview.emergentagent.com
 2. Click "Upload Documents" tab
 3. Upload: "Luna Style Guide.docx"
 4. Category: "Style"
