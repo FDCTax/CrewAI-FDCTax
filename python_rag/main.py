@@ -65,6 +65,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: List[ChatMessage]
     session_id: str
+    user_id: Optional[int] = None  # NEW: User ID for context
     form_context: Optional[Dict[str, Any]] = None
     use_fallback: bool = False
     mode: str = "educator"  # 'educator' or 'internal'
