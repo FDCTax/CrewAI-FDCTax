@@ -563,13 +563,22 @@ export default function LunaDashboard() {
               <Sparkles className="w-8 h-8" />
               <h1 className="text-3xl font-bold">Luna AI Dashboard</h1>
             </div>
-            <Link 
-              href="/clients" 
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors font-medium"
-            >
-              <Users className="w-5 h-5" />
-              <span>Client CRM</span>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link 
+                href="/myfdc" 
+                className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors font-medium"
+              >
+                <User className="w-5 h-5" />
+                <span>MyFDC</span>
+              </Link>
+              <Link 
+                href="/clients" 
+                className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors font-medium"
+              >
+                <Users className="w-5 h-5" />
+                <span>Client CRM</span>
+              </Link>
+            </div>
           </div>
           <p className="text-white/90">FDC Tax Knowledge Base & RAG System Testing</p>
           
