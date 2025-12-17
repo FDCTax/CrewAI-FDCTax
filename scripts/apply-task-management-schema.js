@@ -5,9 +5,12 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 async function applySchema() {
+  // Use the correct environment variable
+  const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+  
   const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-    ssl: { rejectUnauthorized: false }
+    connectionString: connectionString,
+    ssl: connectionString?.includes('sslmode=require') ? { rejectUnauthorized: false } : false
   });
 
   try {
