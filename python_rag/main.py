@@ -494,6 +494,15 @@ IMPORTANT: Use the knowledge base information below - it contains official FDC g
             except Exception as e2:
                 raise HTTPException(status_code=500, detail=f"Both LLMs failed. OpenAI: {e}, Ollama: {e2}")
         
+        # Save conversation if user_id provided
+        if request.user_id and last_user_msg:
+            save_conversation(
+                user_id=request.user_id,
+                query=last_user_msg.content,
+                response=response_content,
+                mode=request.mode
+            )
+        
         return {
             "message": {
                 "role": "assistant",
@@ -504,7 +513,8 @@ IMPORTANT: Use the knowledge base information below - it contains official FDC g
                 "category": doc['metadata'].get('category', 'Unknown')
             } for doc in kb_results],
             "session_id": request.session_id,
-            "provider": provider
+            "provider": provider,
+            "user_name": user_name  # Include user name for frontend personalization
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
