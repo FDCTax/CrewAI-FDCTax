@@ -81,6 +81,36 @@ class KBSearchRequest(BaseModel):
     limit: int = 5
 
 # Helper functions
+def fetch_user_context(user_id: int) -> Optional[Dict]:
+    """Fetch user context from Next.js API"""
+    try:
+        response = requests.get(
+            f"http://localhost:3000/api/user/context?user_id={user_id}",
+            timeout=5
+        )
+        if response.status_code == 200:
+            return response.json()
+        return None
+    except Exception as e:
+        print(f"Error fetching user context: {e}")
+        return None
+
+def save_conversation(user_id: int, query: str, response: str, mode: str = "educator"):
+    """Save conversation to database via Next.js API"""
+    try:
+        requests.post(
+            "http://localhost:3000/api/user/conversation/save",
+            json={
+                "user_id": user_id,
+                "query": query,
+                "response": response,
+                "mode": mode
+            },
+            timeout=5
+        )
+    except Exception as e:
+        print(f"Error saving conversation: {e}")
+
 def extract_text_from_pdf(file_bytes: bytes) -> str:
     """Extract text from PDF file"""
     import io
