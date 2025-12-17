@@ -324,14 +324,23 @@ export default function MyFDCDashboard() {
       {/* Header */}
       <div className="bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <User className="w-8 h-8" />
-            <div>
-              <h1 className="text-2xl font-bold">
-                Welcome back, {user?.casual_name || user?.first_name || 'there'}!
-              </h1>
-              <p className="text-white/80 text-sm">MyFDC Dashboard</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <User className="w-8 h-8" />
+              <div>
+                <h1 className="text-2xl font-bold">
+                  Welcome back, {user?.casual_name || user?.first_name || 'there'}!
+                </h1>
+                <p className="text-white/80 text-sm">MyFDC Dashboard</p>
+              </div>
             </div>
+            <a 
+              href="/" 
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors text-sm"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Chat with Luna
+            </a>
           </div>
         </div>
       </div>
