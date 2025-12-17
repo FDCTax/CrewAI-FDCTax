@@ -89,7 +89,47 @@ export default function LunaDashboard() {
 
   useEffect(() => {
     checkHealth();
+    loadUserContextAndGreeting();
   }, []);
+  
+  const loadUserContextAndGreeting = async () => {
+    try {
+      const res = await fetch(`/api/user/context?user_id=${userId}`);
+      const data = await res.json();
+      
+      if (data.user) {
+        setUserContext(data);
+        
+        // Generate personalized greeting
+        const greeting = await generatePersonalizedGreeting(data);
+        setChatMessages([{ role: 'assistant', content: greeting }]);
+      }
+    } catch (error) {
+      console.error('Error loading user context:', error);
+      setChatMessages([{ role: 'assistant', content: 'Hi! I\'m Luna, your FDC Tax assistant. How can I help you today?' }]);
+    }
+  };
+  
+  const generatePersonalizedGreeting = async (context) => {
+    try {
+      const res = await fetch('/api/luna-rag/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: 'Generate a warm, personalized greeting for me' }],
+          session_id: 'greeting-' + Date.now(),
+          user_id: userId,
+          mode: chatMode,
+          use_fallback: !useLocalModel
+        })
+      });
+      
+      const data = await res.json();
+      return data.message?.content || `Hi ${context.user.name}! How can I help you today?`;
+    } catch (error) {
+      return `Hi ${context.user.name}! How can I help you today?`;
+    }
+  };
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
