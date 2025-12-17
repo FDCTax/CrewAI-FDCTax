@@ -59,24 +59,6 @@ CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status);
 CREATE INDEX IF NOT EXISTS idx_tasks_due_date ON tasks(due_date);
 
 -- ==========================================
--- MESSAGES TABLE (Client-Agent Communication)
--- ==========================================
-CREATE TABLE IF NOT EXISTS messages (
-    id SERIAL PRIMARY KEY,
-    client_id INTEGER NOT NULL REFERENCES clients(system_id) ON DELETE CASCADE,
-    task_id INTEGER REFERENCES tasks(id) ON DELETE SET NULL,
-    sender VARCHAR(20) NOT NULL CHECK (sender IN ('client', 'agent', 'system', 'luna')),
-    message_text TEXT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    attachment_id INTEGER REFERENCES documents(id) ON DELETE SET NULL,
-    read BOOLEAN DEFAULT false
-);
-
-CREATE INDEX IF NOT EXISTS idx_messages_client_id ON messages(client_id);
-CREATE INDEX IF NOT EXISTS idx_messages_task_id ON messages(task_id);
-CREATE INDEX IF NOT EXISTS idx_messages_timestamp ON messages(timestamp DESC);
-
--- ==========================================
 -- DOCUMENTS TABLE (File Management)
 -- ==========================================
 CREATE TABLE IF NOT EXISTS documents (
