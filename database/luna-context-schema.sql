@@ -41,48 +41,39 @@ CREATE TABLE IF NOT EXISTS user_conversations (
 CREATE INDEX IF NOT EXISTS idx_user_conversations_user_id ON user_conversations(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_conversations_timestamp ON user_conversations(timestamp DESC);
 
--- Step 4: Insert test users
-INSERT INTO clients (
-    first_name, 
-    last_name, 
-    casual_name, 
-    email, 
-    mobile,
-    cashbook_start_date,
-    gst_registered,
-    bas_quarter
-) VALUES 
-(
-    'Sarah',
-    'Wilson',
-    'Sarah',
-    'sarah.test@fdctax.com.au',
-    '0412345678',
-    '2024-07-01',
-    false,
-    'Q1'
-),
-(
-    'Emma',
-    'Thompson',
-    'Em',
-    'emma.test@fdctax.com.au',
-    '0423456789',
-    '2024-01-15',
-    true,
-    'Q3'
-),
-(
-    'Michael',
-    'Chen',
-    'Mike',
-    'michael.test@fdctax.com.au',
-    '0434567890',
-    '2024-10-01',
-    false,
-    'Q2'
-)
-ON CONFLICT (email) DO NOTHING;
+-- Step 4: Insert test users (only if they don't exist)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM clients WHERE email = 'sarah.test@fdctax.com.au') THEN
+        INSERT INTO clients (
+            first_name, last_name, casual_name, email, mobile,
+            cashbook_start_date, gst_registered, bas_quarter
+        ) VALUES (
+            'Sarah', 'Wilson', 'Sarah', 'sarah.test@fdctax.com.au', '0412345678',
+            '2024-07-01', false, 'Q1'
+        );
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM clients WHERE email = 'emma.test@fdctax.com.au') THEN
+        INSERT INTO clients (
+            first_name, last_name, casual_name, email, mobile,
+            cashbook_start_date, gst_registered, bas_quarter
+        ) VALUES (
+            'Emma', 'Thompson', 'Em', 'emma.test@fdctax.com.au', '0423456789',
+            '2024-01-15', true, 'Q3'
+        );
+    END IF;
+    
+    IF NOT EXISTS (SELECT 1 FROM clients WHERE email = 'michael.test@fdctax.com.au') THEN
+        INSERT INTO clients (
+            first_name, last_name, casual_name, email, mobile,
+            cashbook_start_date, gst_registered, bas_quarter
+        ) VALUES (
+            'Michael', 'Chen', 'Mike', 'michael.test@fdctax.com.au', '0434567890',
+            '2024-10-01', false, 'Q2'
+        );
+    END IF;
+END $$;
 
 -- Step 5: Insert sample checklist items for test users
 INSERT INTO user_checklists (user_id, task_name, status, due_date)
