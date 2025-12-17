@@ -558,9 +558,18 @@ export default function LunaDashboard() {
       {/* Header */}
       <div className="bg-gradient-to-r from-[#15ADC2] to-[#6366F1] text-white p-6 shadow-lg">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <Sparkles className="w-8 h-8" />
-            <h1 className="text-3xl font-bold">Luna AI Dashboard</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <Sparkles className="w-8 h-8" />
+              <h1 className="text-3xl font-bold">Luna AI Dashboard</h1>
+            </div>
+            <Link 
+              href="/clients" 
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors font-medium"
+            >
+              <Users className="w-5 h-5" />
+              <span>Client CRM</span>
+            </Link>
           </div>
           <p className="text-white/90">FDC Tax Knowledge Base & RAG System Testing</p>
           
