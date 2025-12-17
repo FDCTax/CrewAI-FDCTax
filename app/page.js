@@ -13,9 +13,13 @@ export default function LunaDashboard() {
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // User context (hardcoded for Sandbox testing - will be dynamic later)
+  const [userId, setUserId] = useState(143000); // Sarah's test user ID
+  const [userContext, setUserContext] = useState(null);
+
   // Chat state
   const [chatMessages, setChatMessages] = useState([
-    { role: 'assistant', content: 'Hi! I\'m Luna, your FDC Tax assistant. Ask me anything about tax, ABN, GST, or deductions!' }
+    { role: 'assistant', content: 'Loading your personalized greeting...' }
   ]);
   const [chatInput, setChatInput] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
