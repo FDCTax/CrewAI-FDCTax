@@ -462,7 +462,7 @@ Your role:
 5. For personalised advice, direct them to contact the FDC Tax team
 
 IMPORTANT: Use the knowledge base information below - it contains official FDC guidance and your style guide. Follow the style guide strictly.
-{kb_context}{form_context_str}"""
+{kb_context}{form_context_str}{user_context_str}"""
         
         # Format messages for LLM
         formatted_messages = [{"role": m.role, "content": m.content} for m in request.messages]
