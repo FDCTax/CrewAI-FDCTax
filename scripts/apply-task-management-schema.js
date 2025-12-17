@@ -10,7 +10,7 @@ async function applySchema() {
   
   const pool = new Pool({
     connectionString: connectionString,
-    ssl: connectionString?.includes('sslmode=require') ? { rejectUnauthorized: false } : false
+    ssl: { rejectUnauthorized: false }
   });
 
   try {
