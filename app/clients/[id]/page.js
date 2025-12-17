@@ -949,11 +949,18 @@ export default function ClientDetailPage() {
                     </div>
                   )}
                   
-                  {selectedTask.client_files && JSON.parse(selectedTask.client_files || '[]').length > 0 && (
+                  {selectedTask.client_files && (
+                    typeof selectedTask.client_files === 'string' 
+                      ? JSON.parse(selectedTask.client_files || '[]') 
+                      : selectedTask.client_files
+                  ).length > 0 && (
                     <div>
                       <label className="text-xs text-purple-600">Uploaded Files:</label>
                       <div className="mt-1 space-y-1">
-                        {JSON.parse(selectedTask.client_files).map((file, idx) => (
+                        {(typeof selectedTask.client_files === 'string' 
+                          ? JSON.parse(selectedTask.client_files) 
+                          : selectedTask.client_files
+                        ).map((file, idx) => (
                           <a 
                             key={idx} 
                             href={file.url} 
