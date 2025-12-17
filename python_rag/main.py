@@ -422,7 +422,7 @@ Your role:
 5. Include calculations, examples, exceptions
 
 IMPORTANT: Use the knowledge base information below - it contains official FDC guidance and technical details.
-{kb_context}{form_context_str}"""
+{kb_context}{form_context_str}{user_context_str}"""
         else:
             # Educator/Client Mode - Brief, bullets, plain language
             system_prompt = f"""You are Luna, a warm, professional tax assistant for Australian Family Day Care educators.
