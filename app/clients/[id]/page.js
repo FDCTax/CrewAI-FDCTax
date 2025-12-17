@@ -2,11 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { 
   User, Building2, Calendar, Percent, FileText, MessageSquare, 
   FolderOpen, Calculator, Bot, ArrowLeft, CheckCircle, Clock,
-  AlertCircle, Download, Upload, Plus, Edit
+  AlertCircle, Download, Upload, Plus, Edit, X, Send, Loader2,
+  Eye, Trash2, DollarSign
 } from 'lucide-react';
+
+// Dynamically import CKEditor
+const CKEditor = dynamic(() => import('@ckeditor/ckeditor5-react').then(mod => mod.CKEditor), { ssr: false });
+const ClassicEditor = dynamic(() => import('@ckeditor/ckeditor5-build-classic'), { ssr: false });
 
 export default function ClientDetailPage() {
   const params = useParams();
@@ -21,6 +27,29 @@ export default function ClientDetailPage() {
   const [documents, setDocuments] = useState([]);
   const [calculations, setCalculations] = useState([]);
   const [lunaLogs, setLunaLogs] = useState([]);
+
+  // New Task Modal State
+  const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+  const [newTask, setNewTask] = useState({
+    title: '',
+    description: '',
+    due_date: '',
+    priority: 'medium',
+    input_type: 'none',
+    custom_options: '',
+    notify_on_complete: true
+  });
+  const [savingTask, setSavingTask] = useState(false);
+
+  // Task Detail Modal State
+  const [showTaskDetailModal, setShowTaskDetailModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [taskMessages, setTaskMessages] = useState([]);
+  const [taskDocuments, setTaskDocuments] = useState([]);
+  const [replyText, setReplyText] = useState('');
+  const [agentNotes, setAgentNotes] = useState('');
+  const [sendingReply, setSendingReply] = useState(false);
+  const [updatingTask, setUpdatingTask] = useState(false);
 
   useEffect(() => {
     loadClientData();
@@ -50,6 +79,7 @@ export default function ClientDetailPage() {
     const colors = {
       'pending': 'bg-orange-100 text-orange-700',
       'in_progress': 'bg-blue-100 text-blue-700',
+      'submitted': 'bg-purple-100 text-purple-700',
       'completed': 'bg-green-100 text-green-700',
       'cancelled': 'bg-gray-100 text-gray-700'
     };
@@ -74,6 +104,154 @@ export default function ClientDetailPage() {
       'luna': 'bg-teal-100 text-teal-700'
     };
     return colors[sender] || 'bg-gray-100 text-gray-700';
+  };
+
+  // New Task Functions
+  const handleCreateTask = async () => {
+    if (!newTask.title.trim()) {
+      alert('Please enter a task title');
+      return;
+    }
+
+    setSavingTask(true);
+    try {
+      const payload = {
+        client_id: parseInt(clientId),
+        title: newTask.title,
+        description: newTask.description,
+        due_date: newTask.due_date || null,
+        priority: newTask.priority,
+        input_type: newTask.input_type,
+        custom_options: newTask.input_type === 'dropdown' || newTask.input_type === 'radio' 
+          ? newTask.custom_options.split('\n').filter(o => o.trim())
+          : [],
+        notify_on_complete: newTask.notify_on_complete
+      };
+
+      const res = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setShowNewTaskModal(false);
+        setNewTask({
+          title: '',
+          description: '',
+          due_date: '',
+          priority: 'medium',
+          input_type: 'none',
+          custom_options: '',
+          notify_on_complete: true
+        });
+        loadClientData(); // Reload to get the new task
+      } else {
+        alert('Failed to create task: ' + (data.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+      alert('Failed to create task');
+    } finally {
+      setSavingTask(false);
+    }
+  };
+
+  // Task Detail Functions
+  const openTaskDetail = async (task) => {
+    setSelectedTask(task);
+    setAgentNotes(task.agent_notes || '');
+    setReplyText('');
+    setShowTaskDetailModal(true);
+
+    // Load task-specific messages and documents
+    try {
+      const res = await fetch(`/api/tasks/${task.id}`);
+      const data = await res.json();
+      setTaskMessages(data.messages || []);
+      setTaskDocuments(data.documents || []);
+    } catch (error) {
+      console.error('Error loading task details:', error);
+    }
+  };
+
+  const handleMarkComplete = async () => {
+    if (!selectedTask) return;
+    setUpdatingTask(true);
+    try {
+      const res = await fetch(`/api/tasks/${selectedTask.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'completed', agent_notes: agentNotes })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setShowTaskDetailModal(false);
+        loadClientData();
+      } else {
+        alert('Failed to update task');
+      }
+    } catch (error) {
+      console.error('Error updating task:', error);
+      alert('Failed to update task');
+    } finally {
+      setUpdatingTask(false);
+    }
+  };
+
+  const handleSendReply = async () => {
+    if (!replyText.trim() || !selectedTask) return;
+    setSendingReply(true);
+    try {
+      const res = await fetch(`/api/tasks/${selectedTask.id}/reply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: replyText, sender: 'agent' })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setReplyText('');
+        // Reload task messages
+        const taskRes = await fetch(`/api/tasks/${selectedTask.id}`);
+        const taskData = await taskRes.json();
+        setTaskMessages(taskData.messages || []);
+      } else {
+        alert('Failed to send reply');
+      }
+    } catch (error) {
+      console.error('Error sending reply:', error);
+      alert('Failed to send reply');
+    } finally {
+      setSendingReply(false);
+    }
+  };
+
+  const handleSaveNotes = async () => {
+    if (!selectedTask) return;
+    setUpdatingTask(true);
+    try {
+      const res = await fetch(`/api/tasks/${selectedTask.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent_notes: agentNotes })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert('Notes saved');
+        loadClientData();
+      } else {
+        alert('Failed to save notes');
+      }
+    } catch (error) {
+      console.error('Error saving notes:', error);
+      alert('Failed to save notes');
+    } finally {
+      setUpdatingTask(false);
+    }
   };
 
   if (loading) {
@@ -146,7 +324,7 @@ export default function ClientDetailPage() {
           <div className="flex gap-6 overflow-x-auto">
             {[
               { id: 'overview', label: 'Overview', icon: User },
-              { id: 'tasks', label: 'Tasks', icon: FileText, badge: tasks.filter(t => t.status === 'pending').length },
+              { id: 'tasks', label: 'Tasks', icon: FileText, badge: tasks.filter(t => t.status === 'pending' || t.status === 'submitted').length },
               { id: 'messages', label: 'Messages', icon: MessageSquare, badge: messages.length },
               { id: 'documents', label: 'Documents', icon: FolderOpen, badge: documents.length },
               { id: 'calculations', label: 'Calculations', icon: Calculator, badge: calculations.length },
@@ -290,9 +468,12 @@ export default function ClientDetailPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">Tasks</h3>
-              <button className="px-4 py-2 bg-[#6366F1] text-white rounded-lg hover:bg-[#4F46E5] transition-colors flex items-center gap-2">
+              <button 
+                onClick={() => setShowNewTaskModal(true)}
+                className="px-4 py-2 bg-[#6366F1] text-white rounded-lg hover:bg-[#4F46E5] transition-colors flex items-center gap-2"
+              >
                 <Plus className="w-4 h-4" />
-                Add Task
+                New Task
               </button>
             </div>
             
@@ -300,6 +481,12 @@ export default function ClientDetailPage() {
               <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
                 <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-600">No tasks yet</p>
+                <button 
+                  onClick={() => setShowNewTaskModal(true)}
+                  className="mt-4 text-[#6366F1] hover:text-[#4F46E5]"
+                >
+                  Create your first task →
+                </button>
               </div>
             ) : (
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -309,8 +496,9 @@ export default function ClientDetailPage() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Priority</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Input Type</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Due Date</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
@@ -318,7 +506,9 @@ export default function ClientDetailPage() {
                       <tr key={task.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="font-medium text-gray-900">{task.title}</div>
-                          <div className="text-sm text-gray-500">{task.description}</div>
+                          {task.description && (
+                            <div className="text-sm text-gray-500 truncate max-w-xs">{task.description.replace(/<[^>]+>/g, '')}</div>
+                          )}
                         </td>
                         <td className="px-6 py-4">
                           <span className={`px-2 py-1 text-xs rounded ${getStatusColor(task.status)}`}>
@@ -331,10 +521,19 @@ export default function ClientDetailPage() {
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
-                          {task.due_date ? new Date(task.due_date).toLocaleDateString() : '-'}
+                          {task.input_type || 'none'}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600">
-                          {task.assigned_to || '-'}
+                          {task.due_date ? new Date(task.due_date).toLocaleDateString() : '-'}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button 
+                            onClick={() => openTaskDetail(task)}
+                            className="text-[#6366F1] hover:text-[#4F46E5] flex items-center gap-1 ml-auto"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -415,10 +614,15 @@ export default function ClientDetailPage() {
                           {doc.uploaded_by || '-'}
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <button className="text-[#6366F1] hover:text-[#4F46E5] flex items-center gap-1 ml-auto">
+                          <a 
+                            href={doc.file_url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-[#6366F1] hover:text-[#4F46E5] flex items-center gap-1 ml-auto"
+                          >
                             <Download className="w-4 h-4" />
                             Download
-                          </button>
+                          </a>
                         </td>
                       </tr>
                     ))}
@@ -524,6 +728,363 @@ export default function ClientDetailPage() {
           </div>
         )}
       </div>
+
+      {/* New Task Modal */}
+      {showNewTaskModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">New Task for {client.first_name}</h2>
+              <button onClick={() => setShowNewTaskModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Title <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                  placeholder="e.g., Upload Q1 receipts"
+                />
+              </div>
+
+              {/* Description (Rich Text) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                {typeof window !== 'undefined' && ClassicEditor && (
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={newTask.description}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setNewTask({ ...newTask, description: data });
+                    }}
+                    config={{
+                      toolbar: ['bold', 'italic', 'bulletedList', 'numberedList', 'link']
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Due Date & Priority */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Due Date
+                  </label>
+                  <input
+                    type="date"
+                    value={newTask.due_date}
+                    onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Priority
+                  </label>
+                  <select
+                    value={newTask.priority}
+                    onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Input Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Client Input Required
+                </label>
+                <select
+                  value={newTask.input_type}
+                  onChange={(e) => setNewTask({ ...newTask, input_type: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                >
+                  <option value="none">None - Acknowledgement only</option>
+                  <option value="amount">$ Amount - Dollar input</option>
+                  <option value="text">Text - Free text response</option>
+                  <option value="file">File Upload - Document required</option>
+                  <option value="dropdown">Dropdown - Select from options</option>
+                  <option value="radio">Radio - Choose one option</option>
+                </select>
+              </div>
+
+              {/* Custom Options (for dropdown/radio) */}
+              {(newTask.input_type === 'dropdown' || newTask.input_type === 'radio') && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Options (one per line)
+                  </label>
+                  <textarea
+                    value={newTask.custom_options}
+                    onChange={(e) => setNewTask({ ...newTask, custom_options: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                    rows={4}
+                    placeholder="Option 1&#10;Option 2&#10;Option 3"
+                  />
+                </div>
+              )}
+
+              {/* Notify on Complete */}
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="notify"
+                  checked={newTask.notify_on_complete}
+                  onChange={(e) => setNewTask({ ...newTask, notify_on_complete: e.target.checked })}
+                  className="w-4 h-4 text-[#6366F1] rounded"
+                />
+                <label htmlFor="notify" className="text-sm text-gray-700">
+                  Email me when client submits this task
+                </label>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-end gap-3">
+              <button
+                onClick={() => setShowNewTaskModal(false)}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateTask}
+                disabled={savingTask}
+                className="px-6 py-2 bg-[#6366F1] text-white rounded-lg hover:bg-[#4F46E5] disabled:opacity-50 flex items-center gap-2"
+              >
+                {savingTask ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-4 h-4" />
+                    Create Task
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Task Detail Modal */}
+      {showTaskDetailModal && selectedTask && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">{selectedTask.title}</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`px-2 py-0.5 text-xs rounded ${getStatusColor(selectedTask.status)}`}>
+                    {selectedTask.status}
+                  </span>
+                  <span className={`px-2 py-0.5 text-xs rounded ${getPriorityColor(selectedTask.priority)}`}>
+                    {selectedTask.priority}
+                  </span>
+                </div>
+              </div>
+              <button onClick={() => setShowTaskDetailModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Task Description */}
+              {selectedTask.description && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Description</h4>
+                  <div 
+                    className="prose prose-sm text-gray-600 bg-gray-50 p-4 rounded-lg"
+                    dangerouslySetInnerHTML={{ __html: selectedTask.description }}
+                  />
+                </div>
+              )}
+
+              {/* Client Submission */}
+              {selectedTask.status === 'submitted' && (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                  <h4 className="text-sm font-medium text-purple-700 mb-3 flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4" />
+                    Client Submission
+                  </h4>
+                  
+                  {selectedTask.client_response && (
+                    <div className="mb-3">
+                      <label className="text-xs text-purple-600">Response:</label>
+                      <p className="text-gray-900">{selectedTask.client_response}</p>
+                    </div>
+                  )}
+                  
+                  {selectedTask.client_amount && (
+                    <div className="mb-3">
+                      <label className="text-xs text-purple-600">Amount:</label>
+                      <p className="text-gray-900 font-semibold flex items-center gap-1">
+                        <DollarSign className="w-4 h-4" />
+                        {parseFloat(selectedTask.client_amount).toFixed(2)}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {selectedTask.client_comment && (
+                    <div className="mb-3">
+                      <label className="text-xs text-purple-600">Comment:</label>
+                      <p className="text-gray-900">{selectedTask.client_comment}</p>
+                    </div>
+                  )}
+                  
+                  {selectedTask.client_files && JSON.parse(selectedTask.client_files || '[]').length > 0 && (
+                    <div>
+                      <label className="text-xs text-purple-600">Uploaded Files:</label>
+                      <div className="mt-1 space-y-1">
+                        {JSON.parse(selectedTask.client_files).map((file, idx) => (
+                          <a 
+                            key={idx} 
+                            href={file.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-[#6366F1] hover:text-[#4F46E5]"
+                          >
+                            <Download className="w-4 h-4" />
+                            {file.name}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedTask.submitted_at && (
+                    <p className="text-xs text-purple-500 mt-3">
+                      Submitted: {new Date(selectedTask.submitted_at).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Task Documents */}
+              {taskDocuments.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Attachments</h4>
+                  <div className="space-y-2">
+                    {taskDocuments.map(doc => (
+                      <a 
+                        key={doc.id}
+                        href={doc.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 p-2 bg-gray-50 rounded hover:bg-gray-100"
+                      >
+                        <FileText className="w-4 h-4 text-gray-400" />
+                        <span className="text-gray-700">{doc.file_name}</span>
+                        <Download className="w-4 h-4 text-gray-400 ml-auto" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Messages Thread */}
+              {taskMessages.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Messages</h4>
+                  <div className="space-y-3 max-h-60 overflow-y-auto bg-gray-50 p-4 rounded-lg">
+                    {taskMessages.map(msg => (
+                      <div key={msg.id} className="flex gap-3">
+                        <span className={`px-2 py-0.5 text-xs rounded h-fit ${getSenderColor(msg.sender)}`}>
+                          {msg.sender}
+                        </span>
+                        <div>
+                          <p className="text-gray-900 text-sm">{msg.message_text}</p>
+                          <p className="text-xs text-gray-500">{new Date(msg.timestamp).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Reply Box */}
+              <div>
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Send Reply to Client</h4>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                    placeholder="Type your message..."
+                  />
+                  <button
+                    onClick={handleSendReply}
+                    disabled={sendingReply || !replyText.trim()}
+                    className="px-4 py-2 bg-[#6366F1] text-white rounded-lg hover:bg-[#4F46E5] disabled:opacity-50"
+                  >
+                    {sendingReply ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Agent Notes */}
+              <div>
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Internal Notes (not visible to client)</h4>
+                <textarea
+                  value={agentNotes}
+                  onChange={(e) => setAgentNotes(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6366F1] focus:border-transparent"
+                  rows={3}
+                  placeholder="Add private notes..."
+                />
+                <button
+                  onClick={handleSaveNotes}
+                  disabled={updatingTask}
+                  className="mt-2 text-sm text-[#6366F1] hover:text-[#4F46E5]"
+                >
+                  Save Notes
+                </button>
+              </div>
+            </div>
+
+            <div className="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-between">
+              <button
+                onClick={() => setShowTaskDetailModal(false)}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+              >
+                Close
+              </button>
+              {selectedTask.status !== 'completed' && (
+                <button
+                  onClick={handleMarkComplete}
+                  disabled={updatingTask}
+                  className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+                >
+                  {updatingTask ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <CheckCircle className="w-4 h-4" />
+                  )}
+                  Mark Complete
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
