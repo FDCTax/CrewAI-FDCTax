@@ -329,7 +329,7 @@ export default function MyFDCDashboard() {
               <User className="w-8 h-8" />
               <div>
                 <h1 className="text-2xl font-bold">
-                  Welcome back, {user?.casual_name || user?.first_name || 'there'}!
+                  Welcome back, {user?.casual_name || user?.name || user?.first_name || 'there'}!
                 </h1>
                 <p className="text-white/80 text-sm">MyFDC Dashboard</p>
               </div>
