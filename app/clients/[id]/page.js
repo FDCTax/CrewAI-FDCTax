@@ -918,7 +918,9 @@ export default function ClientDetailPage() {
               )}
 
               {/* Client Submission */}
-              {selectedTask.status === 'submitted' && (
+              {(selectedTask.status === 'submitted' || selectedTask.status === 'completed') && 
+               (selectedTask.client_response || selectedTask.client_amount || selectedTask.client_comment || 
+                (selectedTask.client_files && (typeof selectedTask.client_files === 'string' ? JSON.parse(selectedTask.client_files || '[]') : selectedTask.client_files).length > 0)) && (
                 <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
                   <h4 className="text-sm font-medium text-purple-700 mb-3 flex items-center gap-2">
                     <CheckCircle className="w-4 h-4" />
