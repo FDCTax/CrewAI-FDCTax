@@ -413,7 +413,9 @@ export default function MyFDCDashboard() {
                       </div>
                       <h3 className="font-semibold text-gray-900">{task.title}</h3>
                       {task.description && (
-                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">{task.description}</p>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                          {task.description.replace(/<[^>]+>/g, '')}
+                        </p>
                       )}
                     </div>
                     <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
