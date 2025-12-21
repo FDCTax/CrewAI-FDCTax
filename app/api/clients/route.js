@@ -13,7 +13,7 @@ export async function GET(request) {
         c.*,
         COUNT(DISTINCT t.id) FILTER (WHERE t.status = 'pending') as pending_tasks
       FROM crm.clients c
-      LEFT JOIN tasks t ON c.system_id = t.client_id
+      LEFT JOIN crm.tasks t ON c.system_id = t.client_id
     `;
     
     let params = [];

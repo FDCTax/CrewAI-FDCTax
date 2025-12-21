@@ -22,7 +22,7 @@ export async function POST(request, { params }) {
     const taskResult = await pool.query(
       `SELECT t.*, c.first_name, c.last_name, c.email as client_email
        FROM crm.tasks t 
-       JOIN clients c ON t.client_id = c.system_id
+       JOIN crm.clients c ON t.client_id = c.system_id
        WHERE t.id = $1`,
       [taskId]
     );

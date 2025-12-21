@@ -10,7 +10,7 @@ export async function GET(request, { params }) {
     const result = await pool.query(
       `SELECT t.*, c.first_name, c.last_name, c.email as client_email, c.business_name
        FROM crm.tasks t 
-       JOIN clients c ON t.client_id = c.system_id
+       JOIN crm.clients c ON t.client_id = c.system_id
        WHERE t.id = $1`,
       [taskId]
     );
