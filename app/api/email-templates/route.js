@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const pool = getPool();
     const result = await pool.query(
-      'SELECT * FROM email_templates ORDER BY name ASC'
+      'SELECT * FROM crm.email_templates ORDER BY name ASC'
     );
     
     return NextResponse.json({

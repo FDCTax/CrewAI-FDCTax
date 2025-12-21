@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
     const pool = getPool();
     
     const result = await pool.query(
-      'SELECT * FROM kb_entries WHERE id = $1',
+      'SELECT * FROM crm.kb_entries WHERE id = $1',
       [id]
     );
     
@@ -56,7 +56,7 @@ export async function DELETE(request, { params }) {
     const pool = getPool();
     
     const result = await pool.query(
-      'DELETE FROM kb_entries WHERE id = $1 RETURNING *',
+      'DELETE FROM crm.kb_entries WHERE id = $1 RETURNING *',
       [id]
     );
     

@@ -18,7 +18,7 @@ export async function GET(request) {
     // Get user details
     const userResult = await pool.query(
       `SELECT first_name, casual_name, gst_registered, bas_quarter, cashbook_start_date 
-       FROM clients 
+       FROM crm.clients 
        WHERE system_id = $1`,
       [userId]
     );
@@ -62,7 +62,7 @@ export async function GET(request) {
     // Get pending BAS-related tasks
     const tasksResult = await pool.query(
       `SELECT id, task_name, due_date 
-       FROM user_checklists 
+       FROM myfdc.user_checklists 
        WHERE user_id = $1 AND status = 'pending' AND task_name ILIKE '%BAS%'
        ORDER BY due_date ASC NULLS LAST`,
       [userId]

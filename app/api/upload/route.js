@@ -40,7 +40,7 @@ export async function POST(request) {
     if (clientId) {
       const pool = getPool();
       await pool.query(
-        `INSERT INTO documents (client_id, task_id, file_name, file_url, description, uploaded_by, file_type, file_size)
+        `INSERT INTO crm.documents (client_id, task_id, file_name, file_url, description, uploaded_by, file_type, file_size)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
           clientId,

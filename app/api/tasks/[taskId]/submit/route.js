@@ -21,7 +21,7 @@ export async function POST(request, { params }) {
     // Get the task first
     const taskResult = await pool.query(
       `SELECT t.*, c.first_name, c.last_name, c.email as client_email
-       FROM tasks t 
+       FROM crm.tasks t 
        JOIN clients c ON t.client_id = c.system_id
        WHERE t.id = $1`,
       [taskId]
@@ -35,7 +35,7 @@ export async function POST(request, { params }) {
     
     // Update task with client submission
     const updateResult = await pool.query(
-      `UPDATE tasks SET
+      `UPDATE crm.tasks SET
         status = 'submitted',
         client_response = $1,
         client_amount = $2,
@@ -56,7 +56,7 @@ export async function POST(request, { params }) {
     
     // Add a message to track the submission
     await pool.query(
-      `INSERT INTO messages (client_id, task_id, sender, message_text)
+      `INSERT INTO crm.messages (client_id, task_id, sender, message_text)
        VALUES ($1, $2, 'client', $3)`,
       [
         task.client_id,

@@ -25,7 +25,7 @@ export async function GET(request) {
          gst_registered,
          bas_quarter,
          cashbook_start_date
-       FROM clients 
+       FROM crm.clients 
        WHERE system_id = $1`,
       [userId]
     );
@@ -43,7 +43,7 @@ export async function GET(request) {
     // Get pending tasks
     const tasksResult = await pool.query(
       `SELECT id, task_name, status, due_date 
-       FROM user_checklists 
+       FROM myfdc.user_checklists 
        WHERE user_id = $1 AND status = 'pending'
        ORDER BY due_date ASC NULLS LAST, created_at DESC
        LIMIT 5`,
@@ -53,7 +53,7 @@ export async function GET(request) {
     // Get recent conversations (last 10)
     const conversationsResult = await pool.query(
       `SELECT id, query, response, mode, timestamp 
-       FROM user_conversations 
+       FROM myfdc.user_conversations 
        WHERE user_id = $1 
        ORDER BY timestamp DESC 
        LIMIT 10`,

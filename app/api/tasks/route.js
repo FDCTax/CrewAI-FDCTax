@@ -24,7 +24,7 @@ export async function POST(request) {
     }
     
     const result = await pool.query(
-      `INSERT INTO tasks (
+      `INSERT INTO crm.tasks (
         client_id, title, description, due_date, priority, 
         input_type, custom_options, notify_on_complete, assigned_to, status
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending')
@@ -53,7 +53,7 @@ export async function GET(request) {
     const pool = getPool();
     
     let query = `SELECT t.*, c.first_name, c.last_name, c.email as client_email
-                 FROM tasks t 
+                 FROM crm.tasks t 
                  JOIN clients c ON t.client_id = c.system_id`;
     let params = [];
     

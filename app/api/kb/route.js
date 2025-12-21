@@ -8,7 +8,7 @@ export async function GET(request) {
     
     const pool = getPool();
     
-    let query = 'SELECT * FROM kb_entries';
+    let query = 'SELECT * FROM crm.kb_entries';
     let params = [];
     
     if (search) {
@@ -43,7 +43,7 @@ export async function POST(request) {
     
     const pool = getPool();
     const result = await pool.query(
-      `INSERT INTO kb_entries (title, tags, variations, answer) 
+      `INSERT INTO crm.kb_entries (title, tags, variations, answer) 
        VALUES ($1, $2, $3, $4) 
        RETURNING *`,
       [title, tags || '', variations || '', answer]

@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
     
     // Get client details
     const clientResult = await pool.query(
-      'SELECT * FROM clients WHERE system_id = $1',
+      'SELECT * FROM crm.clients WHERE system_id = $1',
       [id]
     );
     
@@ -20,7 +20,7 @@ export async function GET(request, { params }) {
     
     // Get tasks
     const tasksResult = await pool.query(
-      `SELECT * FROM tasks WHERE client_id = $1 ORDER BY 
+      `SELECT * FROM crm.tasks WHERE client_id = $1 ORDER BY 
        CASE WHEN status = 'pending' THEN 0 ELSE 1 END,
        due_date ASC NULLS LAST`,
       [id]
@@ -28,25 +28,25 @@ export async function GET(request, { params }) {
     
     // Get messages
     const messagesResult = await pool.query(
-      'SELECT * FROM messages WHERE client_id = $1 ORDER BY timestamp DESC LIMIT 50',
+      'SELECT * FROM crm.messages WHERE client_id = $1 ORDER BY timestamp DESC LIMIT 50',
       [id]
     );
     
     // Get documents
     const documentsResult = await pool.query(
-      'SELECT * FROM documents WHERE client_id = $1 ORDER BY upload_date DESC',
+      'SELECT * FROM crm.documents WHERE client_id = $1 ORDER BY upload_date DESC',
       [id]
     );
     
     // Get calculations
     const calculationsResult = await pool.query(
-      'SELECT * FROM calculations WHERE client_id = $1 ORDER BY timestamp DESC',
+      'SELECT * FROM myfdc.calculations WHERE client_id = $1 ORDER BY timestamp DESC',
       [id]
     );
     
     // Get Luna conversations
     const lunaLogsResult = await pool.query(
-      'SELECT * FROM user_conversations WHERE user_id = $1 ORDER BY timestamp DESC LIMIT 50',
+      'SELECT * FROM myfdc.user_conversations WHERE user_id = $1 ORDER BY timestamp DESC LIMIT 50',
       [id]
     );
     
@@ -71,7 +71,7 @@ export async function PUT(request, { params }) {
     const pool = getPool();
     
     const result = await pool.query(
-      `UPDATE clients SET
+      `UPDATE crm.clients SET
         first_name = $1, last_name = $2, casual_name = $3, email = $4, mobile = $5,
         abn = $6, business_name = $7, address = $8, phone = $9, fdc_percent = $10,
         gst_registered = $11, bas_quarter = $12, start_date = $13, notes = $14, status = $15

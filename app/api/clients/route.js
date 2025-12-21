@@ -12,7 +12,7 @@ export async function GET(request) {
       SELECT 
         c.*,
         COUNT(DISTINCT t.id) FILTER (WHERE t.status = 'pending') as pending_tasks
-      FROM clients c
+      FROM crm.clients c
       LEFT JOIN tasks t ON c.system_id = t.client_id
     `;
     
@@ -43,7 +43,7 @@ export async function POST(request) {
     const pool = getPool();
     
     const result = await pool.query(
-      `INSERT INTO clients (
+      `INSERT INTO crm.clients (
         first_name, last_name, casual_name, email, mobile, abn, business_name,
         address, phone, fdc_percent, gst_registered, bas_quarter, start_date, notes, status
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)

@@ -16,7 +16,7 @@ export async function POST(request, { params }) {
     
     // Get task to get client_id
     const taskResult = await pool.query(
-      'SELECT client_id FROM tasks WHERE id = $1',
+      'SELECT client_id FROM crm.tasks WHERE id = $1',
       [taskId]
     );
     
@@ -26,7 +26,7 @@ export async function POST(request, { params }) {
     
     // Add message
     const messageResult = await pool.query(
-      `INSERT INTO messages (client_id, task_id, sender, message_text)
+      `INSERT INTO crm.messages (client_id, task_id, sender, message_text)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
       [taskResult.rows[0].client_id, taskId, sender, message]

@@ -16,7 +16,7 @@ export async function GET(request) {
     const pool = getPool();
     const result = await pool.query(
       `SELECT id, task_name, status, due_date, created_at, updated_at 
-       FROM user_checklists 
+       FROM myfdc.user_checklists 
        WHERE user_id = $1 
        ORDER BY 
          CASE WHEN status = 'pending' THEN 0 ELSE 1 END,

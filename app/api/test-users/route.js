@@ -6,7 +6,7 @@ export async function GET() {
     const pool = getPool();
     const result = await pool.query(
       `SELECT system_id, first_name, casual_name, email, gst_registered, bas_quarter 
-       FROM clients 
+       FROM crm.clients 
        WHERE email LIKE '%test@fdctax.com.au'
        ORDER BY system_id`
     );

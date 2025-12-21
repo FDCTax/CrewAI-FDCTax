@@ -14,7 +14,7 @@ export async function GET(request) {
     const pool = getPool();
     
     const result = await pool.query(
-      `SELECT * FROM tasks 
+      `SELECT * FROM crm.tasks 
        WHERE client_id = $1 
        AND status != 'cancelled'
        ORDER BY 

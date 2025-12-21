@@ -191,7 +191,7 @@ export async function POST(request) {
       
       // Fetch clients
       const result = await query(
-        'SELECT * FROM clients WHERE system_id = ANY($1)',
+        'SELECT * FROM crm.clients WHERE system_id = ANY($1)',
         [client_ids]
       )
       

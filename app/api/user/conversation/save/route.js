@@ -14,7 +14,7 @@ export async function POST(request) {
     
     const pool = getPool();
     const result = await pool.query(
-      `INSERT INTO user_conversations (user_id, query, response, mode, timestamp) 
+      `INSERT INTO myfdc.user_conversations (user_id, query, response, mode, timestamp) 
        VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP) 
        RETURNING *`,
       [user_id, query, response, mode || 'educator']

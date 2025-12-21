@@ -39,7 +39,7 @@ export async function POST(request) {
     // Store ABN assistance request in database
     // First, update the client record with the new information
     await pool.query(
-      `UPDATE clients SET
+      `UPDATE crm.clients SET
         first_name = COALESCE($1, first_name),
         middle_name = COALESCE($2, middle_name),
         last_name = COALESCE($3, last_name),
@@ -73,7 +73,7 @@ export async function POST(request) {
     // Create a task for staff to process the ABN application
     if (wantsAssistance) {
       await pool.query(
-        `INSERT INTO tasks (client_id, title, description, status, priority, assigned_to, input_type)
+        `INSERT INTO crm.tasks (client_id, title, description, status, priority, assigned_to, input_type)
          VALUES ($1, $2, $3, 'pending', 'high', 'Tax Team', 'none')`,
         [
           client_id,

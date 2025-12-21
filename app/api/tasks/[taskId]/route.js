@@ -9,7 +9,7 @@ export async function GET(request, { params }) {
     
     const result = await pool.query(
       `SELECT t.*, c.first_name, c.last_name, c.email as client_email, c.business_name
-       FROM tasks t 
+       FROM crm.tasks t 
        JOIN clients c ON t.client_id = c.system_id
        WHERE t.id = $1`,
       [taskId]
@@ -21,13 +21,13 @@ export async function GET(request, { params }) {
     
     // Get related messages
     const messagesResult = await pool.query(
-      'SELECT * FROM messages WHERE task_id = $1 ORDER BY timestamp ASC',
+      'SELECT * FROM crm.messages WHERE task_id = $1 ORDER BY timestamp ASC',
       [taskId]
     );
     
     // Get related documents
     const documentsResult = await pool.query(
-      'SELECT * FROM documents WHERE task_id = $1 ORDER BY upload_date DESC',
+      'SELECT * FROM crm.documents WHERE task_id = $1 ORDER BY upload_date DESC',
       [taskId]
     );
     
@@ -85,7 +85,7 @@ export async function PUT(request, { params }) {
     values.push(taskId);
     
     const result = await pool.query(
-      `UPDATE tasks SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING *`,
+      `UPDATE crm.tasks SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING *`,
       values
     );
     
@@ -110,7 +110,7 @@ export async function DELETE(request, { params }) {
     const pool = getPool();
     
     const result = await pool.query(
-      'DELETE FROM tasks WHERE id = $1 RETURNING *',
+      'DELETE FROM crm.tasks WHERE id = $1 RETURNING *',
       [taskId]
     );
     
