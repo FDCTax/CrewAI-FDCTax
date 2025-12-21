@@ -1,0 +1,3640 @@
+[
+  {
+    "table": "app_users",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "email",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "first_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "last_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "mobile",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "state",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "password_hash",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "signup_type",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "car_nickname",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      }
+    ]
+  },
+  {
+    "table": "business_years",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "financial_year",
+        "data_type": "character varying",
+        "character_maximum_length": 20,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "end_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "operated_full_year",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "weeks_closed",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "daily_counters",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "laundry_washer_loads",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "laundry_dryer_loads",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "internet_fdc_hours_morning",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "internet_fdc_hours_daytime",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "internet_fdc_hours_evening",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "mobile_fdc_minutes",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "expenses",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "supplier",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "amount",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "gst",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "total",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "description",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "payment_method",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "receipt_url",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "is_recurring",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "recurring_expense_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "status",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": "'paid'::character varying",
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "images",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": "'[]'::jsonb",
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "confidence_scores",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": "'{}'::jsonb",
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "fdc_unsure",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "fdc_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "100.00",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "gst_type",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": "'calculated'::character varying",
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "levy_source",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      }
+    ]
+  },
+  {
+    "table": "home_areas",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "area_sqm",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "is_fdc_area",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "room_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "location",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "usage_type",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "square_metres",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "inactive_suppliers",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": "gen_random_uuid()",
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "supplier_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "income",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "source",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "income_type",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "net_amount",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "gross_amount",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "description",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "receipt_url",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "levy_expense_ids",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "levies",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": "'[]'::jsonb",
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "total_levies",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "includes_gst",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      }
+    ]
+  },
+  {
+    "table": "internet_diary",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "before_care_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "during_care_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "family_use_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "after_care_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "non_care_day",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "non_care_used",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "laundry_diary",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "loads_fdc",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "loads_mixed",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "loads_family",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "dryer_fdc",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "dryer_mixed",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "dryer_family",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "logbook_entry",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "period_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "drove_for_fdc",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "end_odometer",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "purpose",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "logbook_period",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "vehicle_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "end_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "start_odometer",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "end_odometer",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "business_km",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "total_km",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "business_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "is_locked",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "logbook_trips",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "vehicle_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "start_odo",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "end_odo",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "distance",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "purpose",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "purpose_other",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "luna_chat_history",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "nextval('luna_chat_history_id_seq'::regclass)",
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "user_email",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "message",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "response",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "luna_kb_articles",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": "gen_random_uuid()",
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "title",
+        "data_type": "character varying",
+        "character_maximum_length": 500,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "content",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "keywords",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "is_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "true",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "luna_knowledge_base",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "nextval('luna_knowledge_base_id_seq'::regclass)",
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "question",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "answer",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "is_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "true",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "tags",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "question_variations",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "related_questions",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "answer_format",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": "'text'::text",
+        "is_nullable": "YES",
+        "udt_name": "text"
+      }
+    ]
+  },
+  {
+    "table": "luna_user_settings",
+    "columns": [
+      {
+        "column_name": "user_email",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "has_seen_welcome",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "magic_links",
+    "columns": [
+      {
+        "column_name": "token",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "email",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "expires_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "mobile_diary",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "texts_to_parents",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "care_time_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "personal_use_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "mobile_phone_plans",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "provider",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "plan_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "number",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "monthly_cost",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "recurring_expense_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "motor_vehicles",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "registration",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "make",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "model",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "year",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "purchase_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "purchase_price",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "disposal_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "disposal_price",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "rego",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "personalized_categories",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "estimated_annual_kms",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "estimated_business_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "has_logbook",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "logbook_start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "logbook_end_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "logbook_start_odometer",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "logbook_end_odometer",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "logbook_business_kms",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "logbook_total_kms",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "logbook_business_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "annual_odometer_readings",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "current_business_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "logbook_expiry_date",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "logbook_status",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "purchased_for_business",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "purchase_price_inc_gst",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "purchase_gst",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "purchase_invoice_url",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "depreciation_schedule",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "is_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "true",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      }
+    ]
+  },
+  {
+    "table": "my_home",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "total_area_sqm",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "fdc_area_sqm",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "fdc_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "other_suppliers",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": "gen_random_uuid()",
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "fdc_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "100.00",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "is_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "true",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      }
+    ]
+  },
+  {
+    "table": "recurring_expenses",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "supplier",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "amount",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "frequency",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "description",
+        "data_type": "character varying",
+        "character_maximum_length": 500,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "next_due_date",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "last_created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "last_paid_expense_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "linked_account_type",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "linked_account_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "expense_type",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      }
+    ]
+  },
+  {
+    "table": "schedule_periods",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "end_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "is_current",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "monday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "monday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "monday_arriving_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "monday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "monday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "monday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "monday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "monday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "tuesday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "tuesday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "tuesday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "tuesday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "tuesday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "tuesday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "tuesday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "wednesday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "wednesday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "wednesday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "wednesday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "wednesday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "wednesday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "wednesday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "thursday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "thursday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "thursday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "thursday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "thursday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "thursday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "thursday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "friday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "friday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "friday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "friday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "friday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "friday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "friday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "saturday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "saturday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "saturday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "saturday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "saturday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "saturday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "saturday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "sunday_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "sunday_morning_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "sunday_care_start",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "sunday_care_end",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "sunday_overnight",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "sunday_evening_prep",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "sunday_notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "shared_leads",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "type",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "first_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "last_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "email",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "mobile",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "state",
+        "data_type": "character varying",
+        "character_maximum_length": 10,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "signup_date",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      }
+    ]
+  },
+  {
+    "table": "streaming_diary",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "service",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "care_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "personal_hours",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "streaming_services",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "supplier_learning",
+    "columns": [
+      {
+        "column_name": "supplier_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "count",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": "1",
+        "is_nullable": "YES",
+        "udt_name": "int4"
+      }
+    ]
+  },
+  {
+    "table": "user_fdc_percentages",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "business_year_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "user_settings",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "settings",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "scheme_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      }
+    ]
+  },
+  {
+    "table": "user_supplier_customizations",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": "gen_random_uuid()",
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "supplier_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "fdc_percentage",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "user_tasks",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": "gen_random_uuid()",
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "task_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "description",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "status",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": "'pending'::character varying",
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "due_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "priority",
+        "data_type": "character varying",
+        "character_maximum_length": 20,
+        "column_default": "'medium'::character varying",
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "category",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      },
+      {
+        "column_name": "task_type",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      }
+    ]
+  },
+  {
+    "table": "task_messages",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": "gen_random_uuid()",
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "task_id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "uuid",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "uuid"
+      },
+      {
+        "column_name": "content",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "sender",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": "'user'::character varying",
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp without time zone",
+        "character_maximum_length": null,
+        "column_default": "CURRENT_TIMESTAMP",
+        "is_nullable": "YES",
+        "udt_name": "timestamp"
+      }
+    ]
+  },
+  {
+    "table": "users",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "email",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "password_hash",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "first_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "last_name",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "plan",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": "'free'::character varying",
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "is_active",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "true",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": "now()",
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": "now()",
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "cashbook_start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "tax_year",
+        "data_type": "character varying",
+        "character_maximum_length": 20,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "gst_registered",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "bas_frequency",
+        "data_type": "character varying",
+        "character_maximum_length": 20,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "car_nickname",
+        "data_type": "character varying",
+        "character_maximum_length": 100,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      }
+    ]
+  },
+  {
+    "table": "vehicle",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "rego",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "make_model",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "initial_odometer",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "water_meter_readings",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "reading_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "meter_reading",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "reading_number",
+        "data_type": "integer",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "int4"
+      },
+      {
+        "column_name": "period_start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "water_quick_diary",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "water_for_care",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "family_water_during_care",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "water_outside_care",
+        "data_type": "numeric",
+        "character_maximum_length": null,
+        "column_default": "0",
+        "is_nullable": "YES",
+        "udt_name": "numeric"
+      },
+      {
+        "column_name": "non_care_day",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "non_care_used",
+        "data_type": "boolean",
+        "character_maximum_length": null,
+        "column_default": "false",
+        "is_nullable": "YES",
+        "udt_name": "bool"
+      },
+      {
+        "column_name": "notes",
+        "data_type": "text",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "text"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "timestamptz"
+      }
+    ]
+  },
+  {
+    "table": "weekly_diaries",
+    "columns": [
+      {
+        "column_name": "id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "NO",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "user_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "schedule_period_id",
+        "data_type": "character varying",
+        "character_maximum_length": 255,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "week_start_date",
+        "data_type": "date",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "date"
+      },
+      {
+        "column_name": "diary_type",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "data",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      },
+      {
+        "column_name": "created_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "updated_at",
+        "data_type": "timestamp with time zone",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "timestamptz"
+      },
+      {
+        "column_name": "status",
+        "data_type": "character varying",
+        "character_maximum_length": 50,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "varchar"
+      },
+      {
+        "column_name": "actual_overrides",
+        "data_type": "jsonb",
+        "character_maximum_length": null,
+        "column_default": null,
+        "is_nullable": "YES",
+        "udt_name": "jsonb"
+      }
+    ]
+  }
+]
