@@ -14,6 +14,8 @@ const pool = new Pool({
 });
 
 // Test client data
+// bas_quarter: Q1 = Jul-Sep, Q2 = Oct-Dec, Q3 = Jan-Mar, Q4 = Apr-Jun
+// For annual BAS, we use 'A' and track frequency separately
 const testClients = [
   {
     first_name: 'Sarah',
@@ -24,7 +26,8 @@ const testClients = [
     type: 'Individual',
     client_type: 'MyFDC Only',
     gst_registered: true,
-    bas_quarter: 'Q1', // Quarterly
+    bas_quarter: 'Q1', // Quarterly - Jul-Sep
+    bas_frequency: 'quarterly',
     fdc_percent: 75.00,
     estimated_turnover: 50000.00,
     business_name: 'Sarah Test FDC',
@@ -39,7 +42,8 @@ const testClients = [
     type: 'Individual',
     client_type: 'DIY/Luna',
     gst_registered: false,
-    bas_quarter: 'Annual',
+    bas_quarter: 'A', // Annual
+    bas_frequency: 'annual',
     fdc_percent: 100.00,
     estimated_turnover: 80000.00,
     business_name: 'Mike Test Family Day Care',
@@ -54,7 +58,8 @@ const testClients = [
     type: 'Individual',
     client_type: 'DIY/Luna',
     gst_registered: true,
-    bas_quarter: 'Q2', // Quarterly
+    bas_quarter: 'Q2', // Quarterly - Oct-Dec
+    bas_frequency: 'quarterly',
     fdc_percent: 75.00,
     estimated_turnover: 100000.00,
     business_name: 'Emma Test Early Learning',
@@ -69,7 +74,8 @@ const testClients = [
     type: 'Individual',
     client_type: 'Full Service',
     gst_registered: true,
-    bas_quarter: 'Q3', // Quarterly
+    bas_quarter: 'Q3', // Quarterly - Jan-Mar
+    bas_frequency: 'quarterly',
     fdc_percent: 100.00,
     estimated_turnover: 120000.00,
     business_name: 'James Test Child Care',
@@ -84,7 +90,8 @@ const testClients = [
     type: 'Individual',
     client_type: 'Full Service',
     gst_registered: false,
-    bas_quarter: 'Annual',
+    bas_quarter: 'A', // Annual
+    bas_frequency: 'annual',
     fdc_percent: 75.00,
     estimated_turnover: 150000.00,
     business_name: 'Lisa Test Educators Hub',
