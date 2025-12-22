@@ -343,13 +343,45 @@ export default function MyFDCDashboard() {
                 <p className="text-white/80 text-sm">MyFDC Dashboard</p>
               </div>
             </div>
-            <a 
-              href="/" 
-              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors text-sm"
-            >
-              <MessageSquare className="w-4 h-4" />
-              Chat with Luna
-            </a>
+            <div className="flex items-center gap-2">
+              {/* Test Client Selector - Sandbox Only */}
+              <div className="relative">
+                <button 
+                  onClick={() => setShowClientSelector(!showClientSelector)}
+                  className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors text-sm"
+                >
+                  <Users className="w-4 h-4" />
+                  Switch User
+                </button>
+                {showClientSelector && (
+                  <div className="absolute right-0 top-full mt-2 bg-white text-gray-900 rounded-lg shadow-xl py-2 w-64 z-50">
+                    <div className="px-3 py-1 text-xs text-gray-500 border-b">Test Clients (Sandbox)</div>
+                    {testClients.map(client => (
+                      <button
+                        key={client.id}
+                        onClick={() => {
+                          setUserId(client.id);
+                          setShowClientSelector(false);
+                          setLoading(true);
+                        }}
+                        className={`w-full text-left px-3 py-2 hover:bg-gray-100 text-sm ${
+                          userId === client.id ? 'bg-[#6366F1]/10 text-[#6366F1] font-medium' : ''
+                        }`}
+                      >
+                        {client.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <a 
+                href="/" 
+                className="flex items-center gap-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-colors text-sm"
+              >
+                <MessageSquare className="w-4 h-4" />
+                Chat with Luna
+              </a>
+            </div>
           </div>
         </div>
       </div>
