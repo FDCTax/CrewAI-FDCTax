@@ -1,6 +1,22 @@
 import { NextResponse } from 'next/server';
 import { getPool } from '@/lib/db';
 
+// Helper function to log audit events
+async function logAudit(pool, { userType, userId, userEmail, action, tableName, recordId, clientId, oldValues, newValues, notes }) {
+  try {
+    await pool.query(
+      `INSERT INTO crm.audit_logs (user_type, user_id, user_email, action, table_name, record_id, client_id, old_values, new_values, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [userType, userId, userEmail, action, tableName, recordId, clientId, 
+       oldValues ? JSON.stringify(oldValues) : null,
+       newValues ? JSON.stringify(newValues) : null,
+       notes]
+    );
+  } catch (error) {
+    console.error('Failed to log audit event:', error);
+  }
+}
+
 export async function GET(request, { params }) {
   try {
     const { id } = params;
@@ -17,6 +33,16 @@ export async function GET(request, { params }) {
     }
     
     const client = clientResult.rows[0];
+    
+    // Log the view action in audit logs
+    await logAudit(pool, {
+      userType: 'agent',
+      action: 'view',
+      tableName: 'crm.clients',
+      recordId: id,
+      clientId: parseInt(id),
+      notes: `Viewed client: ${client.first_name} ${client.last_name}`
+    });
     
     // Get tasks
     const tasksResult = await pool.query(
