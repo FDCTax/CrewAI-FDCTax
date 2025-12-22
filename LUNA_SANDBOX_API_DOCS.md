@@ -6,7 +6,7 @@
 ## 🔗 Sandbox API Base URL
 
 ```
-https://tax-knowledge-hub-2.preview.emergentagent.com
+https://crm-taskhub.preview.emergentagent.com
 ```
 
 ---
@@ -29,7 +29,7 @@ For production, you'll add authentication headers once migrated to main DB.
 
 **Example Request:**
 ```bash
-curl "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/context?user_id=143000"
+curl "https://crm-taskhub.preview.emergentagent.com/api/user/context?user_id=143000"
 ```
 
 **Response:**
@@ -84,7 +84,7 @@ curl "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/context?use
 
 **Example Request:**
 ```bash
-curl "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/checklist?user_id=143000"
+curl "https://crm-taskhub.preview.emergentagent.com/api/user/checklist?user_id=143000"
 ```
 
 **Response:**
@@ -131,7 +131,7 @@ curl "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/checklist?u
 
 **Example Request:**
 ```bash
-curl -X POST "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/checklist/update" \
+curl -X POST "https://crm-taskhub.preview.emergentagent.com/api/user/checklist/update" \
   -H "Content-Type: application/json" \
   -d '{"task_id": 1, "status": "completed"}'
 ```
@@ -162,7 +162,7 @@ curl -X POST "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/che
 
 **Example Request:**
 ```bash
-curl "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/bas-status?user_id=143001"
+curl "https://crm-taskhub.preview.emergentagent.com/api/user/bas-status?user_id=143001"
 ```
 
 **Response (GST Registered):**
@@ -217,7 +217,7 @@ curl "https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/bas-status?
 
 **Example Request:**
 ```bash
-curl -X POST "https://tax-knowledge-hub-2.preview.emergentagent.com/api/luna-rag/chat" \
+curl -X POST "https://crm-taskhub.preview.emergentagent.com/api/luna-rag/chat" \
   -H "Content-Type: application/json" \
   -d '{
     "messages": [{"role": "user", "content": "Hi Luna!"}],
@@ -306,7 +306,7 @@ export default function EducatorDashboard() {
   useEffect(() => {
     async function loadContext() {
       const res = await fetch(
-        `https://tax-knowledge-hub-2.preview.emergentagent.com/api/user/context?user_id=${userId}`
+        `https://crm-taskhub.preview.emergentagent.com/api/user/context?user_id=${userId}`
       );
       const data = await res.json();
       setUserContext(data);
@@ -321,7 +321,7 @@ export default function EducatorDashboard() {
   
   async function generateGreeting(context) {
     const res = await fetch(
-      'https://tax-knowledge-hub-2.preview.emergentagent.com/api/luna-rag/chat',
+      'https://crm-taskhub.preview.emergentagent.com/api/luna-rag/chat',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

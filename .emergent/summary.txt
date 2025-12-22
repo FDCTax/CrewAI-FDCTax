@@ -1,175 +1,154 @@
 <analysis>
-
 **original_problem_statement:**
-The initial request was to build a 9-stage conversational form for FDC Tax – Luna Onboarding. The project's scope pivoted to creating a full AI-powered knowledge base (KB), contextual chat assistant (Luna), and a comprehensive CRM system.
+The initial project scope was to build a full AI-powered knowledge base (KB), a contextual chat assistant (Luna), and a comprehensive CRM system for FDC Tax. The user provides CRITICAL priority feature requests frequently, requiring rapid development and deployment.
 
-Recent CRITICAL priority requests from the user include:
-1.  **Context-Aware Luna**: Extend the backend to use user data (checklists, BAS status) from a Sandbox database to provide personalized, contextual greetings and responses using OpenAI GPT-4o-mini. This has been partially implemented.
-2.  **CRM Backend Skeleton**: Build the foundational database tables and UI for a full-featured CRM, including , , , , and .
-3.  **Knowledge Base Management UI**: Create a dedicated UI at  for viewing, searching, adding, and editing all KB articles with a rich text editor.
-4.  **Clients UI**: Create a separate, dedicated UI at  for managing client records, with a list view and a detailed, tabbed view for each client.
-
-PRODUCT REQUIREMENTS: The ultimate goal is a dual-interface system:
-- A backend CRM for the tax agent to manage clients, tasks, documents, and Luna's knowledge base.
-- A client-facing dashboard (MyFDC) where educators interact with a context-aware Luna, see their tasks, and manage their tax information.
+Recent critical requests implemented in this session include:
+1.  **Add Navigation Links**: Add direct links to the Client CRM and a new MyFDC dashboard on the main home screen header.
+2.  **Task Management System**: Build a full, end-to-end task management feature allowing staff to create tasks in the CRM, which then appear on a client-facing MyFDC dashboard. Clients can submit responses, files, and comments, which are then reflected back in the CRM for staff review.
+3.  **ABN Assistance Form**: Create a new 9-stage, multi-step form at  for ABN/GST registration, pre-filling data from the client's record and integrating with Stripe for payment.
+4.  **Database Security Overhaul**: Restructure the entire Sandbox PostgreSQL database by creating  and  schemas, moving all existing tables into them, and creating three granular roles (, , ) with specific permissions to secure data access.
+5.  **MyFDC Data Migration**: Migrate over 40 tables of schema and data from an old, separate MyFDC production database into the newly structured Sandbox environment.
+6.  **AI Tone Refinement**: Iteratively tighten Luna's system prompt and RAG logic to eliminate casual language, greetings, and unsolicited information, enforcing a strictly professional and direct tone.
 
 **User's preferred language**: English
 
 **what currently exists?**
-The application is a Next.js project with a Python/FastAPI backend for RAG/AI functions and a PostgreSQL database.
+The application is a full-stack Next.js project with a Python/FastAPI backend for the RAG service and a PostgreSQL database. It has three primary user interfaces:
+1.  **Luna AI Dashboard ()**: The main chat interface, now with header links to the other UIs.
+2.  **Client CRM ()**: A comprehensive console for tax agents to manage clients. The client detail page () now includes a fully functional, multi-tabbed interface with a complete task management system.
+3.  **MyFDC Dashboard ()**: A new client-facing dashboard where educators can view and complete tasks assigned to them by the agent.
+4.  **ABN Assistance Form ()**: A new multi-stage form for ABN registration.
 
-**Key Components:**
-1.  **Luna AI Dashboard ()**: The main chat interface. It now features personalized greetings by fetching user context from the new API endpoints. It also includes document upload and a KB library view.
-2.  **Python RAG Service**: A robust backend service that handles document ingestion (PDF, DOCX, RTF, TXT), vector search (ChromaDB), and chat generation. It has been enhanced to enforce a strict style guide, prioritize Core documents, and incorporate user-specific context into its prompts.
-3.  **Knowledge Base (KB) Management UI ()**: A new, fully functional UI with pages to list, search, add, and edit KB articles using CKEditor 5. The backend APIs () and database table () are in place.
-4.  **Client CRM UI ()**: A new UI to manage client records. The list page () is complete. The detail page () has been created as a skeleton file but is not yet implemented.
-5.  **Database**: The PostgreSQL schema has been significantly expanded with tables for the CRM (, , , etc.) and the new KB management system ().
+The database has been significantly refactored into  and  schemas with granular user roles, and all application code has been updated to reflect this new structure. The legacy MyFDC data has been successfully migrated into this new secure environment.
 
 **Last working item**:
-- Last item agent was working: Building the comprehensive **Client Detail page** (). The user confirmed the agent should proceed with implementing all 6 required tabs (Overview, Tasks, Messages, Documents, Calculations, Luna Logs) in one go. A skeleton file for this page was created.
-- Status: **IN PROGRESS**
-- Agent Testing Done: N
-- Which testing method agent to use? **screenshot tool**. After implementing the UI, the agent should navigate to  (Sarah's ID) and take screenshots of each of the 6 tabs to verify they render correctly.
+- Last item agent was working: The user reported that the AI assistant, Luna, was still providing unsolicited information and casual greetings. The agent performed a second round of hardening on the AI's system prompts and retrieval logic to enforce a much stricter, more direct tone.
+- Status: **USER VERIFICATION PENDING**
+- Agent Testing Done: Y
+- Which testing method agent to use? **NA** (Agent has already tested. Awaiting user feedback on the AI's new conversational style).
 - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-- There are no pending bugs. All work is focused on new feature development.
+- There are no known bugs or pending issues. All work is awaiting user review and feedback.
 
 **In progress Task List**:
-- **Task 1: Complete the Client Detail Page UI (P0)**
-  - Description: The file  was created, but it's a placeholder. The task is to build out the full UI with 6 tabs, fetching and displaying data from the respective CRM tables.
-  - Where to resume: Open  and implement the React component. It should fetch data for a specific client ID from the params and render the tabbed interface.
-  - What will be achieved with this? This will complete the core CRM console, providing a central place for the tax agent to view all information related to a single client.
-  - Status: **IN PROGRESS**
-  - Should Test frontend/backend/both after fix? Frontend (via screenshot tool).
-  - Blocked on something: None.
+- No tasks are currently in progress.
 
 **Upcoming and Future Tasks**
 - **Upcoming Tasks:**
-    - **P1: Implement CRM Functionality**: The Client Detail page will initially be read-only. The next step is to add functionality to the tabs (e.g., creating/editing tasks, sending messages in the chatbox, uploading documents).
-    - **P1: MyFDC Webhook Integration**: Implement the one-way webhook mentioned in the CRM ticket, where an expense saved in the MyFDC app triggers an update in the CRM (e.g., in the  table).
-    - **P2: Full MyFDC Frontend Integration**: Remove the hardcoded  from the Luna dashboard and connect it to a proper authentication system to support multiple real users.
+    - **P0: Finalize Stripe Integration for ABN Form**: The Stripe payment endpoint () is implemented but uses placeholder API keys. It needs valid keys from the user to complete the payment functionality.
+    - **P1: Connect Luna to ABN Assistance Form**: Implement the logic for the Luna chat assistant to proactively offer a link to the  form when a user asks about ABN registration or indicates they do not have an ABN. This involves updating the RAG retrieval logic or prompts in .
 - **Future Tasks:**
-    - **P2: Migrate Schema to Main DB**: Once the Sandbox implementation is fully tested and approved by the user, migrate the new CRM and KB schemas to the main production database.
-    - **P3: Original Luna Onboarding Project**:
-        - Full Annature integration for e-signatures.
-        - Self-hosted Addressr integration.
-        - Dropbox folder creation for new clients.
+    - **P2: Migrate Schema to Main DB**: After the Sandbox environment is fully approved, migrate the new  and  schemas, roles, and data to the production database.
+    - **P3: Original Luna Onboarding Project**: Implement features from the original project scope, including Annature e-signature integration, a self-hosted Addressr instance, and Dropbox folder creation for new clients.
 
 **Completed work in this session**
+- **Feature: End-to-End Task Management System**:
+  - Created a new client-facing dashboard at .
+  - Implemented schema changes to the  table to support complex input types, submission data, and internal notes.
+  - Built APIs for task creation, retrieval, submission, and messaging between agent and client.
+  - Developed UI components in the CRM for creating new tasks and a detailed modal for viewing task submissions (including client responses, comments, and uploaded files).
+  - Developed UI on the MyFDC dashboard for clients to view, action, and submit tasks.
+- **Feature: ABN Assistance Form**:
+  - Built a 9-stage form at  with conditional logic.
+  - Implemented data pre-filling from the  table.
+  - Created backend APIs to handle form submission, which creates a corresponding task in the CRM.
+  - Added a Stripe payment endpoint (pending valid keys).
+- **Critical Infra: Database Security Overhaul**:
+  - Created  and  schemas in the PostgreSQL database.
+  - Migrated dozens of tables from the  schema into the new schemas.
+  - Created , , and  roles with granular RLS permissions.
+  - Refactored all API routes in the Next.js application to use the new schema-qualified table names (e.g., ).
+- **Critical Infra: MyFDC Data Migration**:
+  - Connected to a legacy database using temporary credentials.
+  - Exported schema and data for over 40 tables related to the MyFDC application.
+  - Imported all data into the Sandbox DB under the  schema, successfully migrating all historical user data.
+- **Enhancement: AI Tone & Prompt Engineering**:
+  - Performed two rounds of updates to the system prompts in  to make the Luna AI's responses progressively stricter, more professional, and less proactive, based on user feedback.
 - **Bug Fixes**:
-  - Resolved a critical RAG service failure by fixing supervisor configuration, installing Python dependencies, and correcting the startup script.
-  - Fixed PDF and DOCX file ingestion by correctly handling byte streams in the Python backend.
-  - Fixed database connection SSL issues for API routes.
-- **Feature Enhancements**:
-  - **Core Docs Protection**: Implemented a Core category for KB articles. These docs are protected from deletion (delete button removed) and have their relevance score boosted in search. The category is preserved even after editing.
-  - **KB Editing (WYSIWYG)**: Added CKEditor 5 to allow editing of KB articles directly in the UI.
-  - **Add New KB Article**: Created a feature to add new KB articles directly via a WYSIWYG editor, without needing to upload a file.
-  - **Stricter Tone Enforcement**: Heavily modified the system prompts and RAG retrieval logic to make the Luna Style Guide a hard rule, eliminating casual language.
-- **New Features (Contextual Luna & CRM)**:
-  - **Database Expansion**: Created and migrated schemas for , , a full CRM (, , etc.), and a new KB management table ().
-  - **Contextual API Layer**: Built and tested 4 new API endpoints (, , etc.) to provide user-specific data.
-  - **Personalized Greetings**: Integrated the context API into the Luna chat, enabling personalized greetings that reference the user's name and pending tasks.
-  - **Conversation Logging**: Implemented logic to save every user query and Luna's response to the  table.
-  - **KB Management UI**: Built the full UI at  to list, search, add, and edit knowledge base articles.
-  - **Client CRM UI (Partial)**: Built the client list page at  and the API endpoints to support the full CRM console.
+  - Fixed a DB constraint violation that prevented task submission.
+  - Resolved a frontend crash in the CRM task modal caused by a JSON parsing error.
+  - Fixed incorrect rendering of HTML tags and user greetings on the MyFDC dashboard.
+  - Corrected logic in the CRM to ensure the Client Submission section is visible on both 'submitted' and 'completed' tasks.
 
 **Earlier issues found/mentioned but not fixed**
-   - **Issue 1: Self-hosted Address Autocomplete**
-     - Debug checklist: A mock API is in place. The task to deploy and integrate a self-hosted  instance for the original  onboarding form is pending.
-     - Why to solve this issue and what will be achieved with this? Fulfills an original requirement for a private, free address lookup service.
-     - Should Test frontend/backend/both after fix: Both.
-     - Is recurring issue? N
+   - **Self-hosted Address Autocomplete**: A mock API is in place. The task to deploy and integrate a self-hosted  instance for the original  onboarding form is pending from a previous session.
 
 **Known issue recurrence from previous fork**
-- N/A
+  - N/A
 
 **Code Architecture**
 
 
 **Key Technical Concepts**
-- **Frontend**: Next.js 14, React, Tailwind CSS, shadcn/ui, **CKEditor 5**.
+- **Frontend**: Next.js 14, React, Tailwind CSS, shadcn/ui.
 - **Backend (JS)**: Next.js API Routes.
-- **Backend (Python)**: **FastAPI**, running as a separate service managed by Supervisor.
-- **Database**: PostgreSQL (with significant schema additions).
-- **AI/RAG**: LangChain, ChromaDB (vector store), OpenAI (primary LLM, /).
+- **Backend (Python)**: FastAPI, running as a separate service ().
+- **Database**: PostgreSQL with schema-based multi-tenancy (, ) and Role-Based Access Control (RBAC).
+- **AI/RAG**: LangChain, ChromaDB, OpenAI.
+- **DevOps/Scripting**: Node.js scripts for complex, multi-step database migrations and applying permissions. Use of / for large-scale code refactoring.
 
 **key DB schema**
-- : (Existing table, heavily altered) { uid=0(root) gid=0(root) groups=0(root), , , , ... }
-- : { uid=0(root) gid=0(root) groups=0(root), , , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , ... } (NEW)
-- : { uid=0(root) gid=0(root) groups=0(root), , , ... } (NEW)
+- **Schemas**: , , 
+- **Roles**:  (R/W , R-safe ),  (R/W , R ), 
+- : { id, preferred_name, ... }
+- : { id, client_id, title, status, description, due_date, priority, input_type, input_options, client_response, client_files, agent_notes, ... } (Heavily modified)
+- : { id, task_id, sender, message_text, ... }
+- : ~40 tables migrated from legacy DB, including , , .
 
 **changes in tech stack**
-- **CKEditor 5**: Added for rich text editing in the KB and Email Template UIs.
+- No new technologies were added, but the PostgreSQL database implementation was significantly matured with the introduction of schemas and granular roles.
 
 **All files of reference**
-- **/app/app/clients/[id]/page.js**: **(CURRENT TASK)** The Client Detail page, currently a skeleton.
-- **/app/app/clients/page.js**: The new Client list page.
-- **/app/app/kb/page.js**: The new KB list page.
-- **/app/app/kb/edit/[id]/page.js**: The new KB edit page.
-- **/app/python_rag/main.py**: The RAG service, heavily modified to support contextual chat, style guide enforcement, and new ingestion methods.
-- **/app/app/page.js**: The main Luna dashboard, updated to support personalized greetings.
-- **/app/database/crm-schema.sql**: Defines the new tables for the entire CRM backend.
+- : Main logic for the AI assistant, heavily modified for tone and strictness.
+- : Core CRM UI for client details, significantly enhanced with the task management system.
+- : New client-facing dashboard for tasks.
+- : New multi-stage form UI.
+- All API files under : All were refactored to use new schema-qualified table names.
+- : The script used to perform the critical data migration from the legacy database.
+- : The SQL script defining the new database security structure.
 
 **Areas that need refactoring**:
-- **/app/app/clients/[id]/page.js**: This will become a large, multi-tab component. It should be designed with componentization in mind from the start (e.g., one component per tab).
-- **/app/app/page.js**: The Luna Dashboard is a large monolithic component that could be broken down into smaller pieces (ChatPanel, KBLibrary, etc.).
+- The client detail page () has become very large and complex due to the addition of the full task management system. It could be broken down into smaller, more manageable components (e.g., separate components for the task list, new task modal, and task detail modal).
 
 **key api endpoints**
-- **CRM APIs (NEW)**:
-    - : List all clients.
-    - : Get details for a single client (and all related data for tabs).
-- **KB Management APIs (NEW)**:
-    - : List or create KB articles.
-    - : Manage a single KB article.
-- **User Context APIs (NEW)**:
-    - : Get a full context summary for a user.
-    - : Manage a user's checklist.
-- **RAG Service APIs (Updated)**:
-    - : Now accepts  to provide contextual responses.
-    - : Now accepts text content directly for a new article creation.
+- : Submits the ABN form and creates a CRM task.
+- : Handles Stripe payment intent creation (needs valid keys).
+- : Fetches tasks for the logged-in client for the MyFDC dashboard.
+- : Submits a client's response to a task.
+- All existing APIs (, , etc.) were updated to work with the new database schemas.
 
 **Critical Info for New Agent**
-- **Your immediate task is to build the Client Detail page at **. This is a CRITICAL priority. You need to implement the 6 tabs (Overview, Tasks, Messages, Documents, Calculations, Luna Logs) by fetching data from the newly created API endpoints/database tables.
-- **Work in Sandbox Mode**: All database and API work must target the existing Sandbox environment. Do not attempt to connect to or modify a production database.
-- **Three UIs**: The project now has three distinct front-facing sections: the Luna chat dashboard (), the KB management console (), and the client CRM ().
-- **Leverage Existing APIs**: Use the  endpoint (you may need to enhance it) to fetch all the necessary data for the 6 tabs on the client detail page.
+- **Await User Feedback**: Your first action should be to wait for the user to test and confirm if the new, stricter AI tone meets their requirements. Do not proceed with other tasks until this is confirmed.
+- **Database Structure is Key**: The database is now segmented into  and  schemas. All database queries **must** be schema-qualified (e.g., ). The application code has been refactored, but any new queries must follow this pattern.
+- **Stripe Keys Needed**: The ABN assistance form is functionally complete except for payment processing, which is blocked on the user providing valid Stripe API keys.
+- **User Cadence**: The user operates on a fast-paced, CRITICAL priority schedule. Be prepared to implement and verify large features within a single session.
 
 **documents created in this job**
 - 
 - 
 - 
-- 
-- 
 
 **Last 10 User Messages and any pending user messages**
-1. **User (Msg 503):** Requested the full Clients UI as a critical priority for a same-day deployment. (IN PROGRESS)
-2. **Agent (Msg 504-509):** Started work, creating API endpoints and the  list page, then confirmed the plan for the complex  detail page. (COMPLETED)
-3. **User (Msg 510):** **(PENDING)** Confirmed the agent should proceed with building the full, 6-tab Client Detail page () in one go without asking for further confirmation. This is the current active task.
-4. **Agent (Msg 511-512):** Created the skeleton file  to begin implementation. (COMPLETED)
-5. **Agent (Msg 513):** Provided a summary of deployed work. (COMPLETED)
+1.  **User (Msg 308):** Requested additional  permissions for the  on the  schema. (COMPLETED)
+2.  **User (Msg 315):** Reported Luna was too casual and gave unsolicited advice. Asked for a stricter prompt. (COMPLETED)
+3.  **Agent (Msg 316-337):** Implemented the first round of prompt hardening and verified it. (COMPLETED)
+4.  **User (Msg 338):** **(PENDING)** Reported Luna was *still* too verbose. Requested an even stricter prompt to answer ONLY the query asked and to prioritize the style guide. This is the last active user request.
+5.  **Agent (Msg 339-359):** Implemented the second, much stricter round of prompt hardening and logic changes. (COMPLETED, AWAITING USER VERIFICATION)
 
 **Project Health Check:**
 - **Broken**: None
 - **Mocked**:
-    - Address Autocomplete (in original  form)
-    - Ollama Integration (unstable, OpenAI is the primary)
+  - **Stripe Payment**: The  form has a payment step that uses placeholder Stripe keys and will fail until real keys are provided.
+  - **Address Autocomplete**: Mocked from a previous session, still pending implementation.
 - **Incomplete**:
-    - The Client Detail page () is a skeleton and needs to be fully implemented.
+  - The conversational link from the Luna AI to the  form has not been implemented.
 
 **3rd Party Integrations**
-- **OpenAI GPT-4o / GPT-4o-mini** — uses User API Key (Primary LLM for chat and reasoning).
+- **OpenAI GPT-4o / GPT-4o-mini** — uses User API Key (Primary LLM).
 - **PostgreSQL (DigitalOcean)** — requires User API Key.
 - **Resend (Emails)** — requires User API Key.
-- **CKEditor 5** — Frontend library, installed.
-- **Ollama (Local LLM)** — Self-hosted, but unstable and not actively used.
-- **Annature (eSignatures)** — Planned, not built.
+- **Stripe (Payments)** — requires User API Key (Currently using placeholders).
 
 **Testing status**
 - Testing agent used after significant changes: NO
@@ -178,9 +157,9 @@ The application is a Next.js project with a Python/FastAPI backend for RAG/AI fu
 - Known regressions: None.
 
 **Credentials to test flow:**
-- All necessary credentials (PostgreSQL, Resend, OpenAI) are in .
+- All necessary credentials (PostgreSQL, Resend, OpenAI) are in . The Stripe keys are placeholders.
 
 **What agent forgot to execute**
-- In the CRM Backend Skeleton ticket (Msg 470), the request for a **one-way webhook** from the MyFDC expense app was mentioned but has not been implemented or planned yet.
+- When building the  form, the user request mentioned links from Luna if No/Unsure on ABN or user asks. The agent built the form but did not implement this conversational trigger within the Luna AI.
 
 </analysis>
