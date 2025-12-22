@@ -291,7 +291,7 @@ async function setupTestClients() {
       const name = `${tc.first_name} ${tc.last_name}`.padEnd(15);
       const type = tc.client_type.padEnd(12);
       const gst = tc.gst_registered ? '✓' : '✗';
-      const bas = tc.bas_quarter === 'Annual' ? 'Annual' : 'Quarterly';
+      const bas = tc.bas_frequency === 'annual' ? 'Annual' : 'Quarterly';
       const fdc = `${tc.fdc_percent}%`.padEnd(7);
       const turnover = `$${(tc.estimated_turnover/1000).toFixed(0)}k`.padEnd(12);
       console.log(`│ ${name} │ ${type} │  ${gst}  │ ${bas.padEnd(9)} │ ${fdc} │ ${turnover} │`);
