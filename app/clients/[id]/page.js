@@ -418,6 +418,22 @@ export default function ClientDetailPage() {
                     <p className="text-gray-900 font-mono">{client.abn || '-'}</p>
                   </div>
                   <div>
+                    <label className="text-xs text-gray-500">Client Type</label>
+                    <p className={`mt-1 px-3 py-1 rounded-lg w-fit text-sm font-medium ${
+                      client.client_type === 'Full Service' ? 'bg-purple-100 text-purple-700' :
+                      client.client_type === 'MyFDC Only' ? 'bg-teal-100 text-teal-700' :
+                      'bg-blue-100 text-blue-700'
+                    }`}>
+                      {client.client_type || 'DIY/Luna'}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500">Estimated Turnover</label>
+                    <p className="text-gray-900 font-medium">
+                      {client.estimated_turnover ? `$${parseFloat(client.estimated_turnover).toLocaleString()}` : '-'}
+                    </p>
+                  </div>
+                  <div>
                     <label className="text-xs text-gray-500">FDC Percentage</label>
                     <p className="text-gray-900 font-bold text-2xl flex items-center gap-1">
                       {client.fdc_percent || 0}
@@ -433,6 +449,52 @@ export default function ClientDetailPage() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Tech Help Access Status Card */}
+            <div className={`rounded-lg border p-6 ${
+              client.client_access_approved 
+                ? 'bg-green-50 border-green-200' 
+                : 'bg-orange-50 border-orange-200'
+            }`}>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  {client.client_access_approved ? (
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <CheckCircle className="w-6 h-6 text-green-600" />
+                    </div>
+                  ) : (
+                    <div className="p-2 bg-orange-100 rounded-lg">
+                      <AlertCircle className="w-6 h-6 text-orange-600" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Tech Help Access</h3>
+                    <p className={`text-sm ${client.client_access_approved ? 'text-green-700' : 'text-orange-700'}`}>
+                      {client.client_access_approved 
+                        ? 'Educator has approved access to their MyFDC data'
+                        : 'Awaiting educator approval to access MyFDC data'
+                      }
+                    </p>
+                  </div>
+                </div>
+                {client.client_access_approved && (
+                  <span className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-lg font-medium">
+                    APPROVED
+                  </span>
+                )}
+              </div>
+              {client.client_access_approved && (
+                <div className="mt-4 pt-4 border-t border-green-200">
+                  <p className="text-sm text-green-700 mb-2">You can now view and assist with:</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Income Records</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Expense Records</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Mileage Logs</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">FDC Claims</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Tax Information */}
