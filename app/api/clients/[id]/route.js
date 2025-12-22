@@ -96,11 +96,19 @@ export async function PUT(request, { params }) {
     const data = await request.json();
     const pool = getPool();
     
+    // Get old values for audit log
+    const oldResult = await pool.query(
+      'SELECT * FROM crm.clients WHERE system_id = $1',
+      [id]
+    );
+    const oldValues = oldResult.rows[0];
+    
     const result = await pool.query(
       `UPDATE crm.clients SET
         first_name = $1, last_name = $2, casual_name = $3, email = $4, mobile = $5,
         abn = $6, business_name = $7, address = $8, phone = $9, fdc_percent = $10,
-        gst_registered = $11, bas_quarter = $12, start_date = $13, notes = $14, status = $15
+        gst_registered = $11, bas_quarter = $12, start_date = $13, notes = $14, status = $15,
+        updated_at = CURRENT_TIMESTAMP
       WHERE system_id = $16
       RETURNING *`,
       [
@@ -114,6 +122,18 @@ export async function PUT(request, { params }) {
     if (result.rows.length === 0) {
       return NextResponse.json({ error: 'Client not found' }, { status: 404 });
     }
+    
+    // Log the edit action in audit logs
+    await logAudit(pool, {
+      userType: 'agent',
+      action: 'edit',
+      tableName: 'crm.clients',
+      recordId: id,
+      clientId: parseInt(id),
+      oldValues: oldValues,
+      newValues: data,
+      notes: `Updated client: ${data.first_name} ${data.last_name}`
+    });
     
     return NextResponse.json({
       success: true,
