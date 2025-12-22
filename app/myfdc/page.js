@@ -4,17 +4,26 @@ import { useState, useEffect } from 'react';
 import { 
   CheckCircle, Clock, AlertCircle, FileText, Upload, Send,
   ChevronRight, User, Calendar, DollarSign, MessageSquare,
-  X, Loader2, ArrowLeft
+  X, Loader2, ArrowLeft, Users
 } from 'lucide-react';
 
 export default function MyFDCDashboard() {
-  // Hardcoded for Sandbox - will be dynamic with auth later
-  const [userId] = useState(143000);
+  // Test clients for sandbox - will be replaced with auth later
+  const testClients = [
+    { id: 143003, name: 'Sarah Test (MyFDC Only)' },
+    { id: 143004, name: 'Mike Test (DIY/Luna)' },
+    { id: 143005, name: 'Emma Test (DIY/Luna)' },
+    { id: 143006, name: 'James Test (Full Service)' },
+    { id: 143007, name: 'Lisa Test (Full Service)' }
+  ];
+  
+  const [userId, setUserId] = useState(143003);
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTask, setSelectedTask] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showClientSelector, setShowClientSelector] = useState(false);
   
   // Task submission state
   const [submitting, setSubmitting] = useState(false);
