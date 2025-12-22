@@ -362,25 +362,14 @@ async def chat(request: ChatRequest):
             if request.form_context.get('hasGST'):
                 form_context_str += "- User registered for GST\n"
         
-        # Fetch user context if user_id provided
+        # Fetch user context if user_id provided - BUT DON'T USE IT FOR UNSOLICITED INFO
         user_context_str = ""
         user_name = None
         if request.user_id:
             user_ctx = fetch_user_context(request.user_id)
             if user_ctx:
                 user_name = user_ctx['user']['name']
-                user_context_str = f"\n\n=== USER CONTEXT (PERSONALIZE YOUR RESPONSE) ===\n"
-                user_context_str += f"Educator: {user_name}\n"
-                user_context_str += f"GST Status: {user_ctx['context_summary']['gst_status']}\n"
-                user_context_str += f"Experience: {'New educator' if user_ctx['context_summary']['is_new'] else 'Experienced educator'}\n"
-                
-                if user_ctx['tasks']['count'] > 0:
-                    user_context_str += f"\nPending Tasks ({user_ctx['tasks']['count']}):\n"
-                    for task in user_ctx['tasks']['pending'][:3]:
-                        due = f" (due {task['due_date'][:10]})" if task['due_date'] else ""
-                        user_context_str += f"  • {task['task_name']}{due}\n"
-                
-                user_context_str += "\nIMPORTANT: Use the educator's name naturally. If they have pending tasks, offer to help with them proactively.\n"
+                # Only store name, don't inject context that encourages overstepping
         
         # DYNAMIC SYSTEM PROMPT - Changes based on mode
         if request.mode == "internal":
