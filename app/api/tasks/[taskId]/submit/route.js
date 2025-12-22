@@ -4,6 +4,23 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Helper function to log audit events
+async function logAudit(pool, { userType, userId, userEmail, action, tableName, recordId, clientId, oldValues, newValues, notes }) {
+  try {
+    await pool.query(
+      `INSERT INTO crm.audit_logs (user_type, user_id, user_email, action, table_name, record_id, client_id, old_values, new_values, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [userType, userId, userEmail, action, tableName, recordId, clientId, 
+       oldValues ? JSON.stringify(oldValues) : null,
+       newValues ? JSON.stringify(newValues) : null,
+       notes]
+    );
+  } catch (error) {
+    console.error('Failed to log audit event:', error);
+    // Don't fail the main operation if audit logging fails
+  }
+}
+
 // Client submits task response
 export async function POST(request, { params }) {
   try {
@@ -20,7 +37,7 @@ export async function POST(request, { params }) {
     
     // Get the task first
     const taskResult = await pool.query(
-      `SELECT t.*, c.first_name, c.last_name, c.email as client_email
+      `SELECT t.*, c.first_name, c.last_name, c.email as client_email, c.client_access_approved
        FROM crm.tasks t 
        JOIN crm.clients c ON t.client_id = c.system_id
        WHERE t.id = $1`,
@@ -53,6 +70,50 @@ export async function POST(request, { params }) {
         taskId
       ]
     );
+    
+    // Log the task submission in audit logs
+    await logAudit(pool, {
+      userType: 'educator',
+      userId: task.client_id?.toString(),
+      userEmail: task.client_email,
+      action: 'submit',
+      tableName: 'crm.tasks',
+      recordId: taskId,
+      clientId: task.client_id,
+      oldValues: { status: task.status },
+      newValues: { status: 'submitted', client_response, client_amount, client_comment },
+      notes: `Task submitted: ${task.title}`
+    });
+    
+    // SPECIAL HANDLING: Tech Help Access Permission Task
+    // If client approved access, set client_access_approved flag
+    if (task.title === 'Approve Tech Help Access') {
+      const isApproved = client_response && client_response.toLowerCase().includes('yes');
+      
+      await pool.query(
+        `UPDATE crm.clients SET 
+          client_access_approved = $1,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE system_id = $2`,
+        [isApproved, task.client_id]
+      );
+      
+      // Log the permission change in audit logs
+      await logAudit(pool, {
+        userType: 'educator',
+        userId: task.client_id?.toString(),
+        userEmail: task.client_email,
+        action: isApproved ? 'approve' : 'reject',
+        tableName: 'crm.clients',
+        recordId: task.client_id?.toString(),
+        clientId: task.client_id,
+        oldValues: { client_access_approved: task.client_access_approved },
+        newValues: { client_access_approved: isApproved },
+        notes: `Tech help access ${isApproved ? 'approved' : 'denied'} by educator`
+      });
+      
+      console.log(`Tech help access ${isApproved ? 'APPROVED' : 'DENIED'} for client ${task.client_id}`);
+    }
     
     // Add a message to track the submission
     await pool.query(
