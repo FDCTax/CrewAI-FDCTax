@@ -237,8 +237,15 @@ export default function ABNAssistancePage() {
     }
   };
   
-  const handlePayment = async () => {
+  const handlePayment = async (stripe, elements) => {
+    if (!stripe || !elements) {
+      setError('Stripe not loaded');
+      return;
+    }
+    
     setSubmitting(true);
+    setError('');
+    
     try {
       // Create payment intent
       const res = await fetch('/api/abn-assistance/create-payment', {
@@ -251,19 +258,18 @@ export default function ABNAssistancePage() {
         })
       });
       
-      const { clientSecret, paymentIntentId } = await res.json();
+      const data = await res.json();
       
-      if (!clientSecret) {
-        throw new Error('Failed to create payment');
+      if (!data.clientSecret) {
+        throw new Error(data.error || 'Failed to create payment');
       }
       
-      const stripe = await stripePromise;
+      const { clientSecret, paymentIntentId } = data;
       
-      // For demo, we'll use a simple card element
-      // In production, use Stripe Elements
+      // Confirm payment with card element
       const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: { token: 'tok_visa' }, // Test token
+          card: elements.getElement(CardElement),
           billing_details: {
             name: `${formData.firstName} ${formData.lastName}`,
             email: formData.email
