@@ -55,7 +55,10 @@ embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 
 # Ollama configuration
 OLLAMA_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# OpenAI API key for Luna KB queries
+# Uses OPENAI_API_KEY_LUNA (falls back to OPENAI_API_KEY for backwards compatibility)
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY_LUNA") or os.getenv("OPENAI_API_KEY")
 
 # Pydantic models
 class ChatMessage(BaseModel):
