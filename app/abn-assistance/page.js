@@ -356,63 +356,6 @@ export default function ABNAssistancePage() {
     }
   };
   
-  const handlePayment = async (stripe, elements) => {
-    if (!stripe || !elements) {
-      setError('Stripe not loaded');
-      return;
-    }
-    
-    setSubmitting(true);
-    setError('');
-    
-    try {
-      // Create payment intent
-      const res = await fetch('/api/abn-assistance/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          client_id: userId,
-          email: formData.email,
-          name: `${formData.firstName} ${formData.lastName}`
-        })
-      });
-      
-      const data = await res.json();
-      
-      if (!data.clientSecret) {
-        throw new Error(data.error || 'Failed to create payment');
-      }
-      
-      const { clientSecret, paymentIntentId } = data;
-      
-      // Confirm payment with card element
-      const { error: paymentError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          billing_details: {
-            name: `${formData.firstName} ${formData.lastName}`,
-            email: formData.email
-          }
-        }
-      });
-      
-      if (paymentError) {
-        throw new Error(paymentError.message);
-      }
-      
-      if (paymentIntent.status === 'succeeded') {
-        updateField('paymentComplete', true);
-        updateField('paymentIntentId', paymentIntentId);
-        await submitForm();
-        setStage(9);
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-  
   // Luna Chat Functions
   const sendChatMessage = async () => {
     if (!chatInput.trim()) return;
