@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import {
   FileText, User, Phone, Building2, Briefcase, Receipt, CheckSquare,
   CreditCard, CheckCircle, ArrowRight, ArrowLeft, Loader2, MessageCircle,
