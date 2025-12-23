@@ -889,23 +889,19 @@ export default function ABNAssistancePage() {
                 </ul>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                <p className="text-sm text-gray-600 text-center">
-                  Test Mode: Click the button below to simulate payment
-                </p>
-              </div>
-              
-              <button
-                onClick={handlePayment}
-                disabled={submitting}
-                className="w-full py-3 bg-[#6366F1] text-white rounded-lg hover:bg-[#4F46E5] disabled:opacity-50 flex items-center justify-center gap-2 font-medium"
-              >
-                {submitting ? (
-                  <><Loader2 className="w-5 h-5 animate-spin" /> Processing...</>
-                ) : (
-                  <><CreditCard className="w-5 h-5" /> Pay $99.00</>
-                )}
-              </button>
+              {/* Stripe Card Element */}
+              <Elements stripe={stripePromise}>
+                <PaymentForm 
+                  formData={formData}
+                  userId={userId}
+                  submitting={submitting}
+                  setSubmitting={setSubmitting}
+                  setError={setError}
+                  updateField={updateField}
+                  submitForm={submitForm}
+                  setStage={setStage}
+                />
+              </Elements>
             </div>
           )}
           
