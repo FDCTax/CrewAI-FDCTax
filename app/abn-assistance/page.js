@@ -27,7 +27,8 @@ const CARD_ELEMENT_OPTIONS = {
       color: '#dc2626',
       iconColor: '#dc2626'
     }
-  }
+  },
+  hidePostalCode: true // Disable postal code field since we already collect address
 };
 
 // Separate PaymentForm component that uses Stripe hooks
