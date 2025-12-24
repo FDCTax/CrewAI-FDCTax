@@ -1,0 +1,48 @@
+# DigitalOcean App Platform - Reduce build context
+# Only include Python backend files
+
+# Ignore everything by default
+*
+
+# Allow only backend Python files
+!main.py
+!requirements.txt
+!runtime.txt
+!.python-version
+!*.py
+
+# Allow ChromaDB folder (contains knowledge base - 4MB)
+!chroma_db/
+!chroma_db/**
+
+# Explicitly ignore frontend and Node files (parent directory)
+node_modules/
+.next/
+app/
+components/
+lib/
+public/
+styles/
+package.json
+package-lock.json
+yarn.lock
+*.js
+*.jsx
+*.ts
+*.tsx
+*.css
+*.json
+
+# Ignore Python cache and virtual envs
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+*.egg-info/
+
+# Ignore logs and temp files
+*.log
+*.tmp
+.DS_Store
