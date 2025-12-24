@@ -12,7 +12,7 @@ chromadb==0.4.22
 sentence-transformers==2.3.1
 langchain==0.1.9
 langchain-community==0.0.24
-langchain-core==0.1.53
+langchain-core==1.2.0
 
 # Document processing
 pypdf==4.0.1
