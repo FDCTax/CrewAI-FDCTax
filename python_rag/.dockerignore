@@ -1,17 +1,15 @@
-# DigitalOcean App Platform - Minimal build context
-# Only include Python backend files
-
 # Ignore everything by default
 *
 
-# Allow only backend Python files
+# Allow backend files
 !main.py
 !requirements.txt
 !runtime.txt
 !.python-version
+!Dockerfile
 !*.py
 
-# EXCLUDE ChromaDB from build (will be created at startup)
+# Exclude ChromaDB (auto-initialized at runtime)
 chroma_db/
 chroma_db/**
 
@@ -25,17 +23,3 @@ yarn.lock
 *.jsx
 *.ts
 *.tsx
-
-# Ignore Python cache and virtual envs
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-venv/
-.env
-*.egg-info/
-
-# Ignore logs and temp files
-*.log
-*.tmp
-.DS_Store
