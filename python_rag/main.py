@@ -289,6 +289,16 @@ def call_openai_fallback(messages: List[Dict[str, str]], system_prompt: str) -> 
         raise
 
 # API Endpoints
+@app.get("/")
+async def root():
+    """Root endpoint - confirms API is running"""
+    return {
+        "name": "FDC Luna RAG API",
+        "version": "1.0.0",
+        "status": "running",
+        "docs": "/docs"
+    }
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
