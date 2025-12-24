@@ -1,0 +1,8 @@
+# Ignore everything by default
+*
+
+# Allow the Dockerfile itself
+!Dockerfile
+
+# Allow the backend folder
+!python_rag/**
