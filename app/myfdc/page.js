@@ -8,13 +8,13 @@ import {
 } from 'lucide-react';
 
 export default function MyFDCDashboard() {
-  // Test clients for sandbox - will be replaced with auth later
+  // Test clients for sandbox - aligned with CRM clients
   const testClients = [
-    { id: 143003, name: 'Sarah Test (MyFDC Only)' },
-    { id: 143004, name: 'Mike Test (DIY/Luna)' },
-    { id: 143005, name: 'Emma Test (DIY/Luna)' },
-    { id: 143006, name: 'James Test (Full Service)' },
-    { id: 143007, name: 'Lisa Test (Full Service)' }
+    { id: 143003, name: 'Sarah Test (MyFDC Only)', email: 'sarah.testclient@fdctax.com.au' },
+    { id: 143004, name: 'Mike Test (DIY/Luna)', email: 'mike.testclient@fdctax.com.au' },
+    { id: 143005, name: 'Emma Test (DIY/Luna)', email: 'emma.testclient@fdctax.com.au' },
+    { id: 143006, name: 'James Test (Full Service)', email: 'james.testclient@fdctax.com.au' },
+    { id: 143007, name: 'Lisa Test (Full Service)', email: 'lisa.testclient@fdctax.com.au' }
   ];
   
   const [userId, setUserId] = useState(143003);
