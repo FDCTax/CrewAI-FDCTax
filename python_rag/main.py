@@ -45,7 +45,215 @@ BASE_DIR = Path(__file__).resolve().parent
 # ChromaDB path - relative to this script's directory
 CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", str(BASE_DIR / "chroma_db"))
 
+# Core FDC Tax knowledge base content (embedded if ChromaDB is empty)
+CORE_KB_DOCUMENTS = [
+    {
+        "id": "fdc_percent_overview",
+        "title": "FDC Percentage Overview",
+        "content": """FDC Percentage (Family Day Care Percentage) is the portion of home expenses that can be claimed as business deductions.
+
+Calculation Method:
+1. Floor Area Method: (Care area square meters / Total home square meters) × 100
+2. Time-Based Adjustment: Apply business hours percentage
+
+Typical FDC Percentages:
+- 70-80% is common for dedicated care spaces
+- Based on hours of operation (typically 50+ hours/week)
+- Includes dedicated playrooms, outdoor areas used for care
+
+Claimable Expenses at FDC%:
+- Rent or mortgage interest
+- Council rates
+- Home insurance
+- Electricity and gas
+- Water rates
+- Cleaning supplies
+- Repairs and maintenance (care areas)
+
+Documentation Required:
+- Floor plan with measurements
+- Hours of operation log
+- Utility bills
+- Receipts for all expenses"""
+    },
+    {
+        "id": "gst_registration",
+        "title": "GST Registration for FDC Educators",
+        "content": """GST Registration Requirements for Family Day Care:
+
+Mandatory Registration:
+- Required when GST turnover reaches $75,000 per year
+- GST turnover = gross income from FDC services
+
+Voluntary Registration:
+- Can register voluntarily below $75,000 threshold
+- May be beneficial if purchasing significant business assets
+
+BAS Lodgement:
+- Quarterly: Most common for FDC educators
+- Monthly: Optional for larger operations
+- Annual: Available if turnover under $75,000
+
+GST on FDC Income:
+- Child care services are GST-FREE
+- No GST charged on parent fees
+- Can still claim GST credits on business purchases
+
+Claiming GST Credits:
+- Business portion of home expenses
+- Educational supplies and equipment
+- Vehicle expenses (business use portion)
+- Professional development courses"""
+    },
+    {
+        "id": "abn_requirements",
+        "title": "ABN Requirements for FDC Educators",
+        "content": """Australian Business Number (ABN) for Family Day Care:
+
+Why You Need an ABN:
+- Required to operate as a sole trader
+- Needed for FDC scheme payments
+- Required for tax reporting
+
+How to Apply:
+- Online via Australian Business Register (ABR)
+- Free application process
+- Usually processed within minutes
+
+Information Required:
+- Tax File Number (TFN)
+- Personal identification details
+- Business activity description (Family Day Care)
+- Expected business start date
+- Business address
+
+ABN Entitlement:
+- Must be carrying on an enterprise in Australia
+- FDC educators qualify as sole traders
+- Can also register business name if desired
+
+FDC Tax can assist with ABN registration for $99 (Full Assistance package)."""
+    },
+    {
+        "id": "deductible_expenses",
+        "title": "Deductible Expenses for FDC Educators",
+        "content": """Common Tax Deductions for Family Day Care Educators:
+
+Home Office Expenses (at FDC%):
+- Rent or mortgage interest
+- Council rates and land tax
+- Home and contents insurance
+- Electricity, gas, water
+- Internet and phone (business portion)
+- Cleaning supplies
+
+Equipment and Supplies:
+- Educational toys and materials
+- Art and craft supplies
+- Books and learning resources
+- Safety equipment (gates, locks, first aid)
+- Furniture for care areas
+- Outdoor play equipment
+
+Vehicle Expenses:
+- Travel to FDC scheme meetings
+- Excursions with children
+- Shopping for supplies
+- Professional development travel
+- Logbook method or cents per km
+
+Professional Expenses:
+- FDC scheme fees
+- Public liability insurance
+- First aid training
+- Professional development
+- Working with Children Check
+- Accounting and tax agent fees
+
+Food and Consumables:
+- Meals provided to children
+- Nappies and wipes (if provided)
+- Sunscreen and hygiene products"""
+    },
+    {
+        "id": "record_keeping",
+        "title": "Record Keeping Requirements",
+        "content": """Record Keeping for FDC Tax Compliance:
+
+Required Records (Keep for 5 years):
+- Income records (payment summaries, invoices)
+- Expense receipts and invoices
+- Bank statements
+- Vehicle logbook
+- Home office calculations
+- FDC attendance records
+
+Digital Records:
+- Photos of receipts acceptable
+- Cloud storage recommended
+- MyFDC app for easy tracking
+
+Income Documentation:
+- Payment summaries from FDC scheme
+- Direct parent payments
+- Government subsidies received
+
+Expense Documentation:
+- Date of purchase
+- Amount paid
+- What was purchased
+- Business purpose
+
+Home Office Records:
+- Floor plan with measurements
+- Utility bills (full year)
+- Rates notices
+- Insurance policies
+
+Vehicle Records:
+- Logbook for 12 continuous weeks
+- Odometer readings
+- Fuel and maintenance receipts"""
+    }
+]
+
+def initialize_knowledge_base():
+    """Initialize ChromaDB with core documents if empty"""
+    global kb_collection
+    
+    doc_count = kb_collection.count()
+    print(f"ChromaDB initialized. Current document count: {doc_count}")
+    
+    if doc_count == 0:
+        print("📚 Knowledge base is empty. Loading core FDC Tax documents...")
+        
+        for doc in CORE_KB_DOCUMENTS:
+            try:
+                # Generate embedding
+                embedding = embedding_model.encode(doc["content"]).tolist()
+                
+                # Add to collection
+                kb_collection.add(
+                    ids=[doc["id"]],
+                    embeddings=[embedding],
+                    documents=[doc["content"]],
+                    metadatas=[{
+                        "title": doc["title"],
+                        "doc_id": doc["id"],
+                        "source": "core_kb",
+                        "type": "reference"
+                    }]
+                )
+                print(f"  ✅ Loaded: {doc['title']}")
+            except Exception as e:
+                print(f"  ❌ Error loading {doc['title']}: {e}")
+        
+        print(f"📚 Core knowledge base initialized with {len(CORE_KB_DOCUMENTS)} documents")
+    else:
+        print(f"📚 Knowledge base ready with {doc_count} document chunks")
+
 # Initialize ChromaDB with persistent client
+print(f"Initializing ChromaDB at: {CHROMA_DB_PATH}")
 chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
 
 # Create or get collection
@@ -54,7 +262,6 @@ try:
         name="fdc_knowledge_base",
         metadata={"hnsw:space": "cosine"}
     )
-    print(f"ChromaDB collection initialized. Current document count: {kb_collection.count()}")
 except Exception as e:
     print(f"Error initializing ChromaDB: {e}")
     kb_collection = chroma_client.create_collection(
@@ -64,6 +271,9 @@ except Exception as e:
 
 # Initialize embedding model
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Load core documents if KB is empty
+initialize_knowledge_base()
 
 # Ollama configuration
 OLLAMA_URL = os.getenv("OLLAMA_API_URL", "http://localhost:11434")
