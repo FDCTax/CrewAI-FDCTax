@@ -774,4 +774,6 @@ if __name__ == "__main__":
     # Pre-warm Ollama in background thread
     threading.Thread(target=prewarm_ollama, daemon=True).start()
     
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    # Use PORT env var for production (DO App Platform), default to 8002 for local
+    port = int(os.getenv("PORT", 8002))
+    uvicorn.run(app, host="0.0.0.0", port=port)
