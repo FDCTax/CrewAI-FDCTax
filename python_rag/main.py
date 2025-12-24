@@ -2,10 +2,14 @@
 """
 FDC Tax Luna RAG System
 Lightweight RAG using Ollama + ChromaDB
+
+Deployable as standalone FastAPI app on DigitalOcean App Platform.
+Run command: uvicorn main:app --host 0.0.0.0 --port $PORT
 """
 
 import os
 import uuid
+from pathlib import Path
 from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,7 +24,11 @@ from striprtf.striprtf import rtf_to_text
 import json
 
 # Initialize FastAPI
-app = FastAPI(title="FDC Luna RAG API")
+app = FastAPI(
+    title="FDC Luna RAG API",
+    description="RAG-powered AI assistant for FDC Tax",
+    version="1.0.0"
+)
 
 # CORS middleware
 app.add_middleware(
@@ -31,10 +39,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Determine the base directory (where this script is located)
+BASE_DIR = Path(__file__).resolve().parent
+
+# ChromaDB path - relative to this script's directory
+CHROMA_DB_PATH = os.getenv("CHROMA_DB_PATH", str(BASE_DIR / "chroma_db"))
+
 # Initialize ChromaDB with persistent client
-chroma_client = chromadb.PersistentClient(
-    path="/app/python_rag/chroma_db"
-)
+chroma_client = chromadb.PersistentClient(path=CHROMA_DB_PATH)
 
 # Create or get collection
 try:
