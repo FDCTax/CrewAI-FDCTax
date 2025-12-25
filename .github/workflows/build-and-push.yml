@@ -22,7 +22,7 @@ jobs:
     - name: Build Docker image
       working-directory: .
       run: |
-        docker build -t ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}:latest .
+        docker buildx build --load -t ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}:latest .
 
     - name: Push Docker image
       working-directory: .
