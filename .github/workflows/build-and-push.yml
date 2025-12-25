@@ -1,4 +1,4 @@
-# force workflow refresh
+# workflow refresh 2
 name: Build and Push Docker Image
 
 on:
@@ -24,11 +24,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
-      working-directory: .
       run: |
         docker buildx build --load -t ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}:latest .
 
     - name: Push Docker image
-      working-directory: .
       run: |
         docker push ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}:latest
