@@ -20,9 +20,11 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
+      working-directory: .
       run: |
         docker build -t ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}:latest .
 
     - name: Push Docker image
+      working-directory: .
       run: |
         docker push ${{ secrets.REGISTRY }}/${{ secrets.IMAGE_NAME }}:latest
